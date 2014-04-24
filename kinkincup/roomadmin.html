@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
+    <script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore.js"></script>
+    <script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone.js"></script>
+    <script type="text/javascript"  src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script type="text/javascript" src="https://cdn.firebase.com/libs/backfire/0.3.0/backbone-firebase.js"></script>
+
+    <script type="text/javascript"  src="js/libs/bootstrap2/js/bootstrap.js"></script>
+    <link href="js/libs/bootstrap2/css/bootstrap.css" rel="stylesheet"/>
+    <link href="js/libs/bootstrap2/css/bootstrap-responsive.css" rel="stylesheet"/>
+
+    <script type="text/javascript"  src="kinkincup.js"></script>
+</head>
+<body>
+    <style>
+        a, a:link, a:visited, a:hover, a:active { text-decoration: none; border: none; }
+        #rooms div {
+            padding:5px;
+            border-bottom: 1px solid silver;
+        }
+        #rooms div:hover {
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #rooms div:active {
+            text-indent: 2px;
+        }
+        #content {
+            font-size: 10px;
+            line-height: 1.2em;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="pull-right"><a class="btn" href="lobby.html" style="margin-top:5px"> Back to Lobby </a></div>
+        <h4 class="row-fluid"> Room Admin <span id="roomid"></span> </h4>
+        <div id="info" class="row-fluid" style="width:100%; background-color:#eee; padding:5px"></div>
+        <div id="content" class="row-fluid" style="width:100%"></div>
+    </div>
+
+    <script>
+        //room logic is built here
+        App.View = Backbone.View.extend({
+            SB_SIZE: 2,
+            BB_SIZE: 5,
+            STACK_SIZE: 500,
+            states: ['Wait', 'Start', 'preflop', 'flop', 'turn', 'river', 'showdown'],
+
+            handcount: 0,
+
+            initialize: function() {
+                this.collection.on('all', this.render, this);
+                this.collection.on('change:status', this.changeStatusAction, this);
+
+                var self = this;
+                setInterval($.proxy(self.checkWait, self), 2000);
+            },
+
+            playerAction: function(player) {
+                if (player.id != this.model.get('turn')) return;
+                if (!player.get('action')) return;
+                console.log('playerAction: ' + player.id + " " + JSON.stringify(player.get('action')));
+
+                //ask another player to move
+                var self = this;
+                setTimeout(function() { $.proxy(self.action(player), self); }, 10);
+                $(this.el).find('#content').append('<div>Player action: <strong>'+JSON.stringify(player.toJSON())+"</strong></div>");
+            },
+
+            checkWait: function() {
+                console.log('checkStatus');
+                var self = this;
+
+                    //remove player with no money
+                    if (self.model.get('status') == 'Wait') {
+                        self.model.players.each(function(p, i) {
+                            if (p.get('stack') <= 0) self.model.players.remove(p);
+                        });
+                    }
+
+                    //wait for at least 2 ppl to start
+                    var players = self.model.players? self.model.players.length: 0;
+                    if (self.model.get('status') == 'Wait' && players >= 2) {
+                        if (self.changingStatus) return;
+                        self.changingStatus = true;
+
+                        setTimeout(function() {
+                            self.changeGameState();
+                            self.start();
+                            self.changingStatus = false;
+                        }, 3000);
+                    }
+            },
+
+            start: function() {
+                console.log('start');
+                var self = this;
+
+                self.handcount++;
+                self.hand = new App.Hand();
+                self.model.players.off('change:action');
+                self.model.players.on('change:action', self.playerAction, self);
+
+                //set/move button
+                self.model.set({ button: self.nextPlayer(self.model.get('button'), self.model.players) });
+
+                self.changeGameState();
+                self.takeBlinds();
+            },
+
+            changeGameState: function() {
+                console.log('changeGameState: ' + this.model.get('status'));
+
+                //return extra all in amount
+                var playersSorted = view.model.players.sortBy('prepot').reverse();
+                var bigStack = playersSorted.shift();
+                var secondBigStack = playersSorted.shift();
+                var stockDiff = bigStack.get('prepot') - secondBigStack.get('prepot');
+                console.log("StockDiff: " + + stockDiff);
+
+                if (stockDiff > 0) {
+                    bigStack.set({
+                        prepot: bigStack.get('prepot') - stockDiff,
+                        stack: stockDiff + bigStack.get('stack')
+                    })
+                }
+
+                //sum up pot
+                var newPot = 0;
+                this.model.players.each(function(p, i) { if (p.get('prepot')) { newPot += p.get('prepot'); } });
+
+                var newStatusIndex = _(this.states).indexOf(this.model.get('status')) + 1;
+                var newStatus = this.states[newStatusIndex == this.states.length? 0: newStatusIndex];
+
+                //reset
+                if (_(['flop', 'turn', 'river', 'preflop']).contains(this.model.get('status'))) {
+                    this.model.players.each(function(p, i) { 
+                        setTimeout(function() { p.set({ prepot:0, action:false }) }, 10);
+                    });
+                }
+
+                this.model.set({ 
+                    turn: "", 
+                    deal: false, 
+                    pot: (this.model.get('pot') || 0) + newPot, 
+                    status: newStatus,
+                    tocall: 0,
+                });
+
+                console.log('changeGameState to: ' + this.model.get('status'));
+            },
+
+            changeStatusAction: function() {
+                console.log('changeAction: ' + this.model.get('turn') + "|" + this.model.get('status'));
+                if (this.model.get('status')=='Start') return;
+                if (this.model.get('status')=='Wait') return;
+
+                var self = this;
+                setTimeout(function() {
+                    self.deal();
+                    self.action();
+                }, 3000);
+            },
+
+            deal: function() {
+                console.log('deal: ' + this.model.get('status') +  "|" + this.model.get('deal'));
+                if (this.model.get('deal')) return;
+
+                if (this.model.get('status') == "preflop") {
+                    var deck = this.hand.get('deck');
+                    this.model.players.each(function(p, i) {
+                        p.set('holdcards', [deck.shift(), deck.shift()]);
+                    });
+                    this.model.set('deal', true);
+                }
+
+                if (this.model.get('status') == "flop") {
+                    var deck = this.hand.get('deck');
+                    $(this.el).find('#content').append('<div>Burn card: <strong>'+deck.shift()+"</strong></div>");
+                    this.model.set({ flopCard:[deck.shift(), deck.shift(), deck.shift()], deal: true });
+                }
+
+                if (this.model.get('status') == "turn") {
+                    var deck = this.hand.get('deck');
+                    $(this.el).find('#content').append('<div>Burn card: <strong>'+deck.shift()+"</strong></div>");
+                    this.model.set({ turnCard:[deck.shift()], deal: true });
+                }
+
+                if (this.model.get('status') == "river") {
+                    var deck = this.hand.get('deck');
+                    $(this.el).find('#content').append('<div>Burn card: <strong>'+deck.shift()+"</strong></div>");
+                    this.model.set({ riverCard:[deck.shift()], deal: true });
+                }
+            },
+
+            action: function(currentPlayer) {
+                console.log('action: ' + this.model.get('status'));
+                var self = this;
+
+                if (this.model.get('status') == 'Wait' || this.model.get('status') == 'Start') return;
+
+                if (this.model.get('status') == 'showdown') {
+                    this.decideWinnerAndMovePot();
+                    this.changeGameState();
+                    return;
+                }
+
+                //process this players actions
+                if (currentPlayer && currentPlayer.get('action')) {
+                    if (currentPlayer.get('action').type == 'call') {
+                        var tocall = parseInt(currentPlayer.get('action').toCall);
+                        this.model.players.get(currentPlayer.id).set({
+                            prepot: Math.min(currentPlayer.get('stack') + currentPlayer.get('prepot'), currentPlayer.get('prepot') + tocall),
+                            stack: Math.max(currentPlayer.get('stack') - tocall, 0)
+                        });
+                    }
+
+                    if (currentPlayer.get('action').type == 'raise') {
+                        var raiseTo = parseInt(currentPlayer.get('action').raiseTo);
+                        this.model.players.get(currentPlayer.id).set({
+                            prepot: raiseTo,
+                            stack: currentPlayer.get('stack') + currentPlayer.get('prepot') - raiseTo
+                        });
+
+                        self.model.players.each(function(p, i) {
+                            if (currentPlayer.id != p.id) self.model.players.get(p.id).set({ action: false });
+                        }); 
+
+                        //define next player and return
+                        this.model.set({ 
+                            tocall: raiseTo,
+                            turn: this.nextPlayer(currentPlayer.id, this.model.players)
+                        });
+                        return;
+                    }
+                }
+
+                //check condition
+                if (this.isAllFolded()) {
+                    this.doEndOfHand();
+                } else if (this.activeTurnPlayers() <= 1) {
+                    this.changeGameState();
+                } else {
+                    //choose turn
+                    var currentTurn = (this.model.get('turn') == "" || !this.model.get('turn'))?
+                        this.model.get('button'):
+                        this.model.get('turn');
+
+                    var newTurn = this.nextPlayer(currentTurn, this.model.players);
+                    var startNewTurn = newTurn;
+
+                    while(!this.isAValidTurn(newTurn)) {
+                        newTurn = this.nextPlayer(newTurn, this.model.players);
+                        if (newTurn == startNewTurn) { newTurn = null; break; }
+                    }
+
+                    if (newTurn) this.model.set('turn', newTurn);
+                    else this.changeGameState();
+                }
+            },
+
+            activeTurnPlayers: function() {
+                var result =
+                    this.model.players.filter(function(p) {
+                        return (!p.get('action') || p.get('action')!='fold') && p.get('stack')>0;
+                    }).length;
+                return result;
+            },
+
+            isAValidTurn: function(turn) {
+                try {
+                    var player = this.model.players.where({id: turn })[0]; 
+                    if (player.get('stack') == 0) return false;
+                    return !player.get('action');
+                } catch(e) { return false; }
+            },
+            
+            doEndOfHand: function() {
+                this.decideWinnerAndMovePot();
+
+                var self = this;
+                setTimeout(function() { self.model.set('status', 'Wait'); }, 4000);
+            },
+
+            isAllFolded: function() {
+                return this.model.players.filter(function(p) { 
+                    return !p.get('action') || (p.get('action') && p.get('action').type != 'fold');   
+                }).length <= 1;
+            },
+
+            decideWinnerAndMovePot: function() {
+                var winners;
+                if (this.isAllFolded()) {
+                    winners = [this.model.players.filter(function(p) { 
+                        return !p.get('action') || (p.get('action') && p.get('action').type != 'fold');   
+                    })[0]];
+                } else {
+                    // var playerIndex = _.random(0, this.model.players.length-1);
+                    // winningPlayer = this.model.players.at(playerIndex);
+                    var communityCards = _.union(
+                        this.model.get('flopCard'), 
+                        this.model.get('turnCard'), 
+                        this.model.get('riverCard'))
+
+                    winners = new App.HandStrength().chooseWinners(this.model.players, communityCards);
+                }
+
+                var pp = 0;
+                this.model.players.each(function(p) { 
+                    pp += p.get('prepot') || 0; 
+
+                    if (_(winners).contains(p)) return;
+                    p.set({ prepot: 0 });
+                });
+
+                var self = this;
+                _(winners).each(function(w, i) {
+                    w.set({
+                        stack: w.get('stack') + (self.model.get('pot') + pp)/winners.length,
+                        prepot: 0
+                    });
+                })
+            },
+
+            nextPlayer: function(currentId, players) {
+                var button = currentId;
+                var buttonIndex = -1;
+                var result = "";
+                if (!button) return players.at(0).id;
+                else players.each(function(p, i) { 
+                    if (button == p.id) { 
+                        result = players.at(i==players.length-1? 0: i+1).id; 
+                    } 
+                });
+                return result;
+            },
+
+            nextPlayerObject: function(currentId, players) {
+                var button = currentId;
+                var buttonIndex = -1;
+                var result = "";
+                if (!button) return players.at(0);
+                else players.each(function(p, i) { 
+                    if (button == p.id) { 
+                        result = players.at(i==players.length-1? 0: i+1); 
+                    } 
+                });
+                return result;
+            },
+
+            takeBlinds: function() {
+                console.log('takeBlinds');
+                var players = this.model.players;
+                var self = this;
+
+                //find small and big blind
+                var sb = self.nextPlayer(this.model.get('button'), self.model.players);
+                var bb = self.nextPlayer(sb, self.model.players);
+
+                //set blinds
+                players.each(function(p, i) {
+                    if (p.id == sb || p.id == bb) {
+                        setTimeout(function() {
+                            var blind = p.id==sb? Math.min(p.get('stack'), self.SB_SIZE): p.id==bb? Math.min(p.get('stack'), self.BB_SIZE): 0;
+                            if (p.id==sb) p.set({ action:false, stack:p.get('stack')-blind, prepot:blind });
+                            else if (p.id==bb) p.set({ action:false, stack:p.get('stack')-blind, prepot:blind });
+                            else p.set({ action:false, prepot:0 })
+                        }, i*20);
+                    }
+                });
+
+                //reset table statuses
+                this.model.set({
+                    pot: 0,
+                    tocall: self.BB_SIZE,
+                    flopCard: [],
+                    turnCard: [],
+                    riverCard: []
+                });
+            },
+
+            render: function(action, model) {
+                if (model.get('name')==this.model.get('name')) {
+                    if (action == "add") {
+                        App.Roombase = App.SpecificRoom.extend({ firebase: "https://kinkincup.firebaseio.com/rooms/" + model.id })
+                        this.model = new App.Roombase;
+
+                        var self = this;
+                        this.model.on('sync', function() {
+                            $(self.el).find('#content').append('<div>' + JSON.stringify(self.model.changedAttributes()) + "</div>");
+                            $(self.el).find('#info').empty().html("ID: " + self.model.id + "<br>" + 
+                                "Name: " + self.model.get('name') + "<br>" + 
+                                "Room ID: " + self.model.get('roomid')
+                            );
+                        });
+                    }
+                }
+            }
+        });
+
+        var rooms, room, view;
+        $(document).ready(function() {
+            rooms = new App.Rooms();
+            room = new App.Room({
+                "roomid": Math.round(Math.random() * 100),
+                "name": Date.now() + "",
+                "roomadmin": null,
+                "players": [],
+                "turn": "...",
+                "status": "Wait"
+            });
+            view = new App.View({ el:$('body'), model:room, collection:rooms });
+            rooms.create(room);
+
+            $(window).unload(function() {
+                rooms.remove(rooms.where({ name: room.get('name') }));
+            });
+        });
+    </script>
+</body>
+</html>

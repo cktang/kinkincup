@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/backfire/0.3.0/backbone-firebase.min.js"></script>
+
+    <script src="js/libs/bootstrap2/js/bootstrap.js"></script>
+    <link href="js/libs/bootstrap2/css/bootstrap.css" rel="stylesheet"/>
+    <link href="js/libs/bootstrap2/css/bootstrap-responsive.css" rel="stylesheet"/>
+
+    <script src="kinkincup.js"></script>
+</head>
+<body>
+    <style>
+        a, a:link, a:visited, a:hover, a:active { text-decoration: none; border: none; }
+        #rooms div {
+            padding:5px;
+            border-bottom: 1px solid silver;
+        }
+        #rooms div:hover {
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #rooms div:active {
+            text-indent: 2px;
+        }
+
+        #log {
+            font-size: 6px;
+            line-height: 6px;
+            max-width: 300px;
+        }
+        thead th {
+            padding: 3px 10px;
+        }
+        tbody td {
+            text-align: center;
+        }
+        .cardspritewrapper {
+            height: 118px;
+            width: 81px;
+            overflow: hidden;
+            float: left;
+        }
+        .cardspritewrapper img {
+            max-width: none;
+            width: auto;
+            height: auto;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="pull-right label label-inverse" style='padding:5px 10px; margin-top:5px'>
+            Welcome <span class=playerName></span><br>
+            <a class="btn" href="lobby.html" style="margin-top:5px"> Back to Lobby </a>
+        </div>
+        <h4 class="row-fluid"> Room <span id="roomid"></span> </h4>
+        <div id="log" class="hide pull-right">
+
+        </div>
+        <div id="content" class="row-fluid" style="width:100%">
+            <h5>Community Cards</h5>
+            <table id="communitycards" style="margin-bottom:20px">
+                <thead>
+                    <tr>
+                        <th> Flop </th>
+                        <th> Turn </th>
+                        <th> River </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="flop"></td>
+                        <td class="turnCard"></td>
+                        <td class="river"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h5> Status: <span class="status"></span> </h5>
+
+            <h5> pot: <span class="pot"></span> </h5>
+            <h5> to call: <span class="tocall"></span> </h5>
+            <h5> temppot: <span class="temppot"></span> </h5>
+
+            <h5>Actions</h5>
+            <table class="actionTable">
+                <tr>
+                    <td><a class="btn action foldButton hide">Fold</a></td>
+                    <td><a class="btn action checkButton hide">Check</a></td>
+                    <td><a class="btn action tocallButton hide">Call <span class=amttocall></span></a></td>
+                    <td style="padding-left:20px"> <a class="btn action raiseButton">Raise</td>
+                    <td style="padding-left:5px"> Raise to: <input style="width:50px" class="amttoraise"/></td>
+                </tr>
+            </table>
+
+            <h5> Players </h5>
+            <table id="players">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Hole Cards</th>
+                        <th>Stack</th>
+                        <th>Turn</th>
+                        <th>Pre pot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="pos1">
+                        <td><span class="btn seat"> Empty </span></td>
+                        <td class=holecard></td>
+                        <td class="stack"></td>
+                        <td class="turn"></td>
+                        <td class="button"></td>
+                        <td class="prepot"></td>
+                    </tr>
+                    <tr id="pos2">
+                        <td><span class="btn seat"> Empty </span></td>
+                        <td class=holecard></td>
+                        <td class="stack"></td>
+                        <td class="turn"></td>
+                        <td class="button"></td>
+                        <td class="prepot"></td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
+    </div>
+
+    <script>
+        App.View = Backbone.View.extend({
+            STACK_SIZE: 500,
+
+            events: {
+                'click #content .btn.seat': 'toggleSeat',
+                'click .action.btn': 'playerAction'
+            },
+
+            initialize: function() {
+                this.model.on('all', this.render, this);
+                this.model.players.on('all', this.render, this);
+
+                this.player = this.options.player;
+                $(this.el).find('.playerName').html(this.player.name);
+
+                var self = this;
+                $(window).unload(function() {
+                    self.model.set('players', _.difference(self.model.get('players'), _(self.model.get('players')).where({id: self.options.player.id}) ));
+                });
+            },
+
+            getMyself: function() {
+                return _(view.model.players.where({id:view.player.id})).first();
+            },
+
+            isMyTurn: function(id) {
+                return this.model.get('turn') == (id || this.player.id) && !this.getMyself().get('action');
+            },
+
+            playerAction: function(e) {
+                if (!this.isMyTurn()) {
+                    alert('Not your turn');
+                    return;
+                }
+
+                var target = $(e.target).hasClass('action')? e.target: $(e.target).parents('.action');
+
+                if ($(target).hasClass('checkButton')) {
+                    this.getMyself().set('action', {type:'call', toCall: 0});
+                }
+
+                if ($(target).hasClass('foldButton')) {
+                    this.getMyself().set('action', {type:'fold', toCall: 0});
+                }
+
+                if ($(target).hasClass('tocallButton')) {
+                    this.getMyself().set('action', {type:'call', toCall: $(target).find('.amttocall').text()});
+                }
+
+                if ($(target).hasClass('raiseButton')) {
+                    var raiseValue = $('.amttoraise').val();
+                    if (raiseValue == '' || parseInt(raiseValue) == 0) return;
+                    if (raiseValue < (this.model.get('tocall')*2)) {
+                        alert('raise more');
+                        return; 
+                    }
+                    raiseValue = Math.min(raiseValue, this.getMyself().get('stack') + this.getMyself().get('prepot'));
+                    this.getMyself().set('action', {type:'raise', raiseTo: raiseValue});
+                }
+
+                $(this.el).find('.actionTable').hide();
+            },
+
+            getBlankCardSprite: function(card) {
+                var html = $("<div class=cardspritewrapper></div>");
+                var img = $("<img src='cardsprite.gif'/>");
+                var multiplier1 = 117;
+                $(img).css('marginTop', 4 * -1 * multiplier1);
+                return ($(html).append(img))[0].outerHTML;
+            },
+
+            getCardSprite: function (card) {
+                var html = $("<div class=cardspritewrapper></div>");
+                var img = $("<img src='cardsprite.gif'/>");
+
+                var order0 = ['2','3','4','5','6','7','8','9','T','J','Q','K','A'];
+                var order1 = ['h', 'd', 'c', 's'];
+                var multiplier0 = 81;
+                var multiplier1 = 117;
+                
+                $(img).css('marginLeft', _(order0).indexOf(card[0]) * -1 * multiplier0);
+                $(img).css('marginTop', _(order1).indexOf(card[1]) * -1 * multiplier1);
+
+                return ($(html).append(img))[0].outerHTML;
+            },
+
+            render: function(action, model) {
+                $(this.el).find('#players').find('tr').find('td:gt(0)').html("");
+
+                $(this.el).find('#log').append('<div>action: ' + action + "</div>");
+                $(this.el).find('#log').append('<div>model: ' + JSON.stringify(model) + "</div>");
+                $(this.el).find('#roomid').html(this.model.get('roomid'));
+
+                var self = this;
+                //reset
+                $(self.el).find('.seat').html('Empty').removeClass('btn-inverse');
+                $(self.el).find('.status').html(this.model.get('status'));
+                $(self.el).find('.pot').html(this.model.get('pot'));
+                $(self.el).find('.tocall').html(this.model.get('tocall'));
+
+                var temppot = 0;
+                this.model.players.each(function(p, i) {
+                    temppot += p.get('prepot');
+                });
+                temppot += this.model.get('pot');
+                $(self.el).find('.temppot').html(temppot);
+
+                //find call value
+                try {
+                    var amttocall = Math.min(this.getMyself().get('stack'), this.model.get('tocall') - (this.getMyself().get('prepot') || 0));
+                    if (this.isMyTurn()) {
+                        if (amttocall > 0) {
+                            $(self.el).find('.amttocall').html(amttocall);
+                            $(self.el).find('.tocallButton').show();
+                            $(self.el).find('.checkButton').hide();
+                            $(self.el).find('.foldButton').show();
+                        } else {
+                            $(self.el).find('.amttocall').html("");
+                            $(self.el).find('.tocallButton').hide();
+                            $(self.el).find('.checkButton').show();
+                        } 
+                    }
+
+                    $(self.el).find('.amttoraise').html(this.model.get('tocall') * 2);
+                }catch(e){}
+
+                //print flop
+                $(this.el).find(".flop").html("");
+                if (this.model.get('flopCard')) {
+                    var cards = this.model.get('flopCard');
+                    $(this.el).find(".flop").html(self.getCardSprite(cards[0]) + self.getCardSprite(cards[1]) + self.getCardSprite(cards[2]));
+                }
+
+                //print turn
+                $(this.el).find(".turnCard").html("");
+                if (this.model.get('turnCard')) {
+                    var cards = this.model.get('turnCard');
+                    $(this.el).find(".turnCard").html(self.getCardSprite(cards[0]));
+                }
+
+                //print river
+                $(this.el).find(".river").html("");
+                if (this.model.get('riverCard')) {
+                    var cards = this.model.get('riverCard');
+                    $(this.el).find(".river").html(self.getCardSprite(cards[0]));
+                }
+
+                this.model.players.each(function(p, i) {
+                    var tr =  $(self.el).find('#'+p.get('position'));
+                    $(tr).find(".seat").text(p.get('name')).addClass('btn-inverse');
+
+                    if (p.get('holdcards')) {
+                        if (p.id==self.player.id || _(['showdown', "Wait"]).contains(self.model.get('status')))
+                            $(tr).find(".holecard").html(self.getCardSprite(p.get('holdcards')[0]) + self.getCardSprite(p.get('holdcards')[1]));
+                        else 
+                            $(tr).find(".holecard").html(self.getBlankCardSprite(p.get('holdcards')[0]) + self.getBlankCardSprite(p.get('holdcards')[1])); 
+                    }
+
+                    $(tr).find(".stack").text(p.get('stack'));
+                    if (self.model.get('turn') && self.model.get('turn') == p.id) {
+                        $(self.el).find('.turn').empty();
+                        $(tr).find(".turn").html("<img src='turn.jpeg' style='height:40px'/>");
+                    }
+                    if (self.model.get('button') && self.model.get('button') == p.id) {
+                        $(self.el).find('.button').empty();
+                        $(tr).find(".button").html("B");
+                    }
+                    $(tr).find(".prepot").text(p.get('prepot'));
+                });
+
+                if (this.isMyTurn()) {
+                    $(this.el).find('.actionTable').show();
+                } else {
+                    $(this.el).find('.actionTable').hide();
+                }
+            },
+
+            toggleSeat: function(e) {
+                var player = App.param.get('player');
+                player.position = $(e.target).parents('tr').attr('id');
+                player.stack = this.STACK_SIZE;
+                room.addPlayer(player);
+            },
+
+        });
+
+        var room, view;
+        $(document).ready(function() {
+            App.Roombase = App.SpecificRoom.extend({ firebase: "https://kinkincup.firebaseio.com/rooms/" + App.param.get('room').id })
+            room = new App.Roombase;
+            view = new App.View({ el:$('body'), model:room, player:App.param.get('player') });
+        });
+    </script>
+</body>
+</html>
