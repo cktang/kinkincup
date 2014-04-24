@@ -54,7 +54,32 @@
             width: auto;
             height: auto;
         }
+
+        .actionTable {
+            position: fixed;
+            bottom: 0px;
+            background-color: #666;
+            color: white;
+            border-top: 2px solid gray;
+            width: 100%;
+            display:block !important;
+            padding: 10px;
+        }
     </style>
+
+    <div class="actionTable">
+        <table>
+            <tr>
+                <th> Action </th>
+                <td><a class="btn action foldButton hide">Fold</a></td>
+                <td><a class="btn action checkButton hide">Check</a></td>
+                <td><a class="btn action tocallButton hide">Call <span class=amttocall></span></a></td>
+                <td style="padding-left:20px"> <a class="btn action raiseButton">Raise</td>
+                <td style="padding-left:5px"> Raise to: <input style="width:50px" class="amttoraise"/></td>
+            </tr>
+        </table>
+    </div>
+
     <div class="container-fluid">
         <div class="span12">
             <div class="pull-right label label-inverse" style='padding:5px 10px; margin-top:5px'>
@@ -93,16 +118,6 @@
                             <td class="river"></td>
                         </tr>
                     </tbody>
-                </table>
-
-                <table class="actionTable">
-                    <tr>
-                        <td><a class="btn action foldButton hide">Fold</a></td>
-                        <td><a class="btn action checkButton hide">Check</a></td>
-                        <td><a class="btn action tocallButton hide">Call <span class=amttocall></span></a></td>
-                        <td style="padding-left:20px"> <a class="btn action raiseButton">Raise</td>
-                        <td style="padding-left:5px"> Raise to: <input style="width:50px" class="amttoraise"/></td>
-                    </tr>
                 </table>
 
                 <table id="players" class="table">
@@ -240,7 +255,7 @@
                 //reset
                 $(self.el).find('.seat').html('Empty').removeClass('btn-inverse');
                 $(self.el).find('.status').html(this.model.get('status'));
-                $(self.el).find('.pot').html(this.model.get('pot'));
+                $(self.el).find('.pot').html("$"+this.model.get('pot'));
                 $(self.el).find('.tocall').html(this.model.get('tocall'));
 
                 var temppot = 0;
@@ -248,7 +263,7 @@
                     temppot += p.get('prepot');
                 });
                 temppot += this.model.get('pot');
-                $(self.el).find('.temppot').html(temppot);
+                $(self.el).find('.temppot').html("$"+temppot);
 
                 //find call value
                 try {
@@ -312,7 +327,7 @@
                             $(tr).find(".madehand").text(JSON.stringify(new App.HandStrength().measure(cards)));
                     }
 
-                    $(tr).find(".stack").text(p.get('stack'));
+                    $(tr).find(".stack").text("$"+p.get('stack'));
                     if (self.model.get('turn') && self.model.get('turn') == p.id) {
                         $(self.el).find('.turn').empty();
                         $(tr).find(".turn").html("<img src='turn.jpeg' style='height:40px'/>");
@@ -321,7 +336,7 @@
                         $(self.el).find('.button').empty();
                         $(tr).find(".button").html("B");
                     }
-                    $(tr).find(".prepot").text(p.get('prepot'));
+                    $(tr).find(".prepot").text("$"+p.get('prepot'));
 
                 });
 
