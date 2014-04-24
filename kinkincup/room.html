@@ -13,6 +13,7 @@
     <link href="js/libs/bootstrap2/css/bootstrap-responsive.css" rel="stylesheet"/>
 
     <script src="kinkincup.js"></script>
+    <link href="css/table.css" rel="stylesheet"/>
 </head>
 <body>
     <style>
@@ -55,84 +56,89 @@
         }
     </style>
     <div class="container-fluid">
-        <div class="pull-right label label-inverse" style='padding:5px 10px; margin-top:5px'>
-            Welcome <span class=playerName></span><br>
-            <a class="btn" href="lobby.html" style="margin-top:5px"> Back to Lobby </a>
-        </div>
-        <h4 class="row-fluid"> Room <span id="roomid"></span> </h4>
-        <div id="log" class="hide pull-right">
+        <div class="span12">
+            <div class="pull-right label label-inverse" style='padding:5px 10px; margin-top:5px'>
+                Welcome <span class=playerName></span><br>
+                <a class="btn" href="lobby.html" style="margin-top:5px"> Back to Lobby </a>
+            </div>
+            <h4 class="row-fluid"> Room <span id="roomid"></span> </h4>
+            <div id="log" class="hide pull-right">
 
-        </div>
-        <div id="content" class="row-fluid" style="width:100%">
-            <h5>Community Cards</h5>
-            <table id="communitycards" style="margin-bottom:20px">
-                <thead>
+            </div>
+            <div id="content" class="row-fluid" style="width:100%">
+                <table class="table">
                     <tr>
-                        <th> Flop </th>
-                        <th> Turn </th>
-                        <th> River </th>
+                        <th>Status
+                        <td><span class="status"></span>
                     </tr>
-                </thead>
-                <tbody>
                     <tr>
-                        <td class="flop"></td>
-                        <td class="turnCard"></td>
-                        <td class="river"></td>
+                        <th>Pot
+                        <td><span class="pot"></span> (<span class="temppot"></span>) 
                     </tr>
-                </tbody>
-            </table>
+                </table>
+                <!-- <h5> to call: <span class="tocall"></span> </h5> -->
 
-            <h5> Status: <span class="status"></span> </h5>
+                <table id="communitycards" style="margin-bottom:20px" class="table">
+                    <thead>
+                        <tr>
+                            <th> Flop </th>
+                            <th> Turn </th>
+                            <th> River </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="flop"></td>
+                            <td class="turnCard"></td>
+                            <td class="river"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <h5> pot: <span class="pot"></span> </h5>
-            <h5> to call: <span class="tocall"></span> </h5>
-            <h5> temppot: <span class="temppot"></span> </h5>
-
-            <h5>Actions</h5>
-            <table class="actionTable">
-                <tr>
-                    <td><a class="btn action foldButton hide">Fold</a></td>
-                    <td><a class="btn action checkButton hide">Check</a></td>
-                    <td><a class="btn action tocallButton hide">Call <span class=amttocall></span></a></td>
-                    <td style="padding-left:20px"> <a class="btn action raiseButton">Raise</td>
-                    <td style="padding-left:5px"> Raise to: <input style="width:50px" class="amttoraise"/></td>
-                </tr>
-            </table>
-
-            <h5> Players </h5>
-            <table id="players">
-                <thead>
+                <table class="actionTable">
                     <tr>
-                        <th>Player</th>
-                        <th>Hole Cards</th>
-                        <th>Stack</th>
-                        <th>Turn</th>
-                        <th>Button</th>
-                        <th>Pre pot</th>
-                        <th>Made Hand</th>
+                        <td><a class="btn action foldButton hide">Fold</a></td>
+                        <td><a class="btn action checkButton hide">Check</a></td>
+                        <td><a class="btn action tocallButton hide">Call <span class=amttocall></span></a></td>
+                        <td style="padding-left:20px"> <a class="btn action raiseButton">Raise</td>
+                        <td style="padding-left:5px"> Raise to: <input style="width:50px" class="amttoraise"/></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr id="pos1">
-                        <td><span class="btn seat"> Empty </span></td>
-                        <td class=holecard></td>
-                        <td class="stack"></td>
-                        <td class="turn"></td>
-                        <td class="button"></td>
-                        <td class="prepot"></td>
-                        <td class="madehand"></td>
-                    </tr>
-                    <tr id="pos2">
-                        <td><span class="btn seat"> Empty </span></td>
-                        <td class=holecard></td>
-                        <td class="stack"></td>
-                        <td class="turn"></td>
-                        <td class="button"></td>
-                        <td class="prepot"></td>
-                        <td class="madehand"></td>
-                    </tr>
-                </tbody>
-            </table>            
+                </table>
+
+                <table id="players" class="table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Hole Cards</th>
+                            <th>Stack</th>
+                            <th>Turn</th>
+                            <th>Button</th>
+                            <th>Pre pot</th>
+                            <th>Made Hand</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="pos1">
+                            <td><span class="btn seat"> Empty </span></td>
+                            <td class=holecard></td>
+                            <th class="stack"></th>
+                            <td class="turn"></td>
+                            <th class="button"></th>
+                            <td class="prepot"></td>
+                            <th class="madehand"></th>
+                        </tr>
+                        <tr id="pos2">
+                            <td><span class="btn seat"> Empty </span></td>
+                            <td class=holecard></td>
+                            <th class="stack"></th>
+                            <td class="turn"></td>
+                            <th class="button"></th>
+                            <td class="prepot"></td>
+                            <th class="madehand"></th>
+                        </tr>
+                    </tbody>
+                </table>            
+            </div>
         </div>
     </div>
 
