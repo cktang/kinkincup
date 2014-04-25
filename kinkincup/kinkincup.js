@@ -176,18 +176,24 @@ App.HandStrength = Backbone.Model.extend({
 
         return result;
     },
-
+    
     compareHands: function(cards1, cards2) {
-        cards1 = cards1.split("");
+        cards1 = cards1.split("")
         cards2 = cards2.split("");
         var self = this;
 
+        var found = false;
+        var result = 0;
         _(cards1).each(function(c1, i) {
+            if (found) return;
             var index = self.cardOrderReverse.indexOf(c1) - self.cardOrderReverse.indexOf(cards2[i]);
-            if (index != 0) return index < 0;
+            if (index != 0) {
+                found = true;
+                result = index < 0;
+            }
         })
 
-        return 0;
+        return result;
     },
 
     chooseWinners: function(players, communityCards) {
