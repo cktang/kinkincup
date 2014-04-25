@@ -92,7 +92,7 @@
                             self.changeGameState();
                             self.start();
                             self.changingStatus = false;
-                        }, 3000);
+                        }, 2000);
                     }
             },
 
@@ -163,7 +163,7 @@
                 setTimeout(function() {
                     self.deal();
                     self.action();
-                }, 3000);
+                }, 2000);
             },
 
             deal: function() {
@@ -283,7 +283,7 @@
                 this.decideWinnerAndMovePot();
 
                 var self = this;
-                setTimeout(function() { self.model.set('status', 'Wait'); }, 4000);
+                setTimeout(function() { self.model.set('status', 'Wait'); }, 2000);
             },
 
             isAllFolded: function() {
@@ -308,6 +308,8 @@
 
                     winners = new App.HandStrength().chooseWinners(this.model.players, communityCards);
                 }
+
+                    console.log('Winners: ' + JSON.stringify(winners));
 
                 var pp = 0;
                 this.model.players.each(function(p) { 
