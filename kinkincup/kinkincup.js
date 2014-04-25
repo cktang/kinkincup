@@ -64,9 +64,10 @@ App.Hand = Backbone.Model.extend({
 
 App.HandStrength = Backbone.Model.extend({
     cardOrder: "23456789TJQKA|A2345",
+    cardOrderReverse: "AKQJT98765432",
 
     order: function(cards) {
-        return _(cards).chain().groupBy(function(e) { return e[0]; }).sortBy(function(v, k) { return (10-v.length)*10 + "AKQJT98765432".indexOf(k); }).flatten().value();
+        return _(cards).chain().groupBy(function(e) { return e[0]; }).sortBy(function(v, k) { return (10-v.length)*100 + "AKQJT98765432".indexOf(k); }).flatten().value();
     },
 
     isStraightFlush: function(cards) {
@@ -176,6 +177,19 @@ App.HandStrength = Backbone.Model.extend({
         return result;
     },
 
+    compareHands: function(cards1, cards2) {
+        cards1 = cards1.split("");
+        cards2 = cards2.split("");
+        var self = this;
+
+        _(cards1).each(function(c1, i) {
+            var index = self.cardOrderReverse.indexOf(c1) - self.cardOrderReverse.indexOf(cards2[i]);
+            if (index != 0) return index < 0;
+        })
+
+        return 0;
+    },
+
     chooseWinners: function(players, communityCards) {
         var winners = [];
         var winnerCondition;
@@ -185,8 +199,8 @@ App.HandStrength = Backbone.Model.extend({
             var condition = self.measure(_.union(p.get('holdcards'), communityCards));
             if (winners.length == 0
                 || (condition.order > winnerCondition.order) 
-                || (condition.order==winnerCondition.order && condition.cards > winnerCondition.cards)) {
-                winners.push(p);
+                || (condition.order==winnerCondition.order && self.compareHands(condition.cards, winnerCondition.cards) > 0)) {
+                winners = [p];
                 winnerCondition = condition;
             } else if (condition.order==winnerCondition.order && condition.cards == winnerCondition.cards) {
                 winners.push(p);
