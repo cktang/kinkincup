@@ -137,31 +137,31 @@
                     </thead>
                     <tbody>
                         <tr id="pos1">
-                            <td><span class="btn seat"> Empty </span></td>
+                            <th><span class="btn seat"> Empty </span></th>
                             <td class=holecard></td>
-                            <th class="stack"></th>
+                            <td class="stack"></td>
                             <td class="turn"></td>
-                            <th class="button"></th>
+                            <td class="button"></td>
                             <td class="prepot"></td>
-                            <th class="madehand"></th>
+                            <td class="madehand"></td>
                         </tr>
                         <tr id="pos2">
-                            <td><span class="btn seat"> Empty </span></td>
+                            <th><span class="btn seat"> Empty </span></th>
                             <td class=holecard></td>
-                            <th class="stack"></th>
+                            <td class="stack"></td>
                             <td class="turn"></td>
-                            <th class="button"></th>
+                            <td class="button"></td>
                             <td class="prepot"></td>
-                            <th class="madehand"></th>
+                            <td class="madehand"></td>
                         </tr>
                         <tr id="pos3">
-                            <td><span class="btn seat"> Empty </span></td>
+                            <th><span class="btn seat"> Empty </span></th>
                             <td class=holecard></td>
-                            <th class="stack"></th>
+                            <td class="stack"></td>
                             <td class="turn"></td>
-                            <th class="button"></th>
+                            <td class="button"></td>
                             <td class="prepot"></td>
-                            <th class="madehand"></th>
+                            <td class="madehand"></td>
                         </tr>
                     </tbody>
                 </table>            
@@ -318,6 +318,8 @@
                 }
 
                 var self = this;
+                var mc = new App.MontyCarlo();
+                $(this.el).find('#players tbody td').empty();
                 this.model.players.each(function(p, i) {
                     var tr =  $(self.el).find('#'+p.get('position'));
                     $(tr).find(".seat").text(p.get('name')).addClass('btn-inverse');
@@ -335,8 +337,23 @@
                             self.model.get('riverCard')
                         ).compact().value();
 
-                        if (p.id==self.player.id || _(['showdown', "Wait"]).contains(self.model.get('status')))
-                            $(tr).find(".madehand").text(JSON.stringify(new App.HandStrength().measure(cards)));
+                        if (p.id==self.player.id || _(['showdown', "Wait"]).contains(self.model.get('status'))) {
+                            $(tr).find(".madehand").html(
+                                JSON.stringify(new App.HandStrength().measure(cards)) + "<br>" +
+                                JSON.stringify(mc.guess(p.get('holdcards'), _.chain().union(
+                                    self.model.get('flopCard'),
+                                    self.model.get('turnCard'),
+                                    self.model.get('riverCard')).compact().value()
+                                ), null, 4)
+                            )
+
+                            // $(tr).find(".prob2").text(JSON.stringify(mc.guess(p.get('holdcards'), _.chain().union(
+                            //     self.model.get('flopCard'),
+                            //     self.model.get('turnCard'),
+                            //     self.model.get('riverCard')).compact().value(),
+                            //     _.difference(self.model.players, p)[0].get('holdcards')
+                            // )), null, "<br>");
+                        }
                     }
 
                     $(tr).find(".stack").text("$"+p.get('stack'));

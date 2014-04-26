@@ -150,6 +150,16 @@ App.HandStrength = Backbone.Model.extend({
         return _(combo).contains(2) ? _(this.order(cards)).chain().first(5).pluck(0).value().join(""): false;
     },
 
+    findResultScore: function(result) {
+        var score = 0;
+        var self = this;
+        _(result.cards.split("").reverse()).each(function(c, i) {
+            score += Math.pow(15, i) * self.cardOrder.indexOf(c[0]);
+        });
+        score += Math.pow(15, 5) * result.order;
+        return score;
+    },
+
     measure: function(cards) {
         var result = {};
 
@@ -174,55 +184,33 @@ App.HandStrength = Backbone.Model.extend({
             result.cards = _(this.order(cards)).chain().first(5).pluck(0).value().join("")
         }
 
-        return result;
-    },
-    
-    compareHands: function(cards1, cards2) {
-        cards1 = cards1.split("")
-        cards2 = cards2.split("");
-        var self = this;
-
-        var found = false;
-        var result = 0;
-        _(cards1).each(function(c1, i) {
-            if (found) return;
-            var index = self.cardOrderReverse.indexOf(c1) - self.cardOrderReverse.indexOf(cards2[i]);
-            if (index != 0) {
-                found = true;
-                result = index < 0;
-            }
-        })
-
+        result.score = this.findResultScore(result);
         return result;
     },
 
     chooseWinners: function(players, communityCards) {
         var winners = [];
-        var winnerCondition;
+        var winnerScore;
         var self = this;
 
         players.each(function(p, i) {
             var condition = self.measure(_.union(p.get('holdcards'), communityCards));
-            if (winners.length == 0
-                || (condition.order > winnerCondition.order) 
-                || (condition.order==winnerCondition.order && self.compareHands(condition.cards, winnerCondition.cards) > 0)) {
+            if (winners.length == 0 || (condition.score > winnerCondition.score)) {
                 winners = [p];
                 winnerCondition = condition;
-            } else if (condition.order==winnerCondition.order && condition.cards == winnerCondition.cards) {
+            } else if (condition.score==winnerCondition.score) {
                 winners.push(p);
             }
         });
         return winners;
     },
 
-
     compareResults: function(results) {
+        var self = this;
         return _(results).chain()
-            .groupBy(function(r) { return r.order });
-            .sortBy(function(r) { return r.order; })
-            .first()
-            .groupBy(function(r) { return r.cards })
-            .sortBy(function(r) { return r.cards; })
+            .groupBy(function(r) { return r.score })
+            .sortBy(function(r) { return r.score; })
+            .reverse()
             .first()
             .value();
     }
@@ -232,25 +220,40 @@ App.HandStrength = Backbone.Model.extend({
 
 App.MontyCarlo = Backbone.Model.extend({
 
-    guess: function(cards, communityCards) {
+    guess: function(heroCards, communityCards, villianCards) {
 
         var deck = new App.Hand().get('deck');
-        deck = _.difference(deck, cards, communityCards);
+        communityCards = communityCards || [];
+        deck = _.difference(deck, heroCards, communityCards, villianCards);
 
-        _(1000).times(function(n) {
+        var hs = new App.HandStrength();
+        var win = 0;
+        var draw = 0;
+        var lose = 0;
+
+        _(1500).times(function(n) {
             var randomDeck = _.shuffle(deck);
-            var heroCards = cards;
-            var villianCards = [randomDeck.shift(), randomDeck.shift()];
-            var randomCommunityCards = communityCards;
+            var hc = heroCards;
+            var vc = villianCards || [randomDeck.shift(), randomDeck.shift()];
+            var randomCommunityCards = _.union([], communityCards);
 
             _(5 - randomCommunityCards.length).times(function(nn) {
                 randomCommunityCards.push(randomDeck.shift());
             });
 
-
-
+            var heroResult = hs.measure(_.union(hc, randomCommunityCards));
+            var villianResult = hs.measure(_.union(vc, randomCommunityCards));
+            var winners = hs.compareResults([heroResult, villianResult]);
+            //console.log("c:" + communityCards + " rc:" + randomCommunityCards + " h:" + JSON.stringify(heroResult) + " v:" + JSON.stringify(villianResult) + " w:" + JSON.stringify(winners));
+            
+            if (_(winners).contains(heroResult)) {
+                if (winners.length == 1) win++;
+                else draw++;
+            }
+            else lose++;
         });
 
+        return {win: win/(win+lose+draw), draw: draw/(win+lose+draw), lose: lose/(win+lose+draw)};
     }
 
 });
