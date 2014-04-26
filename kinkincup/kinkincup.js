@@ -213,7 +213,44 @@ App.HandStrength = Backbone.Model.extend({
             }
         });
         return winners;
+    },
+
+
+    compareResults: function(results) {
+        return _(results).chain()
+            .groupBy(function(r) { return r.order });
+            .sortBy(function(r) { return r.order; })
+            .first()
+            .groupBy(function(r) { return r.cards })
+            .sortBy(function(r) { return r.cards; })
+            .first()
+            .value();
     }
+
 
 });
 
+App.MontyCarlo = Backbone.Model.extend({
+
+    guess: function(cards, communityCards) {
+
+        var deck = new App.Hand().get('deck');
+        deck = _.difference(deck, cards, communityCards);
+
+        _(1000).times(function(n) {
+            var randomDeck = _.shuffle(deck);
+            var heroCards = cards;
+            var villianCards = [randomDeck.shift(), randomDeck.shift()];
+            var randomCommunityCards = communityCards;
+
+            _(5 - randomCommunityCards.length).times(function(nn) {
+                randomCommunityCards.push(randomDeck.shift());
+            });
+
+
+
+        });
+
+    }
+
+});
