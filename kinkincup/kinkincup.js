@@ -220,7 +220,7 @@ App.HandStrength = Backbone.Model.extend({
 
 App.MontyCarlo = Backbone.Model.extend({
 
-    guess: function(heroCards, communityCards, villianCards) {
+    guess: function(heroCards, communityCards, villianCards, times) {
 
         var deck = new App.Hand().get('deck');
         communityCards = communityCards || [];
@@ -231,7 +231,7 @@ App.MontyCarlo = Backbone.Model.extend({
         var draw = 0;
         var lose = 0;
 
-        _(100).times(function(n) {
+        _(times || 100).times(function(n) {
             var randomDeck = _.shuffle(deck);
             var hc = heroCards;
             var vc = villianCards || [randomDeck.shift(), randomDeck.shift()];
