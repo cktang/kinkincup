@@ -253,7 +253,7 @@ App.MontyCarlo = Backbone.Model.extend({
             else lose++;
         });
 
-        return {win: win/(win+lose+draw), draw: draw/(win+lose+draw), lose: lose/(win+lose+draw)};
+        return {win: 100*win/(win+lose+draw), draw: 100*draw/(win+lose+draw), lose: 100*lose/(win+lose+draw)};
     }
 
 });

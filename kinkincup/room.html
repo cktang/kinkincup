@@ -133,6 +133,7 @@
                             <th>Button</th>
                             <th>Pre pot</th>
                             <th>Made Hand</th>
+                            <th>Probability</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -144,6 +145,7 @@
                             <td class="button"></td>
                             <td class="prepot"></td>
                             <td class="madehand"></td>
+                            <td class="prob"></td>
                         </tr>
                         <tr id="pos2">
                             <th><span class="btn seat"> Empty </span></th>
@@ -153,6 +155,7 @@
                             <td class="button"></td>
                             <td class="prepot"></td>
                             <td class="madehand"></td>
+                            <td class="prob"></td>
                         </tr>
                         <tr id="pos3">
                             <th><span class="btn seat"> Empty </span></th>
@@ -162,6 +165,7 @@
                             <td class="button"></td>
                             <td class="prepot"></td>
                             <td class="madehand"></td>
+                            <td class="prob"></td>
                         </tr>
                     </tbody>
                 </table>            
@@ -345,11 +349,11 @@
                                     self.model.get('riverCard')).compact().value();
 
                         if (p.id==self.player.id || _(['showdown', "Wait"]).contains(self.model.get('status'))) {
-                            $(tr).find(".madehand").html(
-                                JSON.stringify(new App.HandStrength().measure(cards), null, "<br>") + "<br>" +
+                            $(tr).find(".madehand").html(JSON.stringify(new App.HandStrength().measure(cards), null, "<br>"));
+                            $(tr).find(".prob").html(
                                 JSON.stringify(mc.guess(p.get('holdcards'), communitycards), null, "<br>") + "<br>" + 
                                 JSON.stringify(mc.guess(p.get('holdcards'), communitycards, otherHolecards), null, "<br>")
-                            )
+                            );
                         }
                     }
 
