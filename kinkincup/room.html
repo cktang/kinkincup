@@ -183,6 +183,9 @@
             },
 
             initialize: function() {
+                this.model.on('change:flopCard', this.renderOdds, this);
+                this.model.on('change:turnCard', this.renderOdds, this);
+                this.model.on('change:riverCard', this.renderOdds, this);
                 this.model.on('change:status', this.renderOdds, this);
                 this.model.on('all', this.render, this);
                 this.model.players.on('all', this.render, this);
@@ -192,7 +195,7 @@
 
                 var self = this;
                 $(window).unload(function() {
-                    self.model.set('players', _.difference(self.model.get('players'), _(self.model.get('players')).where({id: self.options.player.id}) ));
+                    self.model.players.remove(self.model.players.where({ id: self.options.player.id }))
                 });
             },
 
@@ -262,9 +265,10 @@
             },
 
             renderOdds: function() {
+                console.log('renderOdds()');
+
                 var self = this;
                 var mc = new App.MontyCarlo();
-                $(this.el).find('#players tbody td').empty();
                 this.model.players.each(function(p, i) {
                     var tr =  $(self.el).find('#'+p.get('position'));
 
@@ -288,7 +292,7 @@
             },
 
             render: function(action, model) {
-                $(this.el).find('#players').find('tr').find('td:gt(0)').html("");
+                $(this.el).find('#players tbody td').empty();
 
                 $(this.el).find('#log').append('<div>action: ' + action + "</div>");
                 $(this.el).find('#log').append('<div>model: ' + JSON.stringify(model) + "</div>");
