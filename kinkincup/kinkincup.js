@@ -257,3 +257,12 @@ App.MontyCarlo = Backbone.Model.extend({
     }
 
 });
+
+App.SpecificAgent = Backbone.Firebase.Model.extend({ 
+    firebase: "https://kinkincup.firebaseio.com/agents/<agentID>",
+})
+App.Agent = Backbone.Model.extend();
+App.Agents = Backbone.Firebase.Collection.extend({
+    model: App.Agent,
+    firebase: "https://kinkincup.firebaseio.com/agents"
+})
