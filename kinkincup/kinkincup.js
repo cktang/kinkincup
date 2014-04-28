@@ -231,7 +231,7 @@ App.MontyCarlo = Backbone.Model.extend({
         var draw = 0;
         var lose = 0;
 
-        _(times || 100).times(function(n) {
+        _(times || 500).times(function(n) {
             var randomDeck = _.shuffle(deck);
             var hc = heroCards;
             var vc = villianCards || [randomDeck.shift(), randomDeck.shift()];

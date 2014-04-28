@@ -94,6 +94,10 @@
                             self.changingStatus = false;
                         }, 3000);
                     }
+
+                    if (_(['preflop', 'flop', 'turn', 'river']).contains(self.model.get('status')) && players < 2) {
+                        self.model.set({ status: 'showdown' });
+                    }
             },
 
             start: function() {

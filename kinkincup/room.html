@@ -144,8 +144,8 @@
                             <td class="turn"></td>
                             <td class="button"></td>
                             <td class="prepot"></td>
-                            <td class="madehand"></td>
-                            <td class="prob"></td>
+                            <th class="madehand"></th>
+                            <th class="prob"></th>
                         </tr>
                         <tr id="pos2">
                             <th><span class="btn seat"> Empty </span></th>
@@ -154,8 +154,8 @@
                             <td class="turn"></td>
                             <td class="button"></td>
                             <td class="prepot"></td>
-                            <td class="madehand"></td>
-                            <td class="prob"></td>
+                            <th class="madehand"></th>
+                            <th class="prob"></th>
                         </tr>
                         <tr id="pos3">
                             <th><span class="btn seat"> Empty </span></th>
@@ -164,8 +164,8 @@
                             <td class="turn"></td>
                             <td class="button"></td>
                             <td class="prepot"></td>
-                            <td class="madehand"></td>
-                            <td class="prob"></td>
+                            <th class="madehand"></th>
+                            <th class="prob"></th>
                         </tr>
                     </tbody>
                 </table>            
@@ -183,6 +183,7 @@
             },
 
             initialize: function() {
+                this.model.on('change:status', this.renderOdds, this);
                 this.model.on('all', this.render, this);
                 this.model.players.on('all', this.render, this);
 
@@ -260,6 +261,32 @@
                 return ($(html).append(img))[0].outerHTML;
             },
 
+            renderOdds: function() {
+                var self = this;
+                var mc = new App.MontyCarlo();
+                $(this.el).find('#players tbody td').empty();
+                this.model.players.each(function(p, i) {
+                    var tr =  $(self.el).find('#'+p.get('position'));
+
+                    var otherHolecards = self.model.players.at(Math.abs(i-1)).get('holdcards');
+
+                    var communitycards = _.chain().union(
+                                self.model.get('flopCard'),
+                                self.model.get('turnCard'),
+                                self.model.get('riverCard')).compact().value();
+
+                    if (p.get('holdcards')) {
+                        if (p.id==self.player.id) {
+                            $(tr).find(".madehand").html(JSON.stringify(new App.HandStrength().measure(_.union(p.get('holdcards'), communitycards)), null, "<br>"));
+                            $(tr).find(".prob").html(
+                                JSON.stringify(mc.guess(p.get('holdcards'), communitycards), null, "<br>") + "<br>" + 
+                                JSON.stringify(mc.guess(p.get('holdcards'), communitycards, otherHolecards), null, "<br>")
+                            );
+                        }
+                    }
+                });
+            },
+
             render: function(action, model) {
                 $(this.el).find('#players').find('tr').find('td:gt(0)').html("");
 
@@ -322,7 +349,6 @@
                 }
 
                 var self = this;
-                var mc = new App.MontyCarlo();
                 $(this.el).find('#players tbody td').empty();
                 this.model.players.each(function(p, i) {
                     var tr =  $(self.el).find('#'+p.get('position'));
@@ -332,29 +358,7 @@
                         if (p.id==self.player.id || _(['showdown', "Wait"]).contains(self.model.get('status')))
                             $(tr).find(".holecard").html(self.getCardSprite(p.get('holdcards')[0]) + self.getCardSprite(p.get('holdcards')[1]));
                         else 
-                            $(tr).find(".holecard").html(self.getBlankCardSprite(p.get('holdcards')[0]) + self.getBlankCardSprite(p.get('holdcards')[1])); 
-
-                        var cards = _.chain().union(
-                            p.get('holdcards'), 
-                            self.model.get('flopCard'), 
-                            self.model.get('turnCard'), 
-                            self.model.get('riverCard')
-                        ).compact().value();
-
-                        var otherHolecards = self.model.players.at(Math.abs(i-1)).get('holdcards');
-
-                        var communitycards = _.chain().union(
-                                    self.model.get('flopCard'),
-                                    self.model.get('turnCard'),
-                                    self.model.get('riverCard')).compact().value();
-
-                        if (p.id==self.player.id || _(['showdown', "Wait"]).contains(self.model.get('status'))) {
-                            $(tr).find(".madehand").html(JSON.stringify(new App.HandStrength().measure(cards), null, "<br>"));
-                            $(tr).find(".prob").html(
-                                JSON.stringify(mc.guess(p.get('holdcards'), communitycards), null, "<br>") + "<br>" + 
-                                JSON.stringify(mc.guess(p.get('holdcards'), communitycards, otherHolecards), null, "<br>")
-                            );
-                        }
+                            $(tr).find(".holecard").html(self.getBlankCardSprite(p.get('holdcards')[0]) + self.getBlankCardSprite(p.get('holdcards')[1]));
                     }
 
                     $(tr).find(".stack").text("$"+p.get('stack'));
