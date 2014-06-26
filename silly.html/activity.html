@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src="underscore-min.js"></script>
+	<script src="backbone-min.js"></script>
+	<script src="bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+
+	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		body {
+			background-color: #eee;
+		}
+
+		.activity input {
+			background-color: transparent;
+			border: 0px;
+			color: auto;
+			max-width: 70%;
+			width: 3000px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h3 id="title"> 
+			<div class="pull-right">
+				<a href="#" class="btn btn-default" id="infoButton"><span class="glyphicon glyphicon-info-sign"></span></a>
+				<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+			</div>
+			<a href="index.html"><span class="glyphicon glyphicon-chevron-left"></span></a> <span class="name"> Boat Trip </span> 
+		</h3>
+		<div id="stats" class="well well-sm">
+			<h6> <span class="glyphicon glyphicon-ok"></span> : 3 </h6>
+			<h6> <span class="glyphicon glyphicon-remove"></span> : 0 </h6>
+			<h6> Unknown : 0 </h6>
+		</div>
+
+		<div class="list-group" id="activities">
+			<a href="#" class="list-group-item activity list-group-item-success">
+				<h4 class="name list-group-item-heading"> Henry Hui </h4>
+				<div class="content list-group-item-text">
+					<div class="btn-group pull-right">
+					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>	
+					<div> Phone: 1234 5678 </div>
+					<div> Remark: Dead, not coming </div>
+				</div>
+			</a>
+			<a href="#" class="list-group-item activity  list-group-item-warning">
+				<h4 class="name list-group-item-heading"> Kin Tang </h4>
+				<div class="content list-group-item-text">
+					<div class="btn-group pull-right">
+					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>	
+					<div> Phone: 1234 5678 </div>
+					<div> Remark: <input type=text value="Dead, not coming"></input> </div>
+				</div>
+			</a>
+			<a href="#" class="list-group-item activity">
+				<h4 class="name list-group-item-heading"> Kin Tang </h4>
+				<div class="content list-group-item-text">
+					<div class="btn-group pull-right">
+					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>	
+					<div> Phone: 1234 5678 </div>
+					<div> Remark: Sick, not coming </div>
+				</div>
+			</a>
+			<a href="#" class="list-group-item activity">
+				<h4 class="name list-group-item-heading"> Kin Tang </h4>
+				<div class="content list-group-item-text">
+					<div class="btn-group pull-right">
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>	
+					<div> Phone: 1234 5678 </div>
+					<div> Remark: Sick, not coming </div>
+				</div>
+			</a>
+			<a href="#" class="list-group-item activity">
+				<h4 class="name list-group-item-heading"> Kin Tang </h4>
+				<div class="content list-group-item-text">
+					<div class="btn-group pull-right">
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>	
+					<div> Phone: 1234 5678 </div>
+					<div> Remark: Sick, not coming </div>
+				</div>
+			</a>
+			<a href="#" class="list-group-item activity">
+				<h4 class="name list-group-item-heading"> Kin Tang </h4>
+				<div class="content list-group-item-text">
+					<div class="btn-group pull-right">
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>	
+					<div> Phone: 1234 5678 </div>
+					<div> Remark: Sick, not coming </div>
+				</div>
+			</a>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#activities').find('.content').hide();
+			$('#stats').hide();
+		});
+
+		$('#infoButton').click(function(e) { $('#stats').toggle('slide'); })
+
+		$('#activities > a').click(function(e) {
+			if (e.target.tagName == 'INPUT') return;
+			e = e.target.tagName == 'A'? e.target: $(e.target).parents('a');
+			$(e).parents('.list-group').children().removeClass('active');
+			$(e).addClass('active').find('.content').toggle('slide');
+		});
+
+		$('#activities .btn').click(function(e) {
+			var target = e.target.tagName == 'BUTTON'? e.target: $(e.target).parents('button');
+			if ($(target).hasClass('btn-success')) 
+				$(target).parents('.activity').removeClass(' list-group-item-warning').addClass('list-group-item-success');
+			if ($(target).hasClass('btn-danger')) 
+				$(target).parents('.activity').removeClass(' list-group-item-success').addClass('list-group-item-warning');
+			e.stopPropagation();
+		});
+
+	</script>
+</body>
+</html>

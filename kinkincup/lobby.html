@@ -12,32 +12,69 @@
     <script src="js/libs/bootstrap2/js/bootstrap.js"></script>
     <link href="js/libs/bootstrap2/css/bootstrap.css" rel="stylesheet"/>
     <link href="js/libs/bootstrap2/css/bootstrap-responsive.css" rel="stylesheet"/>
-
 </head>
 <body>
     <style>
-        #rooms div {
+        div.click {
             padding:5px;
             border-bottom: 1px solid silver;
         }
-        #rooms div:hover {
+        div.click:hover {
             background-color: black;
             color: white;
             cursor: pointer;
             font-weight: bold;
         }
-        #rooms div:active {
+        div.click:active {
             text-indent: 2px;
         }
     </style>
     <div class="container-fluid">
         <div class="pull-right label label-inverse" style='padding:5px 10px; margin-top:5px'>Welcome <span class=playerName></span></div>
-        <h4 class="row-fluid"> Lobby </h4>
-        <div id="rooms" class="row-fluid" style="width:100%">
+
+        <div class="span4">
+            <h4 class="row-fluid"> Players </h4>
+            <div id="players" class="row-fluid"></div>
+        </div>
+
+        <div class="span4">
+            <h4 class="row-fluid"> Rooms </h4>
+            <div id="rooms" class="row-fluid"></div>
         </div>
     </div>
 
     <script>
+        App.PlayersView = Backbone.View.extend({
+            events : {
+                'click .player': 'setPlayer'
+            },
+
+            initialize: function() {
+                this.collection = new App.Players;
+                this.collection.on('all', this.render, this);
+            },
+
+            render: function() {
+                var self = this;
+                $(this.el).empty();
+                this.collection.each(function(e, i) {
+                    var div = $("<div class='player click'>" + e.get('name') + "</div>").data('obj', e);
+                    $(div).append(" " + 
+                        _(lobby.collection.filter(function(r) { 
+                            return r.get('players')? _(r.get('players')).chain().keys().contains(e.id).value(): false; 
+                        })).map(function(r) { return r.get('name'); }).join()
+                    );
+                    $(self.el).append(div);
+                })
+            },
+
+            setPlayer: function(e) {
+                var p = $(e.target).data('obj') || $(e.target).parents('.player').data('obj');
+                App.param.set('player', p.toJSON());
+                $('.playerName').html(App.param.get('player').name);
+            }
+        })
+
         App.Lobby = Backbone.View.extend({
             events : {
                 'click .room': 'gotoRoom'
@@ -53,8 +90,10 @@
                 $(this.el).empty();
                 var self = this;
                 this.collection.each(function(e, i) {
-                    $(self.el).append($("<div class=room>" + e.get('name') + "</div>").data('obj', e));
-                })
+                    var div = $("<div class='room click'>" + e.get('name') + "</div>").data('obj', e);
+                    $(div).append(" (" + _(e.toJSON().players || {}).keys().length + ")");
+                    $(self.el).append(div);
+                });
             },
 
             gotoRoom: function(e) {
@@ -65,14 +104,14 @@
             }
         });
 
-        var lobby;
+        var lobby, playerView;
         $(document).ready(function() {
             lobby = new App.Lobby({ el:$('#rooms') });
+            playerView = new App.PlayersView({ el: $('#players') });
 
-            if (!App.param.get('player'))
-                App.param.set('player', new App.Players().create({name: prompt('Name?')}));
-
-            $('.playerName').html(App.param.get('player').name);
+            // if (!App.param.get('player'))
+            //     App.param.set('player', new App.Players().create({name: prompt('Name?')}));
+            // $('.playerName').html(App.param.get('player').name);
         });
     </script>
 </body>

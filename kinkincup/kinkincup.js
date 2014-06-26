@@ -220,21 +220,33 @@ App.HandStrength = Backbone.Model.extend({
 
 App.MontyCarlo = Backbone.Model.extend({
 
-    guess: function(heroCards, communityCards, villianCards, times) {
+    guess: function(heroCards, communityCards, villianCards, times, villianRange) {
 
         var deck = new App.Hand().get('deck');
         communityCards = communityCards || [];
         deck = _.difference(deck, heroCards, communityCards, villianCards);
+        villianRange = villianRange || 30;
+        times = times || 500;
 
         var hs = new App.HandStrength();
         var win = 0;
         var draw = 0;
         var lose = 0;
 
-        _(times || 500).times(function(n) {
+        var n = 0;
+        var sk = new slanskyKarlson();
+        while (n < times) {
             var randomDeck = _.shuffle(deck);
             var hc = heroCards;
-            var vc = villianCards || [randomDeck.shift(), randomDeck.shift()];
+            var vc;
+
+            if (!villianCards || villianCards.length < 2) {
+                vc = [randomDeck.shift(), randomDeck.shift()];
+                if (!sk.isHandInRange(vc, villianRange)) continue;
+            } else {
+                vc = villianCards;
+            }
+            n++;    
             var randomCommunityCards = _.union([], communityCards);
 
             _(5 - randomCommunityCards.length).times(function(nn) {
@@ -251,7 +263,7 @@ App.MontyCarlo = Backbone.Model.extend({
                 else draw++;
             }
             else lose++;
-        });
+        };
 
         return {win: 100*win/(win+lose+draw), draw: 100*draw/(win+lose+draw), lose: 100*lose/(win+lose+draw)};
     }

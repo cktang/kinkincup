@@ -13,6 +13,7 @@
     <link href="js/libs/bootstrap2/css/bootstrap-responsive.css" rel="stylesheet"/>
 
     <script src="kinkincup.js"></script>
+    <script type="text/javascript"  src="slanskykarlson.js"></script>
     <link href="css/table.css" rel="stylesheet"/>
 </head>
 <body>
@@ -279,13 +280,17 @@
                                 self.model.get('turnCard'),
                                 self.model.get('riverCard')).compact().value();
 
+                    if (p.id==self.player.id) {
+                        $(tr).find(".prob").html(
+                            JSON.stringify(mc.guess(p.get('holdcards') || [], communitycards), null, "<br>")
+                        ); 
+                    }
+
                     if (p.get('holdcards')) {
                         if (p.id==self.player.id) {
                             $(tr).find(".madehand").html(JSON.stringify(new App.HandStrength().measure(_.union(p.get('holdcards'), communitycards)), null, "<br>"));
-                            $(tr).find(".prob").html(
-                                JSON.stringify(mc.guess(p.get('holdcards'), communitycards), null, "<br>") + "<br>" + 
-                                JSON.stringify(mc.guess(p.get('holdcards'), communitycards, otherHolecards), null, "<br>")
-                            );
+                                // + "<br>" + 
+                                // JSON.stringify(mc.guess(p.get('holdcards'), communitycards, otherHolecards), null, "<br>")
                         }
                     }
                 });
