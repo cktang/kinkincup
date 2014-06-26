@@ -27,34 +27,34 @@
 	<div class="container">
 		<h3 id="title"> 
 			<div class="pull-right">
-				<a href="#" class="btn btn-default" id="infoButton"><span class="glyphicon glyphicon-info-sign"></span></a>
-				<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+				<div class="btn-group">
+				  <button type="button" class="btn btn-success">5</button>
+				  <button type="button" class="btn btn-default">8</button>
+				  <button type="button" class="btn btn-danger">0</button>
+				</div>
+				<a href="#" class="btn btn-default" id="editButton"><span class="glyphicon glyphicon-pencil"></span></a>
 			</div>
 			<a href="index.html"><span class="glyphicon glyphicon-chevron-left"></span></a> <span class="name"> Boat Trip </span> 
 		</h3>
-		<div id="stats" class="well well-sm">
-			<h6> <span class="glyphicon glyphicon-ok"></span> : 3 </h6>
-			<h6> <span class="glyphicon glyphicon-remove"></span> : 0 </h6>
-			<h6> Unknown : 0 </h6>
-		</div>
-
 		<div class="list-group" id="activities">
 			<a href="#" class="list-group-item activity list-group-item-success">
 				<h4 class="name list-group-item-heading"> Henry Hui </h4>
 				<div class="content list-group-item-text">
 					<div class="btn-group pull-right">
 					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
 						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>	
 					<div> Phone: 1234 5678 </div>
 					<div> Remark: Dead, not coming </div>
 				</div>
 			</a>
-			<a href="#" class="list-group-item activity  list-group-item-warning">
+			<a href="#" class="list-group-item activity  list-group-item-danger">
 				<h4 class="name list-group-item-heading"> Kin Tang </h4>
 				<div class="content list-group-item-text">
 					<div class="btn-group pull-right">
 					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
 						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>	
 					<div> Phone: 1234 5678 </div>
@@ -66,6 +66,7 @@
 				<div class="content list-group-item-text">
 					<div class="btn-group pull-right">
 					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
 						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>	
 					<div> Phone: 1234 5678 </div>
@@ -76,36 +77,53 @@
 				<h4 class="name list-group-item-heading"> Kin Tang </h4>
 				<div class="content list-group-item-text">
 					<div class="btn-group pull-right">
-					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span></button>
-						<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-					</div>	
-					<div> Phone: 1234 5678 </div>
-					<div> Remark: Sick, not coming </div>
-				</div>
-			</a>
-			<a href="#" class="list-group-item activity">
-				<h4 class="name list-group-item-heading"> Kin Tang </h4>
-				<div class="content list-group-item-text">
-					<div class="btn-group pull-right">
-					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span></button>
-						<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-					</div>	
-					<div> Phone: 1234 5678 </div>
-					<div> Remark: Sick, not coming </div>
-				</div>
-			</a>
-			<a href="#" class="list-group-item activity">
-				<h4 class="name list-group-item-heading"> Kin Tang </h4>
-				<div class="content list-group-item-text">
-					<div class="btn-group pull-right">
-					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"></span></button>
-						<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+					    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+					    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+						<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>	
 					<div> Phone: 1234 5678 </div>
 					<div> Remark: Sick, not coming </div>
 				</div>
 			</a>
 		</div>
+
+		<div id="editPersonList" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">Personnel in Boat Trip</h4>
+		      </div>
+		      <div class="modal-body" style="max-height:300px; overflow:scroll">
+				<div class="list-group">
+				  <a href="#" class="list-group-item list-group-item-success">Dapibus ac facilisis in
+				  </a>
+				  <a href="#" class="list-group-item person">Morbi leo risus
+				  </a>
+				  <a href="#" class="list-group-item person">Porta ac consectetur ac
+				  </a>
+				  <a href="#" class="list-group-item">Vestibulum at eros</a>
+				  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+				  <a href="#" class="list-group-item list-group-item-success">Morbi leo risus</a>
+				  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+				  <a href="#" class="list-group-item">Vestibulum at eros</a>
+				  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+				  <a href="#" class="list-group-item">Morbi leo risus</a>
+				  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+				  <a href="#" class="list-group-item">Vestibulum at eros</a>
+				  <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+				  <a href="#" class="list-group-item">Morbi leo risus</a>
+				  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+				  <a href="#" class="list-group-item">Vestibulum at eros</a>
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
 	</div>
 
 	<script>
@@ -123,14 +141,25 @@
 			$(e).addClass('active').find('.content').toggle('slide');
 		});
 
-		$('#activities .btn').click(function(e) {
+		$('#editPersonList .btn').click(function(e) {
 			var target = e.target.tagName == 'BUTTON'? e.target: $(e.target).parents('button');
-			if ($(target).hasClass('btn-success')) 
-				$(target).parents('.activity').removeClass(' list-group-item-warning').addClass('list-group-item-success');
-			if ($(target).hasClass('btn-danger')) 
-				$(target).parents('.activity').removeClass(' list-group-item-success').addClass('list-group-item-warning');
+			var newClass = $(target).hasClass('btn-success')? 'list-group-item-success':
+				$(target).hasClass('btn-danger')? 'list-group-item-danger': 'list-group-item-default';
+			$(target).parents('.person').removeClass('list-group-item-danger list-group-item-success list-group-item-default').addClass(newClass);
 			e.stopPropagation();
 		});
+
+		$('#activities .btn').click(function(e) {
+			var target = e.target.tagName == 'BUTTON'? e.target: $(e.target).parents('button');
+			var newClass = $(target).hasClass('btn-success')? 'list-group-item-success':
+				$(target).hasClass('btn-danger')? 'list-group-item-danger': 'list-group-item-default';
+			$(target).parents('.activity').removeClass('list-group-item-danger list-group-item-success list-group-item-default').addClass(newClass);
+			e.stopPropagation();
+		});
+
+		$('#editButton').click(function(e) {
+			$('#editPersonList').modal(true);
+		})
 
 	</script>
 </body>
