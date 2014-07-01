@@ -35,13 +35,11 @@ App.Mixins.HandlebarModelRenderer = {
 		//clear screen
 		$(this.el).find('*').not('script.template').empty().remove();
 
-		if (this.collection) {
-			this.collection.each(function(model, i) {
-				self.renderModel(self.el, model)
-			});
-		}
+		this.collection && this.collection.each(function(model, i) {
+			self.renderModel(self.el, model)
+		});
 
-		if (this.model) this.renderModel(this.el, this.model);
+		this.model && this.renderModel(this.el, this.model);
 
 		this.trigger('rendered');
 	},

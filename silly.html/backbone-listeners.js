@@ -1,5 +1,3 @@
-
-//Listeners
 App.Listener = Backbone.View.extend({
 	apply: function(element) {
 		//to be overriden
@@ -171,4 +169,3 @@ App.YesOrNoListItemListener = App.Listener.extend({
 		});
 	}
 });
-//Listeners end

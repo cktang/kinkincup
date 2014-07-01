@@ -13,11 +13,7 @@
     <script src="json2.js"></script>
 
 	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
-	<style>
-		body {
-			background-color: #eee;
-		}
-	</style>
+	<link href="silly.css" rel="stylesheet">
 
 	<script src="backbonemodel.js"></script>
 	<script src="sillymodels.js"></script>
@@ -26,10 +22,10 @@
 </head>
 <body>
 	<div class="container">
-		<h3> 
+		<h3 class=header> 
 			<div class="pull-right">
-				<a href="#" class="btn btn-default" id="contactButton"><span class="glyphicon glyphicon-earphone"></span></a>
-				<a href="#" class="btn btn-default" id="addActivityButton"><span class="glyphicon glyphicon-plus"></span></a>
+				<a href="#" class="btn btn-sm btn-default" id="contactButton"><span class="glyphicon glyphicon-earphone"></span></a>
+				<a href="#" class="btn btn-sm btn-default" id="addActivityButton"><span class="glyphicon glyphicon-plus"></span></a>
 			</div>
 			Activities 
 		</h3>
@@ -37,13 +33,13 @@
 		<div class="list-group" id="activities">
 			<script class="template" type="text/x-handlebars-template">
 				<div data-target="activity.html" data-id-type="activity" data-id="{{id}}" class="list-group-item activity">
-					<div class="pull-right">
+					<div class="pull-right buttonGroup">
 						<div class="btn-group">
-						  <button type="button" class="btn btn-success">{{{ filter people status="going" }}}</button>
-						  <button type="button" class="btn btn-default">{{{ filter people status="unknown" }}}</button>
-						  <button type="button" class="btn btn-danger">{{{ filter people status="notgoing" }}}</button>
+						  <button type="button" class="btn btn-sm btn-success">{{{ filter people status="going" }}}</button>
+						  <button type="button" class="btn btn-sm btn-default">{{{ filter people status="unknown" }}}</button>
+						  <button type="button" class="btn btn-sm btn-danger">{{{ filter people status="notgoing" }}}</button>
 						</div>
-						<a href="#" class="btn btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
+						<a href="#" class="btn btn-sm btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
 					<h4> {{name}} </h4>
 					<div> {{description}} </div>
@@ -57,7 +53,7 @@
 		      <div class="modal-header">
 		      	<div class="pull-right">
 			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<a href="#" class="btn btn-default" id="addContactButton" style="margin-right: 10px"><span class="glyphicon glyphicon-plus"></span> New Contact</a>
+					<a href="#" class="btn btn-sm btn-default" id="addContactButton" style="margin-right: 10px"><span class="glyphicon glyphicon-plus"></span> New Contact</a>
 				</div>
 
 		        <h4 class="modal-title">All Contacts</h4>

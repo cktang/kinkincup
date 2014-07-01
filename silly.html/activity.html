@@ -12,28 +12,13 @@
     <script src="handlebars-v1.3.0.js"></script>
     <script src="json2.js"></script>
 
+	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
+	<link href="silly.css" rel="stylesheet">
+
 	<script src="backbonemodel.js"></script>
 	<script src="sillymodels.js"></script>
 
 	<script src="backbone-listeners.js"></script>
-
-	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
-	<style>
-		body {
-			background-color: #eee;
-		}
-
-		#peopleList a {
-			position: relative;
-		}
-
-		#peopleList .buttonGroup {
-			position: absolute;
-			right:0px;
-			top:0px;
-			margin:2px;
-		}
-	</style>
 </head>
 <body>
 	<div class="container">
@@ -42,13 +27,13 @@
 				<h3 id="title"> 
 					<div class="pull-right">
 						<div class="btn-group">
-						  <button type="button" class="btn btn-success">{{{ filter people status="going" }}}</button>
-						  <button type="button" class="btn btn-default">{{{ filter people status="unknown" }}}</button>
-						  <button type="button" class="btn btn-danger">{{{ filter people status="notgoing" }}}</button>
+						  <button type="button" class="btn btn-sm btn-success">{{{ filter people status="going" }}}</button>
+						  <button type="button" class="btn btn-sm btn-default">{{{ filter people status="unknown" }}}</button>
+						  <button type="button" class="btn btn-sm btn-danger">{{{ filter people status="notgoing" }}}</button>
 						</div>
-						<a href="#" class="btn btn-default" id="editButton"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="#" class="btn btn-sm btn-default" id="editButton"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
-					<a href="index.html" style="margin-left:-30px"><span class="glyphicon glyphicon-chevron-left"></span></a> <span class="name"> {{name}} </span> 
+					<a href="index.html"><span class="glyphicon glyphicon-chevron-left"></span></a> <span class="name"> {{name}} </span> 
 				</h3>
 				<h6> {{description}} </h6>
 			</script>
@@ -61,11 +46,11 @@
 					<div class="content list-group-item-text hide">
 						<div class="pull-right  buttonGroup">
 							<div class="btn-group attendanceButtons">
-							    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
-							    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-								<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+							    <button type="button" class="btn btn-sm btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+							    <button type="button" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+								<button type="button" class="btn btn-sm btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
 							</div>	
-							<button type="button" class="reportButton btn btn-primary"><span class="glyphicon glyphicon-flag"></span></button>
+							<button type="button" class="reportButton btn btn-sm btn-primary"><span class="glyphicon glyphicon-flag"></span></button>
 						</div>
 						<div> Phone: {{phone}} </div>
 						<div> Remark: {{remark}} </div>
