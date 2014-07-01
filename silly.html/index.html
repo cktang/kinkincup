@@ -19,7 +19,9 @@
 	<script src="sillymodels.js"></script>
 
 	<script src="backbone-listeners.js"></script>
+
 	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 <body>
 	<div class="container">
@@ -132,9 +134,7 @@
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 
-		<script>
-			document.body.requestFullscreen();
-		
+		<script>		
 			$('#addActivityButton').click(function(e) {
 				$('#newActivity').modal().find('input')[0].focus();
 			})
