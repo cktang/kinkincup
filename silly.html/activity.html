@@ -55,12 +55,15 @@
 			<script class="template" type="text/x-handlebars-template">
 				<a href="#"  data-id="{{id}}" class="list-group-item activity list-group-item-{{{printStatus this}}}">
 					<h4 class="name list-group-item-heading"> {{name}} </h4>
-					<div class="content list-group-item-text hide" id="attendanceButtons">
-						<div class="btn-group pull-right">
-						    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
-						    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-							<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-						</div>	
+					<div class="content list-group-item-text hide">
+						<div class="pull-right">
+							<div class="btn-group" class="attendanceButtons">
+							    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+							    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+								<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+							</div>	
+							<button type="button" class="reportButton btn btn-primary"><span class="glyphicon glyphicon-flag"></span></button>
+						</div>
 						<div> Phone: {{phone}} </div>
 						<div> Remark: {{remark}} </div>
 					</div>
@@ -102,7 +105,7 @@
 			people = new App.CollectionView({ 
 				collection: new App.PeopleInActivityCollection() , 
 				el: $('#peopleList'),
-				listeners: [ new App.ExpandListener(), new App.AttendenceButtonListener() ]  
+				listeners: [ new App.ExpandListener(), new App.AttendenceButtonListener(), new App.ReportButtonListener() ]  
 			});
 
 			activity = new App.Activity();

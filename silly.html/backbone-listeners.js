@@ -88,9 +88,19 @@ App.RemoveListener = App.Listener.extend({
 	}
 });
 
+App.ReportButtonListener = App.Listener.extend({
+	apply: function(el, collection, model) {
+		$(el).find('.reportButton').on('click', function(e) {
+			e.stopPropagation();
+			var newRemark = prompt("Remark?", model.get('remark'));
+			model.set('remark', newRemark);
+		});
+	}
+});
+
 App.AttendenceButtonListener = App.Listener.extend({
 	apply: function(el, collection, model) {
-		$(el).find('#attendanceButtons').find('.btn').on('click', function(e) {
+		$(el).find('.attendanceButtons').find('.btn').on('click', function(e) {
 			e.stopPropagation();
 			var newStatus = 
 				$(e.delegateTarget).hasClass('btn-success')? "going":
