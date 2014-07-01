@@ -93,8 +93,8 @@
 	<script>
 		var people, activity, activityView, editContact;
 		$(document).ready(function() {
-			window.scrollTo(0,1);
-			
+			document.body.requestFullscreen();
+
 			people = new App.CollectionView({ 
 				collection: new App.PeopleInActivityCollection() , 
 				el: $('#peopleList'),

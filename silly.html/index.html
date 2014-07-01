@@ -133,8 +133,8 @@
 		</div><!-- /.modal -->
 
 		<script>
-			window.scrollTo(0,1);
-	
+			document.body.requestFullscreen();
+		
 			$('#addActivityButton').click(function(e) {
 				$('#newActivity').modal().find('input')[0].focus();
 			})
