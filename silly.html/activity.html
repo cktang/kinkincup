@@ -20,7 +20,7 @@
 
 	<script src="backbone-listeners.js"></script>
 
-	<meta name="viewport" content="width=1024, minimal-ui"/>
+	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
 
 </head>
 <body>
@@ -93,6 +93,8 @@
 	<script>
 		var people, activity, activityView, editContact;
 		$(document).ready(function() {
+			window.scrollTo(0,1);
+			
 			people = new App.CollectionView({ 
 				collection: new App.PeopleInActivityCollection() , 
 				el: $('#peopleList'),
