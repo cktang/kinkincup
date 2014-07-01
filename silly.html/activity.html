@@ -19,6 +19,13 @@
 	<script src="sillymodels.js"></script>
 
 	<script src="backbone-listeners.js"></script>
+	
+	<!-- For iOS web apps -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="AMC Walking Dead Story Sync">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
 </head>
 <body>
 	<div class="container">
@@ -35,7 +42,7 @@
 					</div>
 					<a href="index.html"><span class="glyphicon glyphicon-chevron-left"></span></a> <span class="name"> {{name}} </span> 
 				</h3>
-				<h6> {{description}} </h6>
+				<h6 class=header> {{description}} </h6>
 			</script>
 		</div>
 
