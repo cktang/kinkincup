@@ -23,12 +23,15 @@
 			background-color: #eee;
 		}
 
-		.activity input {
-			background-color: transparent;
-			border: 0px;
-			color: auto;
-			max-width: 70%;
-			width: 3000px;
+		#peopleList a {
+			position: relative;
+		}
+
+		#peopleList .buttonGroup {
+			position: absolute;
+			right:0px;
+			top:0px;
+			margin:2px;
 		}
 	</style>
 </head>
@@ -56,8 +59,8 @@
 				<a href="#"  data-id="{{id}}" class="list-group-item activity list-group-item-{{{printStatus this}}}">
 					<h4 class="name list-group-item-heading"> {{name}} </h4>
 					<div class="content list-group-item-text hide">
-						<div class="pull-right">
-							<div class="btn-group" class="attendanceButtons">
+						<div class="pull-right  buttonGroup">
+							<div class="btn-group attendanceButtons">
 							    <button type="button" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
 							    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
 								<button type="button" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>

@@ -92,8 +92,8 @@ App.ReportButtonListener = App.Listener.extend({
 	apply: function(el, collection, model) {
 		$(el).find('.reportButton').on('click', function(e) {
 			e.stopPropagation();
-			var newRemark = prompt("Remark?", model.get('remark'));
-			model.set('remark', newRemark);
+			var newRemark = prompt("Remark?", model.get('remark') || "");
+			newRemark && model.set('remark', newRemark);
 		});
 	}
 });
