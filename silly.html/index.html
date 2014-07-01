@@ -12,7 +12,6 @@
     <script src="handlebars-v1.3.0.js"></script>
     <script src="json2.js"></script>
 
-
 	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		body {
@@ -22,6 +21,8 @@
 
 	<script src="backbonemodel.js"></script>
 	<script src="sillymodels.js"></script>
+
+	<script src="backbone-listeners.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -42,7 +43,6 @@
 						  <button type="button" class="btn btn-default">{{{ filter people status="unknown" }}}</button>
 						  <button type="button" class="btn btn-danger">{{{ filter people status="notgoing" }}}</button>
 						</div>
-						<a href="#" class="btn btn-warning contactSelectButton"><span class="glyphicon glyphicon-user"></span></a>
 						<a href="#" class="btn btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
 					<h4> {{name}} </h4>
@@ -76,36 +76,6 @@
 
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		      </div>
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-
-		<div id="activityContact" class="modal fade">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		        <h4 class="modal-title">Activity Personnel List</h4>
-		      </div>		      
-
-		      <div class="modal-body" style="max-height:300px; overflow:scroll">
-				<div class="list-group" id="contactSelect">
-					<script class="template" type="text/x-handlebars-template">
-					  <div data-id="{{id}}" class="list-group-item person"> 
-						<div class="btn-group pull-right">
-						    <button type="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-ok"></span></button>
-							<button type="button" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-						</div>	
-					  	{{name}} 
-					  </div>
-					</script>
-				</div>
-		      </div>
-
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary" id="submitNewContactButton">Save</button>
 		      </div>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
@@ -180,9 +150,6 @@
 					listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
 				});
 			})
-			$('#contactList .person').click(function(e) {
-				$('#editContact').modal();
-			})
 			$('#submitNewActivityButton').click(function(e) {
 				activities.collection.push(new App.FormHandler({ el: $('#newActivityForm') }).serialize());
 				$('#newActivity').modal('hide');
@@ -198,7 +165,7 @@
 			var activities = new App.CollectionView({ 
 				collection: new App.ActivityCollection, 
 				el: $('#activities'),
-				listeners: [ new App.RemoveListener(), new App.LinkListener(), new App.ContactSelectListener() ]  
+				listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
 			});
 		</script>
 	</div>
