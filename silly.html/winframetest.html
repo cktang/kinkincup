@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src="underscore-min.js"></script>
+	<script src="backbone-min.js"></script>
+	<script src="bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="firebase.js"></script>
+    <script src="backbone-firebase.js"></script>
+    <script src="handlebars-v1.3.0.js"></script>
+    <script src="json2.js"></script>
+    <script src="jquery.tagsinput.js"></script>
+
+	<link href="jquery.tagsinput.css" rel="stylesheet">
+	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- <link href="silly.css" rel="stylesheet"> -->
+	<script src="backbonemodel.js"></script>
+	<script src="sillymodels.js"></script>
+	<script src="backbone-listeners.js"></script>
+
+	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body style="overflow:hidden; width:100%; height:100%">
+	<div id="pic" style="position:absolute; top:0px; left:0px; height:100%; width:100%; margin-left:-110px">
+		<img src="window.jpg" height="570"/>
+	</div>
+
+	<div id="frame" style="display:none; position:absolute; top:0px; left:0px; height:100%; width:100%">
+		<img src="frame.png"/>
+	</div>
+
+	<div id="buttons" style="position:absolute; bottom:0px; left:0px; width:100%">
+		<div id="addframe" class="btn btn-danger">Add Frame</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#addframe').on('click', function(e) {
+				$('#frame').show('fade');
+			});
+
+			$('#frame').on('gesturestart', function(e) {
+				console.log(e);
+				$('#log').html(e);
+			})
+		})
+
+	</script>
+</body>
+</html>
