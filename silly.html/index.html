@@ -210,7 +210,7 @@
 				});
 
 				activities.on('rendered removed', function() {
-
+alert('here');
 					//filterbox
 					try {
 					beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
