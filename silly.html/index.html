@@ -28,6 +28,12 @@
 	<div class="container">
 		<h3 class=header> 
 			<div class="pull-right">
+				<div class="btn-group">
+				  <button type="button" class="btn btn-sm btn-success"><span id="totalGoing"></span></button>
+				  <button type="button" class="btn btn-sm btn-default"><span id="totalUnknown"></span></button>
+				  <button type="button" class="btn btn-sm btn-danger"><span id="totalNotGoing"></span></button>
+				</div>
+
 				<a href="#" class="btn btn-sm btn-default" id="contactButton"><span class="glyphicon glyphicon-earphone"></span></a>
 				<a href="#" class="btn btn-sm btn-default" id="addActivityButton"><span class="glyphicon glyphicon-plus"></span></a>
 			</div>
@@ -147,6 +153,13 @@
 		<script>		
 			var activities, contacts, filterBox, duplicateBox;
 
+			function updateStats() {									//stats box
+				var sum = function(arr) { return _.reduce(arr, function(memo, num){ return memo + num; }, 0); }
+				$('#totalGoing').html(sum(_($('.list-group-item .btn-success:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+				$('#totalUnknown').html(sum(_($('.list-group-item .btn-default:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+				$('#totalNotGoing').html(sum(_($('.list-group-item .btn-danger:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+			}
+
 			$(document).ready(function() {
 				$('input.tags').tagsInput({width:'auto'});
 
@@ -211,6 +224,7 @@
 							activities.filter(function(model) {
 								return value == '' || model.get('tags') && _(model.get('tags').split(",")).contains(value);
 							});
+							updateStats();
 						})
 					}
 
@@ -232,6 +246,8 @@
 							console.log(value);
 						})
 					}
+
+					updateStats();
 				})
 
 			});
