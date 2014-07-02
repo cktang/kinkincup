@@ -210,12 +210,10 @@
 				});
 
 				activities.on('rendered removed', function() {
-alert('here');
+
 					//filterbox
-					try {
 					beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
 					if (filterBox) {
-						alert(filterBox);
 						filterBox.render(beans);
 					} else {
 						filterBox = new App.SelectView({
@@ -251,7 +249,7 @@ alert('here');
 							console.log(value);
 						})
 					}
-}catch(e) { alert(e); }
+
 					updateStats();
 				})
 
