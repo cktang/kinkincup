@@ -4,22 +4,11 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="jquery-2.1.1.min.js"></script>
-	<script src="underscore-min.js"></script>
-	<script src="backbone-min.js"></script>
 	<script src="bootstrap-3.1.1-dist/js/bootstrap.js"></script>
-    <script src="firebase.js"></script>
-    <script src="backbone-firebase.js"></script>
-    <script src="handlebars-v1.3.0.js"></script>
-    <script src="json2.js"></script>
-    <script src="jquery.tagsinput.js"></script>
 
 	<link href="jquery.tagsinput.css" rel="stylesheet">
 	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- <link href="silly.css" rel="stylesheet"> -->
-	<script src="backbonemodel.js"></script>
-	<script src="sillymodels.js"></script>
-	<script src="backbone-listeners.js"></script>
 
 	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -39,14 +28,22 @@
 
 	<script>
 		$(document).ready(function() {
+			$(document).on('touchstart', function(e) {
+				console.log('D: touchstart');
+				e.stopPropagation();
+			})
+
+			$(document).on('gesturestart gesturechange gestureend', function(e) {
+				alert('D: gesture');
+				e.stopPropagation();
+			})
 
 			$('#addframe').on('click', function(e) {
 				$('#frame').show('fade');
 			});
 
-			$('#frame').on('gesturestart', function(e) {
-				console.log(e);
-				$('#log').html(e);
+			$('#frame').on('gesturestart gesturechange gestureend', function(e) {
+				alert(e);
 			})
 		})
 
