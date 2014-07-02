@@ -43,8 +43,12 @@
 				$('#frame').show('fade');
 			});
 
-			$('#frame').on('gesturechange', function(e) {
-				alert("gesturechange: " + JSON.stringify(e));
+			$('#frame').on('gesturestart', function(e) {
+
+			})
+
+			$('#frame').on('gesturechange', function() {
+				alert(arguments)
 			})
 		})
 
