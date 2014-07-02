@@ -153,11 +153,13 @@
 		<script>		
 			var activities, contacts, filterBox, duplicateBox;
 
-			function updateStats() {									//stats box
-				var sum = function(arr) { return _.reduce(arr, function(memo, num){ return memo + num; }, 0); }
-				$('#totalGoing').html(sum(_($('.list-group-item .btn-success:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
-				$('#totalUnknown').html(sum(_($('.list-group-item .btn-default:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
-				$('#totalNotGoing').html(sum(_($('.list-group-item .btn-danger:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+			function updateStats() {									
+				setTimeout(function() {
+					var sum = function(arr) { return _.reduce(arr, function(memo, num){ return memo + num; }, 0); }
+					$('#totalGoing').html(sum(_($('.list-group-item .btn-success:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+					$('#totalUnknown').html(sum(_($('.list-group-item .btn-default:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+					$('#totalNotGoing').html(sum(_($('.list-group-item .btn-danger:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+				}, 1000);
 			}
 
 			$(document).ready(function() {
