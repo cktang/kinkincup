@@ -1,5 +1,5 @@
 body {
-	background-color: #eee;
+	background-color: #ddd;
 }
 #activities .list-group-item {
 	position: relative;
@@ -11,8 +11,17 @@ body {
 	top:0px;
 }
 
-.btn {
+.btn, .list-group-item, select {
 	border-radius: 0px;
+	border: 0px;
+}
+
+.list-group-item {
+	border-bottom: 4px solid #ddd;
+}
+
+.modal .list-group-item {
+	border-bottom: 2px solid #ddd;	
 }
 
 .container {
@@ -25,5 +34,5 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .header {
-	padding-left: 10px;
+	/*padding-left: 10px;*/
 }

@@ -16,8 +16,6 @@ App.CheckboxTraceListener = Backbone.View.extend({
 				self.goingList = _.difference(self.goingList, model.id);
 				self.notGoingList = _.union(self.notGoingList, model.id);
 			}
-
-			console.log(self.goingList + "|" + self.notGoingList);
 		});
 	}
 });
@@ -56,9 +54,6 @@ App.EditButtonListener = App.Listener.extend({
 				});
 
 				editContact.save = function() {
-					// console.log("saving: " + this.goingList);
-					// console.log("removing: " + this.notGoingList);
-
 					var idsToAdd = _.difference(this.goingList, _(activity.get('people')).pluck('id'))
 					var pp = editContact.collection.filter(function(e) { return _(idsToAdd).contains(e.id) });
 					// console.log(pp);

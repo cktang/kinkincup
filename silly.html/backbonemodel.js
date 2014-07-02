@@ -2,12 +2,8 @@ App = {
 	Mixins: {},
 	savePrefix: 'silly-',
 	local: localStorage,
-	access: function(name) {
-		return App.local[App.savePrefix + name] || '';
-	},
-	save: function(name, value) {
-		App.local[App.savePrefix + name] = value;
-	}
+	access: function(name) { return App.local[App.savePrefix + name] || ''; },
+	save: function(name, value) { App.local[App.savePrefix + name] = value; }
 };
 
 //Utility
@@ -65,9 +61,18 @@ App.Mixins.HandlebarModelRenderer = {
 		}
 	},
 
-	removeModel: function(container, model) {
+	showModel: function(container, model) {
+		$(container).find('[data-id=' + model.id + ']').show("fade");
+	},
+
+	hideModel: function(container, model) {
 		$(container).find('[data-id=' + model.id + ']').hide("fade");
+	},
+
+	removeModel: function(container, model) {
+		$(container).find('[data-id=' + model.id + ']').remove();
 		this.handleEmpty();
+		this.trigger('removed');
 	},
 
 	handleEmpty: function() {
@@ -75,6 +80,14 @@ App.Mixins.HandlebarModelRenderer = {
 		if (this.collection && this.collection.length == 0) {
 			$(this.el).append("<div id=noactivity class=well>No Record</div>")
 		}
+	},
+
+	filter: function(fits) {
+		var self = this;
+		this.collection.each(function(e, i) {
+			if (fits(e)) self.showModel(self.el, e);
+			else self.hideModel(self.el, e);
+		})
 	}
 };
 // Handlebar mixin end
@@ -123,4 +136,36 @@ App.ModelView = Backbone.View.extend(
 		if (_(['sync']).contains(action)) this.render();
 	}
 }));
+
+App.SelectView = Backbone.View.extend({
+
+	initialize: function(options) {
+		this.options = options;
+		if (this.options.map) this.map = this.options.map;
+		this.render(this.options.beans);
+	},
+
+	//to be overridden by custom select box mappings
+	map: function(val) { return val; },
+
+  	events: {
+  		'change select': function(e) { this.trigger('changed', $(e.target).val()); }
+  	},
+
+	render: function(beans) {
+		if (!beans) return;
+
+		var comboBox = $('<select class=form-control name="'+this.options.name+'"></select>');
+		if (this.options.addEmpty) $(comboBox).append('<option value=""></option>');
+
+		var self = this;
+		_(beans).each(function(e, i) {
+			$(comboBox).append('<option value="'+e+'">'+self.map(e)+'</option>');
+		});
+
+		$(this.el).empty().append(comboBox);
+		this.trigger('rendered');
+		return this;
+	}
+});
 
