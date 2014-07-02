@@ -48,7 +48,9 @@
 			})
 
 			$('#frame').on('gesturechange', function(e) {
-				alert(e.originalEvent.touches[0].pageX);
+				alert(e);
+				alert(e.originalEvent);
+				alert(e.originalEvent.touches[0]); 
 				alert(e.originalEvent.touches[0].pageY); 
 			})
 		})
