@@ -212,6 +212,7 @@
 				activities.on('rendered removed', function() {
 
 					//filterbox
+					try {
 					beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
 					if (filterBox) filterBox.render(beans);
 					else {
@@ -248,7 +249,7 @@
 							console.log(value);
 						})
 					}
-
+}catch(e) { alert(e); }
 					updateStats();
 				})
 
