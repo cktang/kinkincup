@@ -49,8 +49,8 @@
 
 			$('#frame').on('gesturechange', function(e) {
 				try {
-					alert(e);
-					alert(e.originalEvent);
+					alert(e.pageY);
+					alert(e.originalEvent.pageY);
 					alert(e.originalEvent.touches); 
 					alert(e.originalEvent.touches[0]); 
 				}catch(e) { 
