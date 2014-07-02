@@ -38,7 +38,7 @@
 				<a href="#" class="btn btn-sm btn-default" id="addActivityButton"><span class="glyphicon glyphicon-plus"></span></a>
 			</div>
 			Activities 
-			<span id="filterBox"></span>
+			<span id="filterDiv"></span>
 		</h3>
 
 		<div class="list-group" id="activities">
@@ -138,7 +138,7 @@
 				  </div>
 				  <div class="form-group">
 				    <label for="duplicate">DuplicatedFrom</label>
-				    <div id="duplciateFromBox"></div>
+				    <div id="duplciateFromDiv"></div>
 				  </div>
 				</form>
 		      </div>
@@ -219,7 +219,7 @@ alert('here');
 						filterBox.render(beans);
 					} else {
 						filterBox = new App.SelectView({
-							el: $('#filterBox'),
+							el: $('#filterDiv'),
 							beans: beans,
 							name: 'test',
 							addEmpty: true
@@ -237,7 +237,7 @@ alert('here');
 					if (duplicateBox) duplicateBox.render(beans);
 					else {
 						duplicateBox = new App.SelectView({
-							el: $('#duplciateFromBox'),
+							el: $('#duplciateFromDiv'),
 							beans: activities.collection.pluck('id'),
 							pairs: _.object(activities.collection.pluck('id'), activities.collection.pluck('name')),
 							name: 'duplciateFrom',
