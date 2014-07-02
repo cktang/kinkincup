@@ -5,7 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="jquery-2.1.1.min.js"></script>
 	<script src="bootstrap-3.1.1-dist/js/bootstrap.js"></script>
-
+	<script src="json2.js"></script>
+	
 	<link href="jquery.tagsinput.css" rel="stylesheet">
 	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
 
@@ -34,8 +35,8 @@
 				e.stopPropagation();
 			})
 
-			$(document).on('gesturestart gesturechange gestureend', function(e) {
-				alert('D: gesture');
+			$(document).on('gesturechange', function(e) {
+				alert(JSON.stringify(e));
 				e.stopPropagation();
 			})
 
