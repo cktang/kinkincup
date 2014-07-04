@@ -49,10 +49,7 @@
 
 			$('#frame').on('gestureend', function(e) {
 				try {
-					alert(e.pageY);
-					alert(e.originalEvent.pageY);
-					alert(e.originalEvent.touches); 
-					alert(e.originalEvent.touches[0]); 
+					alert(e.originalEvent.pageX + "|" + e.originalEvent.pageY);
 				}catch(e) { 
 					alert("Error: " + e);
 				}
