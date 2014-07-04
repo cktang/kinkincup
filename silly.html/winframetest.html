@@ -48,8 +48,7 @@
 
 			$('#frame').on('gestureend', function(e) {
 				try {
-					alert(e.originalEvent.pageX + "|" + e.originalEvent.pageY);
-					alert(JSON.stringify(e.originalEvent.targetTouches));
+					alert(e.originalEvent.pageX + "|" + e.originalEvent.pageY + "|" + e.scale + "|" + e.rotation);
 				}catch(e) { 
 					alert("Error: " + e);
 				}
