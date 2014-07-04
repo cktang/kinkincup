@@ -47,6 +47,7 @@
 			$('#frame').on('touchstart', function(e) {
 			    startX = e.targetTouches[0].pageX - startX;
 			    startY = e.targetTouches[0].pageY - startY;
+			    alert(startX + " " + startY);
 			})
 
 			$('#frame').on('touchmove', function(e) {
