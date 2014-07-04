@@ -51,10 +51,7 @@
 				try {
 					// alert(arguments);
 					// alert(e.originalEvent.pageX + "|" + e.originalEvent.pageY + "|" + e.originalEvent.scale + "|" + e.originalEvent.rotation);
-					alert(_(e).keys());
-					alert(e.data);
-					alert(e.bubbles);
-					alert(_(e.originalEvent).keys());
+					alert(e.originalEvent.scale + " " + e.originalEvent.rotation);
 				}catch(e) { 
 					alert("Error: " + e);
 				}
