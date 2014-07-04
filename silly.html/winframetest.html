@@ -51,7 +51,7 @@
 			    alert(startX + " " + startY);
 			})
 
-			$('#frame').on('touchmove', function(e) {
+			$('#frame').on('scroll', function(e) {
 				alert('touchmove');
 			    curX = e.targetTouches[0].pageX - startX;
 			    curY = e.targetTouches[0].pageY - startY;
