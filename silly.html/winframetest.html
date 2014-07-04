@@ -45,19 +45,18 @@
 
 			var startX, startY;
 			$('#frame').on('touchstart', function(e) {
-				console.log('touchstart');
+				// console.log('touchstart');
 			    startX = e.originalEvent.targetTouches[0].pageX;
 			    startY = e.originalEvent.targetTouches[0].pageY;
-			    console.log(startX + " " + startY);
+			    // console.log(startX + " " + startY);
 			})
 
 			$('#frame').on('touchmove', function(e) {
-				console.log('touchmove');
+				// console.log('touchmove');
 			    curX = e.originalEvent.targetTouches[0].pageX - startX;
 			    curY = e.originalEvent.targetTouches[0].pageY - startY;
-			    console.log(curX + "|" + curY);
-			    $(e.delegateTarget).css('marginLeft', curX + "px");
-			    $(e.delegateTarget).css('marginTop', curY + "px");
+			    // console.log(curX + "|" + curY);
+			    $(e.delegateTarget).css({'marginLeft':curX + "px", 'marginTop':curY + "px"});
 			})
 
 			$('#frame').on('gesturechange', function(e) {
