@@ -45,12 +45,14 @@
 
 			var startX, startY;
 			$('#frame').on('touchstart', function(e) {
+				alert('touchstart');
 			    startX = e.targetTouches[0].pageX - startX;
 			    startY = e.targetTouches[0].pageY - startY;
 			    alert(startX + " " + startY);
 			})
 
 			$('#frame').on('touchmove', function(e) {
+				alert('touchmove');
 			    curX = e.targetTouches[0].pageX - startX;
 			    curY = e.targetTouches[0].pageY - startY;
 			    alert(curX + "|" + curY);
