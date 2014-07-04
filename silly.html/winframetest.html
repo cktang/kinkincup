@@ -50,6 +50,7 @@
 			$('#frame').on('gestureend', function(e) {
 				try {
 					alert(e.originalEvent.pageX + "|" + e.originalEvent.pageY);
+					alert(e.originalEvent.offsetX + "|" + e.originalEvent.offsetY);
 				}catch(e) { 
 					alert("Error: " + e);
 				}
