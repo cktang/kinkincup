@@ -73,7 +73,7 @@
 		      </div>
 
 		      <div class="modal-body" style="max-height:300px; overflow:scroll">
-				<div class="list-group" id="contacts">
+				<div class="list-group" id="contactsDiv">
 					<script class="template" type="text/x-handlebars-template">
 					  <div data-id="{{id}}" class="list-group-item person"> 
 						<a href="#" class="btn btn-sm btn-danger removeButton pull-right"><span class="glyphicon glyphicon-remove"></span></a>
@@ -182,7 +182,7 @@
 					$('#contactList').modal();
 					if (!contacts) contacts = new App.CollectionView({ 
 						collection: new App.PeopleCollection, 
-						el: $('#contacts'),
+						el: $('#contactsDiv'),
 						listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
 					});
 				})
