@@ -32,6 +32,7 @@
 				  <button type="button" class="btn btn-sm btn-success"><span id="totalGoing"></span></button>
 				  <button type="button" class="btn btn-sm btn-default"><span id="totalUnknown"></span></button>
 				  <button type="button" class="btn btn-sm btn-danger"><span id="totalNotGoing"></span></button>
+				  <button type="button" class="btn btn-sm strong"><span id="total"></span></button>
 				</div>
 
 				<a href="#" class="btn btn-sm btn-default" id="contactButton"><span class="glyphicon glyphicon-earphone"></span></a>
@@ -46,11 +47,12 @@
 				<div data-target="activity.html" data-id-type="activity" data-id="{{id}}" class="list-group-item activity">
 					<div class="pull-right buttonGroup">
 						<div class="btn-group">
-						  <button type="button" class="btn btn-sm btn-success">{{{ filter people status="going" }}}</button>
-						  <button type="button" class="btn btn-sm btn-default">{{{ filter people status="unknown" }}}</button>
-						  <button type="button" class="btn btn-sm btn-danger">{{{ filter people status="notgoing" }}}</button>
+						  <button type="button" class="btn btn-success">{{{ filter people status="going" }}}</button>
+						  <button type="button" class="btn btn-default">{{{ filter people status="unknown" }}}</button>
+						  <button type="button" class="btn btn-danger">{{{ filter people status="notgoing" }}}</button>
+						  <button type="button" class="btn btn-total strong">{{{ filter people status="--any--" }}}</button>
 						</div>
-						<a href="#" class="btn btn-sm btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
+						<a href="#" class="btn btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
 					<h4> {{name}} </h4>
 					<div> {{description}} </div>
@@ -101,11 +103,11 @@
 				    <label for="exampleInputEmail1">Name</label>
 				    <input name="name" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
 				  </div>
-				  <div class="form-group">
+<!-- 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Phone</label>
 				    <input name="phone" class="form-control" id="exampleInputPassword1" placeholder="Enter phone number">
 				  </div>
-				</form>
+ -->				</form>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -159,6 +161,7 @@
 					$('#totalGoing').html(sum(_($('.list-group-item .btn-success:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
 					$('#totalUnknown').html(sum(_($('.list-group-item .btn-default:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
 					$('#totalNotGoing').html(sum(_($('.list-group-item .btn-danger:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
+					$('#total').html(sum(_($('.list-group-item .btn-total:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
 				}, 1000);
 			}
 

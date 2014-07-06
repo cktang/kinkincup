@@ -16,6 +16,7 @@ App.FormHandler = Backbone.View.extend({
 
 // Handlebar mixin start
 Handlebars.registerHelper('filter', function(list, options) {
+  if (options.hash.status == "--any--") return new Handlebars.SafeString(_(list).keys().length);
   return new Handlebars.SafeString(_(list).where(options.hash).length);
 });
 

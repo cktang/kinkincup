@@ -33,6 +33,7 @@
 						  <button type="button" class="btn btn-sm btn-success">{{{ filter people status="going" }}}</button>
 						  <button type="button" class="btn btn-sm btn-default">{{{ filter people status="unknown" }}}</button>
 						  <button type="button" class="btn btn-sm btn-danger">{{{ filter people status="notgoing" }}}</button>
+						  <button type="button" class="btn btn-sm strong">{{{ filter people status="--any--" }}}</button>
 						</div>
 						<a href="#" class="btn btn-sm btn-default" id="editButton"><span class="glyphicon glyphicon-pencil"></span></a>
 					</div>
@@ -46,17 +47,16 @@
 			<script class="template" type="text/x-handlebars-template">
 				<a href="#"  data-id="{{id}}" class="list-group-item activity list-group-item-{{{printStatus this}}}">
 					<h4 class="name list-group-item-heading"> {{name}} </h4>
+					<div> {{remark}} </div>
 					<div class="content list-group-item-text hide">
 						<div class="pull-right  buttonGroup">
 							<div class="btn-group attendanceButtons">
-							    <button type="button" class="btn btn-sm btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
-							    <button type="button" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-								<button type="button" class="btn btn-sm btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+							    <button type="button" class="btn btn-lg btn-default btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+							    <button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+								<button type="button" class="btn btn-lg btn-default btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
 							</div>	
-							<button type="button" class="reportButton btn btn-sm btn-primary"><span class="glyphicon glyphicon-flag"></span></button>
+							<button type="button" class="reportButton btn btn-lg btn-primary"><span class="glyphicon glyphicon-flag"></span></button>
 						</div>
-						<div> Phone: {{phone}} </div>
-						<div> Remark: {{remark}} </div>
 					</div>
 				</a>
 			</script>
