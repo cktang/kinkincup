@@ -47,6 +47,7 @@ App.Mixins.HandlebarModelRenderer = {
 		$(el).find('.hide').removeClass('hide').hide();
 		this.registerListeners(el);	
 		this.handleEmpty();
+		return el;
 	},
 	
 	realRenderModel: function(container, model, el) {
@@ -73,7 +74,6 @@ App.Mixins.HandlebarModelRenderer = {
 	removeModel: function(container, model) {
 		$(container).find('[data-id=' + model.id + ']').remove();
 		this.handleEmpty();
-		this.trigger('removed');
 	},
 
 	handleEmpty: function() {
@@ -108,8 +108,11 @@ App.CollectionView = Backbone.View.extend(
 			this.render();
 		}
 		if (!this.synced) return;
-		if (_(['add', 'change']).contains(action)) this.render();
+		if (_(['add']).contains(action)) this.render();
 		if (_(['remove']).contains(action)) this.removeModel(this.el, model);
+		if (action.indexOf('change:') >= 0) this.renderModel(this.el, model).show('pulsate');
+
+		this.trigger('changed');
 	},
 
 	registerListeners: function(element) {

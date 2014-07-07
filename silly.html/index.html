@@ -13,6 +13,9 @@
     <script src="json2.js"></script>
     <script src="jquery.tagsinput.js"></script>
 
+    <script src="jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+
 	<link href="jquery.tagsinput.css" rel="stylesheet">
 	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
 
@@ -212,7 +215,7 @@
 					listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
 				});
 
-				activities.on('rendered removed', function() {
+				activities.on('rendered', function() {
 
 					//filterbox
 					beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
