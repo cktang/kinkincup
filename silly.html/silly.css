@@ -48,3 +48,19 @@ h1,h2,h3,h4,h5,h6 {
 .btn-unknown, .btn-group .btn-default {
 	background-color: Khaki;
 }
+
+.btn-group .btn {
+	max-width: 30px;
+	min-width: 30px;
+	width: 30px;
+	text-align: center;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.attendanceButtons .btn {
+	max-width: 50px;
+	min-width: 50px;
+	width: 50px;
+	text-align: center;
+}

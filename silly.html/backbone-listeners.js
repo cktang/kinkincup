@@ -57,6 +57,7 @@ App.EditButtonListener = App.Listener.extend({
 					var idsToAdd = _.difference(this.goingList, _(activity.get('people')).pluck('id'))
 					var pp = editContact.collection.filter(function(e) { return _(idsToAdd).contains(e.id) });
 					// console.log(pp);
+					_(pp).each(function(p) { p.set('status', 'unknown'); })
 					people.collection.push(pp);
 
 					var idsToRemove = _.intersection(this.notGoingList, _(activity.get('people')).pluck('id'))
