@@ -60,10 +60,10 @@ App.EditButtonListener = App.Listener.extend({
 					_(pp).each(function(p) { p.set('status', 'unknown'); })
 					people.collection.push(pp);
 
-					var idsToRemove = _.intersection(this.notGoingList, _(activity.get('people')).pluck('id'))
-					var pp2 = editContact.collection.filter(function(e) { return _(idsToRemove).contains(e.id) });
+					var originalList = _.difference(_(activity.get('people')).pluck('id'), this.notGoingList);
+					var pp2 = editContact.collection.filter(function(e) { return _(originalList).contains(e.id) });
 					// console.log(pp2);
-					people.collection.remove(pp2);
+					people.collection.set(_.union(pp, pp2));
 				}
 			} else {
 				editContact.render();
