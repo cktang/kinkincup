@@ -56,13 +56,15 @@ App.EditButtonListener = App.Listener.extend({
 				editContact.save = function() {
 					var idsToAdd = _.difference(this.goingList, _(activity.get('people')).pluck('id'))
 					var pp = editContact.collection.filter(function(e) { return _(idsToAdd).contains(e.id) });
+					pp = _(pp).map(function(e) { return e.toJSON(); })
 					// console.log(pp);
-					_(pp).each(function(p) { p.set('status', 'unknown'); })
-					people.collection.push(pp);
+					_(pp).each(function(p) { p.status = 'unknown'; })
+					// people.collection.push(pp);
 
 					var originalList = _.difference(_(activity.get('people')).pluck('id'), this.notGoingList);
-					var pp2 = editContact.collection.filter(function(e) { return _(originalList).contains(e.id) });
-					// console.log(pp2);
+					var pp2 = _(activity.get('people')).filter(function(e) { return _(originalList).contains(e.id) });
+					// pp2 = _(pp2).map(function(e) { return e.toJSON(); })
+					console.log(pp2);
 					people.collection.set(_.union(pp, pp2));
 				}
 			} else {
