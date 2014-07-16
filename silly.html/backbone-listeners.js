@@ -61,11 +61,16 @@ App.EditButtonListener = App.Listener.extend({
 					_(pp).each(function(p) { p.status = 'unknown'; })
 					// people.collection.push(pp);
 
-					var originalList = _.difference(_(activity.get('people')).pluck('id'), this.notGoingList);
-					var pp2 = _(activity.get('people')).filter(function(e) { return _(originalList).contains(e.id) });
+					// var originalList = _.difference(_(activity.get('people')).pluck('id'), this.notGoingList);
+					// _(activity.get('people')).chain().pluck('id').intersection(this.notGoingList).value()
+					var self = this;
+					var pp2 = _(activity.get('people')).filter(function(e) { return _(self.notGoingList).contains(e.id) });
 					// pp2 = _(pp2).map(function(e) { return e.toJSON(); })
 					console.log(pp2);
-					people.collection.set(_.union(pp, pp2));
+					people.collection.add(pp);
+					setTimeout(function() {
+						people.collection.remove(pp2);
+					}, 2000);
 				}
 			} else {
 				editContact.render();
