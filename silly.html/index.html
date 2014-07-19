@@ -215,7 +215,7 @@
 					listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
 				});
 
-				activities.on('rendered', function() {
+				activities.on('changed', function() {
 
 					//filterbox
 					beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
