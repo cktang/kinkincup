@@ -42,7 +42,7 @@
 				<a href="#" class="btn btn-sm btn-default" id="addActivityButton"><span class="glyphicon glyphicon-plus"></span></a>
 			</div>
 
-			<div class="pull-left" id="group">
+			<div id="group">
 				<script class="template" type="text/x-handlebars-template">
 					<a href="index.html"><span class="glyphicon glyphicon-chevron-left"></span></a> <span id="name">{{name}}</span> 
 				</script>
@@ -228,7 +228,7 @@
 
 				activities.on('changed', function() {
 
-					//filterbox
+					// //filterbox
 					// beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
 					// if (filterBox) {
 					// 	filterBox.render(beans);
