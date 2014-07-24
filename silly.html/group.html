@@ -48,7 +48,7 @@
 				</script>
 			</div>
  
-			<span id="filterDiv"></span>
+			<!-- <span id="filterDiv"></span> -->
 		</h3>
 
 		<div class="list-group" id="activities">
@@ -229,24 +229,24 @@
 				activities.on('changed', function() {
 
 					//filterbox
-					beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
-					if (filterBox) {
-						filterBox.render(beans);
-					} else {
-						filterBox = new App.SelectView({
-							el: $('#filterDiv'),
-							beans: beans,
-							name: 'test',
-							addEmpty: true
-						});
+					// beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
+					// if (filterBox) {
+					// 	filterBox.render(beans);
+					// } else {
+					// 	filterBox = new App.SelectView({
+					// 		el: $('#filterDiv'),
+					// 		beans: beans,
+					// 		name: 'test',
+					// 		addEmpty: true
+					// 	});
 
-						filterBox.on('changed', function(value) {
-							activities.filter(function(model) {
-								return value == '' || model.get('tags') && _(model.get('tags').split(",")).contains(value);
-							});
-							updateStats();
-						})
-					}
+					// 	filterBox.on('changed', function(value) {
+					// 		activities.filter(function(model) {
+					// 			return value == '' || model.get('tags') && _(model.get('tags').split(",")).contains(value);
+					// 		});
+					// 		updateStats();
+					// 	})
+					// }
 
 					//duplicatebox
 					if (duplicateBox) duplicateBox.render(beans);
