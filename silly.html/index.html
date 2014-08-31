@@ -3,26 +3,28 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="jquery-2.1.1.min.js"></script>
-	<script src="underscore-min.js"></script>
-	<script src="backbone-min.js"></script>
-	<script src="bootstrap-3.1.1-dist/js/bootstrap.js"></script>
-    <script src="firebase.js"></script>
-    <script src="backbone-firebase.js"></script>
-    <script src="handlebars-v1.3.0.js"></script>
-    <script src="json2.js"></script>
-    <script src="jquery.tagsinput.js"></script>
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
 
-    <script src="jquery-ui-1.11.0/jquery-ui.js"></script>
-	<link href="jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
 
-	<link href="jquery.tagsinput.css" rel="stylesheet">
-	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
+	<link href="js/jquery.tagsinput.css" rel="stylesheet">
+	<link href="js/bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
 
-	<link href="silly.css" rel="stylesheet">
-	<script src="backbonemodel.js"></script>
-	<script src="sillymodels.js"></script>
-	<script src="backbone-listeners.js"></script>
+	<link href="css/silly.css" rel="stylesheet">
+	<script src="js/backbonemodel.js"></script>
+	<script src="js/sillymodels.js"></script>
+	<script src="js/backbone-listeners.js"></script>
+
+	<script src="pagejs/index.js"></script>
 
 	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -104,31 +106,6 @@
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
-
-		<script>		
-			var groups;
-
-			$(document).ready(function() {
-				$('input.tags').tagsInput({width:'auto'});
-
-				$('#addGroupButton').click(function(e) {
-					$('#newGroup').modal().find('input')[0].focus();
-				})
-
-				$('#submitNewGroupButton').click(function(e) {
-					var newGroup = new App.FormHandler({ el: $('#newGroupForm') }).serialize();
-					groups.collection.push(newGroup);
-					$('#newGroup').modal('hide');
-					$('#newGroupForm')[0].reset();
-				})
-
-				groups = new App.CollectionView({
-					collection: new App.GroupCollection,
-					el: $('#groups'),
-					listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
-				})
-			});
-		</script>
 	</div>
 </body>
 </html>

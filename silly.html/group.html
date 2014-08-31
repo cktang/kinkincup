@@ -1,30 +1,32 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="jquery-2.1.1.min.js"></script>
-	<script src="underscore-min.js"></script>
-	<script src="backbone-min.js"></script>
-	<script src="bootstrap-3.1.1-dist/js/bootstrap.js"></script>
-    <script src="firebase.js"></script>
-    <script src="backbone-firebase.js"></script>
-    <script src="handlebars-v1.3.0.js"></script>
-    <script src="json2.js"></script>
-    <script src="jquery.tagsinput.js"></script>
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
 
-    <script src="jquery-ui-1.11.0/jquery-ui.js"></script>
-	<link href="jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
 
-	<link href="jquery.tagsinput.css" rel="stylesheet">
-	<link href="bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
+	<link href="js/jquery.tagsinput.css" rel="stylesheet">
+	<link href="js/bootstrap-3.1.1-dist//css/bootstrap.min.css" rel="stylesheet">
 
-	<link href="silly.css" rel="stylesheet">
-	<script src="backbonemodel.js"></script>
-	<script src="sillymodels.js"></script>
-	<script src="backbone-listeners.js"></script>
+	<link href="css/silly.css" rel="stylesheet">
+	<script src="js/backbonemodel.js"></script>
+	<script src="js/sillymodels.js"></script>
+	<script src="js/backbone-listeners.js"></script>
 
-	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
+	<script src="pagejs/group.js"></script>
+
 	<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 <body>
@@ -47,15 +49,13 @@
 					<a href="index.html"><span class="glyphicon glyphicon-chevron-left"></span></a> <span id="name">{{name}}</span> 
 				</script>
 			</div>
- 
-			<!-- <span id="filterDiv"></span> -->
 		</h3>
 
 		<div class="list-group" id="activities">
 			<script class="template" type="text/x-handlebars-template">
 				<div data-target="activity.html" data-id-type="activity" data-id="{{id}}" class="list-group-item activity full">
 					<div class="pull-right buttonGroup">
-						<div class="btn-group">
+						<div class="btn-group" ontouchstart="return true;">
 						  <button type="button" class="btn btn-success">{{{ filter people status="going" }}}</button>
 						  <button type="button" class="btn btn-default">{{{ filter people status="unknown" }}}</button>
 						  <button type="button" class="btn btn-danger">{{{ filter people status="notgoing" }}}</button>
@@ -112,10 +112,6 @@
 				    <label for="exampleInputEmail1">Name</label>
 				    <input name="name" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
 				  </div>
-<!-- 				  <div class="form-group">
-				    <label for="exampleInputPassword1">Phone</label>
-				    <input name="phone" class="form-control" id="exampleInputPassword1" placeholder="Enter phone number">
-				  </div>
  -->				</form>
 		      </div>
 		      <div class="modal-footer">
@@ -160,118 +156,6 @@
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
-
-		<script>		
-			var activities, contacts, filterBox, duplicateBox, group;
-
-			function updateStats() {									
-				setTimeout(function() {
-					var sum = function(arr) { return _.reduce(arr, function(memo, num){ return memo + num; }, 0); }
-					$('#totalGoing').html(sum(_($('.list-group-item .btn-success:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
-					$('#totalUnknown').html(sum(_($('.list-group-item .btn-default:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
-					$('#totalNotGoing').html(sum(_($('.list-group-item .btn-danger:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
-					$('#total').html(sum(_($('.list-group-item .btn-total:visible')).map(function(e) { return parseInt($(e).text() || "0") })));
-				}, 1000);
-			}
-
-			$(document).ready(function() {
-				$('input.tags').tagsInput({width:'auto'});
-
-				$('#newActivity').find('[name=name]').on('keyup', function(e) {		
-					$('#newActivity').find('[name=tags]').importTags($(e.delegateTarget).val().split(" ").join(","));
-				});
-
-				$('#addActivityButton').click(function(e) {
-					$('#newActivity').modal().find('input')[0].focus();
-				})
-				$('#addContactButton').click(function(e) {
-					$('#newContact').modal().find('input')[0].focus();
-				})
-				$('#contactButton').click(function(e) {
-					$('#contactList').modal();
-					if (!contacts) contacts = new App.CollectionView({ 
-						collection: new App.PeopleCollection, 
-						el: $('#contactsDiv'),
-						listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
-					});
-				})
-				$('#submitNewActivityButton').click(function(e) {
-					var newActivity = new App.FormHandler({ el: $('#newActivityForm') }).serialize();
-
-					//duplicate people list
-					if ($('#newActivityForm').find('[name=duplciateFrom]').val() != "") {
-						var pp = activities.collection.findWhere({id: $('#newActivityForm').find('[name=duplciateFrom]').val()}).get('people');
-						_(pp).each(function(p) { p.status = "unknown"; })
-						newActivity.people = pp;
-					}
-
-					activities.collection.push(newActivity);
-					$('#newActivity').modal('hide');
-					$('#newActivityForm')[0].reset();
-				})
-				$('#submitNewContactButton').click(function(e) {
-					contacts.collection.push(new App.FormHandler({ el: $('#newContactForm') }).serialize());
-					$('#newContact').modal('hide');
-					$('#newContactForm')[0].reset();
-				})
-
-				group = new App.ModelView({
-					model: new App.Group, 
-					el: $('#group')
-				});
-
-				activities = new App.CollectionView({ 
-					collection: new App.ActivityCollection, 
-					el: $('#activities'),
-					listeners: [ new App.RemoveListener(), new App.LinkListener() ]  
-				});
-
-				activities.on('changed', function() {
-
-					// //filterbox
-					// beans = _(_(activities.collection.pluck('tags')).compact().join(",").split(",")).uniq().sort();
-					// if (filterBox) {
-					// 	filterBox.render(beans);
-					// } else {
-					// 	filterBox = new App.SelectView({
-					// 		el: $('#filterDiv'),
-					// 		beans: beans,
-					// 		name: 'test',
-					// 		addEmpty: true
-					// 	});
-
-					// 	filterBox.on('changed', function(value) {
-					// 		activities.filter(function(model) {
-					// 			return value == '' || model.get('tags') && _(model.get('tags').split(",")).contains(value);
-					// 		});
-					// 		updateStats();
-					// 	})
-					// }
-
-					//duplicatebox
-					if (duplicateBox) duplicateBox.render(beans);
-					else {
-						duplicateBox = new App.SelectView({
-							el: $('#duplciateFromDiv'),
-							beans: activities.collection.pluck('id'),
-							pairs: _.object(activities.collection.pluck('id'), activities.collection.pluck('name')),
-							name: 'duplciateFrom',
-							addEmpty: true,
-							map: function(val) {
-								return this.options.pairs[val];
-							}
-						});
-
-						duplicateBox.on('changed', function(value) {
-							console.log(value);
-						})
-					}
-
-					updateStats();
-				})
-
-			});
-		</script>
 	</div>
 </body>
 </html>
