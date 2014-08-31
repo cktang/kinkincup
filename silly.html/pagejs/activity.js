@@ -12,7 +12,8 @@ $(document).ready(function() {
 	activityView = new App.ModelView({
 		model: activity,
 		el: $('#stats'),
-		listeners: [ new App.EditButtonListener() ]
+		listeners: []
+		// listeners: [ new App.EditButtonListener() ]
 	});
 
 	$('#editPersonSaveButton').click(function(e) {
