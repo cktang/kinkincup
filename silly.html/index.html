@@ -26,10 +26,9 @@
 
 	<script src="pagejs/index.js"></script>
 
-	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
-	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width,user-scalable=no">
 </head>
-<body>
+<body ontouchstart="">
 	<div class="container">
 		<h3 class=header> 
 			Groups
@@ -40,7 +39,7 @@
 
 		<div class="list-group" id="groups">
 			<script class="template" type="text/x-handlebars-template">
-				<div data-target="group.html" data-id-type="group" data-id="{{id}}" class="list-group-item group full">
+				<div data-target="group.html" data-id-type="group" data-id="{{id}}" class="link list-group-item group full">
 					<div class="pull-right buttonGroup">
 						<a href="#" class="btn btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
