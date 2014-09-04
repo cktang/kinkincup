@@ -50,9 +50,9 @@
 			</script>
 		</div>
 
-		<div class="list-group" id="peopleList">
+		<ul class="list-group" id="peopleList">
 			<script class="template" type="text/x-handlebars-template">
-				<a href="#"  data-id="{{id}}" class="list-group-item activity list-group-item-{{{printStatus this}}}" style="padding-left:50px">
+				<li  data-id="{{id}}" class="list-group-item activity list-group-item-{{{printStatus this}}}" style="padding-left:50px">
 				    <button type="button" class="link attendenceButton btn btn-lg btn-default" style="position:absolute; top:0px; left:0px">
 				    	<span class="glyphicon glyphicon-{{icon status}}"></span>
 				    </button>
@@ -65,9 +65,9 @@
 							<button type="button" class="link moneyButton btn btn-lg btn-default {{#if money}}active{{/if}}"><span class="glyphicon glyphicon-usd"></span></button>
 						</div>
 					</div>
-				</a>
+				</li>
 			</script>
-		</div>
+		</ul>
 	</div>
 </body>
 </html>
