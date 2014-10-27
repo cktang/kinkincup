@@ -84,9 +84,6 @@
 				<div data-id="{{id}}" class="list-group-item group full {{{owns ownerId}}}">
 					<div class="pull-right buttonGroup" style="width:280px; padding:5px">
 						<span class="link pull-right btn btn-danger removeButton">Remove</span>
-						<div class="well well-xs" style="width:200px">
-							Your Rating: <input class="rating" data-size="xs" data-step="0.5"/>
-						</div>
 					</div>
 					<h4 style="line-height:1.6em"> 
 						{{title}} 
@@ -94,10 +91,17 @@
 					</h4>
 					<div> {{{printTextarea description}}} </div>
 					<br>
-					<div class="well well-xs" style="width:200px">
+					<div class="well well-xs pull-left" style="width:200px">
 						Average Rating: 
+						<input class="rating" data-size="xs" data-readonly="true"/>
+					</div>
+
+					<div class="well well-xs pull-left" style="width:200px">
+						Your Rating: 
 						<input class="rating" data-size="xs" data-step="0.5"/>
 					</div>
+
+					<div style="clear:both"></div>
 				</div>
 			</script>
 		</div>
