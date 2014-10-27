@@ -33,31 +33,71 @@
 	<script src="ratings/js/star-rating.min.js" type="text/javascript"></script>
 
 	<meta name="viewport" content="width=device-width,user-scalable=no">
+
+	<style>
+		.well {
+			padding: 10px;
+		}
+
+		.caption {
+			display: none !important;
+		}
+
+		.owns {
+			background-color: #efd;
+		}
+
+		.owner {
+			background-color: wheat;
+		}
+
+		.owns .owner {
+			background-color: green;
+			color: white;
+		}
+
+		.removeButton {
+			display:none;
+		}
+
+		.owns .removeButton {
+			display:block;
+		}
+	</style>
 </head>
 <body ontouchstart="">
 	<div class="container-fluid">
-		<h3 class=header style="margin-bottom:10px"> 
+		<h3 class=header style="z-index:100; padding-bottom:10px; position:fixed; top:0px; width:100%; background-color:#eee"> 
 			<span class="pull-right">
-				<span type=button class="btn btn-default" id="addButton">Add</span> 
+				<span type=button class="btn btn-default link" id="addButton">Add</span> 
+				<span id="user">
+					<script class="template" type="text/x-handlebars-template">
+						<span class="btn btn-primary">{{name}}</span>
+					</script>
+				</span>
 			</span>
 			Ideas
-
-			<span id="user" style="margin-left:10px">
-				<script class="template" type="text/x-handlebars-template">
-					<small>{{name}}</small>
-				</script>
-			</span>
 		</h3>
 
-		<div class="list-group" id="ideas">
+		<div class="list-group" id="ideas" style="margin-top:50px">
 			<script class="template" type="text/x-handlebars-template">
-				<div data-id="{{id}}" class="list-group-item group full">
-					<div class="pull-right buttonGroup">
-						<span class="btn {{{printOwnerClass ownerId}}}" style="margin:10px">{{{printOwner ownerId}}}</span> 
+				<div data-id="{{id}}" class="list-group-item group full {{{owns ownerId}}}">
+					<div class="pull-right buttonGroup" style="width:280px; padding:5px">
+						<span class="link pull-right btn btn-danger removeButton">Remove</span>
+						<div class="well well-xs" style="width:200px">
+							Your Rating: <input class="rating" data-size="xs" data-step="0.5"/>
+						</div>
 					</div>
-					<h4 style="line-height:1.6em"> {{title}} </h4>
-					<div> {{description}} </div>
-					<input class="rating" data-size="xs" data-step="0.5"/>
+					<h4 style="line-height:1.6em"> 
+						{{title}} 
+						<span class="btn owner" style="margin-left:5px; padding:2px 6px">{{{printOwner ownerId}}}</span> 
+					</h4>
+					<div> {{{printTextarea description}}} </div>
+					<br>
+					<div class="well well-xs" style="width:200px">
+						Average Rating: 
+						<input class="rating" data-size="xs" data-step="0.5"/>
+					</div>
 				</div>
 			</script>
 		</div>

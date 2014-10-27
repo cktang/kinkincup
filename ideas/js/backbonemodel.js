@@ -31,11 +31,15 @@ Handlebars.registerHelper('printOwner', function(ownerId) {
 	return users.get(ownerId).get('name');
 });
 
-Handlebars.registerHelper('printOwnerClass', function(ownerId) {
+Handlebars.registerHelper('printTextarea', function(text) {
+	console.log(text);
+	return text.replace(/\n/mig, '<br>');
+});
+
+Handlebars.registerHelper('owns', function(ownerId) {
 	if (!ownerId) return "";
-	if (!users) return "";
-	if (!users.get(ownerId)) return "";
-	return users.get(ownerId).get('name');
+	if (!user) return "";
+	return user.get('id') == ownerId? "owns": "";
 });
 
 // Handlebar mixin start
@@ -97,7 +101,7 @@ App.Mixins.HandlebarModelRenderer = {
 	},
 
 	removeModel: function(container, model) {
-		$(container).find('[data-id=' + model.id + ']').remove();
+		$(container).find('[data-id=' + model.id + ']').hide('slow', function(){ $(this).remove(); });
 		this.handleEmpty();
 	},
 

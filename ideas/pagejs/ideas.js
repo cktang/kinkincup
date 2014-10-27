@@ -10,7 +10,10 @@ $(document).ready(function() {
 		ideasView = new App.CollectionView({
 			collection: new App.Ideas,
 			el: $('#ideas'),
-			listeners: [ new App.RatingsListener() ]  
+			listeners: [ 
+				new App.RatingsListener(), 
+				new App.RemoveListener() 
+			]  
 		});
 	});
 
@@ -36,5 +39,8 @@ App.RatingsListener = Backbone.View.extend({
 	apply: function(el, collection, model, view) {
 		view.rating = $(el).find('.rating').rating();
 		view.rating.rating('update', model.get('rating'));
+		view.rating.on('rating.change', function(e, v, c) {
+			model.set('rating', v);
+		});
 	}
 });
