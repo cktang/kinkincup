@@ -31,6 +31,13 @@ Handlebars.registerHelper('printOwner', function(ownerId) {
 	return users.get(ownerId).get('name');
 });
 
+Handlebars.registerHelper('printOwnerClass', function(ownerId) {
+	if (!ownerId) return "";
+	if (!users) return "";
+	if (!users.get(ownerId)) return "";
+	return users.get(ownerId).get('name');
+});
+
 // Handlebar mixin start
 Handlebars.registerHelper('icon', function(status) {
   return new Handlebars.SafeString(status=='going'? 'ok': status=='notgoing'? 'remove': 'minus');
