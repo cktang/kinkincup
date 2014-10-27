@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
+    <script type="text/javascript" src="js/underscore-contrib-master/underscore.util.strings.js"></script>
+
+
+    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+
+	<link href="js/jquery.tagsinput.css" rel="stylesheet">
+	<link href="js/bootstrap-3.1.1-dist/css/bootstrap.css" rel="stylesheet">
+
+	<link href="css/silly.css" rel="stylesheet">
+	<script src="js/backbonemodel.js"></script>
+	<script src="js/ideamodels.js"></script>
+	<script src="js/backbone-listeners.js"></script>
+
+	<script src="pagejs/ideas.js"></script>
+
+	<!-- plugins -->
+	<link href="ratings/css/star-rating.min.css" media="all" rel="stylesheet" type="text/css" />
+	<script src="ratings/js/star-rating.min.js" type="text/javascript"></script>
+
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+</head>
+<body ontouchstart="">
+	<div class="container-fluid">
+		<h3 class=header style="margin-bottom:10px"> 
+			<span class="pull-right">
+				<span type=button class="btn btn-default" id="addButton">Add</span> 
+			</span>
+			Ideas
+
+			<span id="user" style="margin-left:10px">
+				<script class="template" type="text/x-handlebars-template">
+					<small>{{name}}</small>
+				</script>
+			</span>
+		</h3>
+
+		<div class="list-group" id="ideas">
+			<script class="template" type="text/x-handlebars-template">
+				<div data-id="{{id}}" class="list-group-item group full">
+					<div class="pull-right buttonGroup">
+						<span class="btn {{{printOwnerClass ownerId}}}" style="margin:10px">{{{printOwner ownerId}}}</span> 
+					</div>
+					<h4 style="line-height:1.6em"> {{title}} </h4>
+					<div> {{description}} </div>
+					<input class="rating" data-size="xs" data-step="0.5"/>
+				</div>
+			</script>
+		</div>
+
+		<div class="modal fade" id="add">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <form>
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title">Add</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<label> Title </label>
+		      	<input type=text class="form-control" name="title"/>
+
+		      	<label> Description </label>
+		      	<textarea type=text class="form-control" name="description"></textarea>
+		      	
+		      	<label> Rating </label>
+				<input class="rating" data-size="xs" data-step="0.5" name="rating"/>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="submit" class="btn btn-primary">Save</button>
+		      </div>
+		      </form>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	</div>
+</body>
+</html>
