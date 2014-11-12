@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+
+	<script src="js/backbonemodel.js"></script>
+	<script src="js/models/calmodels.js"></script>
+	<script src="js/backbone-listeners.js"></script>
+	<script src="js/moment.js"></script>
+
+	<script src="pagejs/cal.js"></script>
+
+    <!-- Include the compiled Ratchet CSS -->
+    <link href="js/ratchet-v2.0.2/css/ratchet.css" rel="stylesheet">
+    <link href="js/ratchet-v2.0.2/css/ratchet-theme-ios.css" rel="stylesheet">
+
+    <!-- Include the compiled Ratchet JS -->
+    <script src="js/ratchet-v2.0.2/js/ratchet.js"></script>
+
+    <link href="css/fontello-cefa6602/css/fontello.css" rel="stylesheet">
+    <link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+
+	<style>
+		.box {
+			width:  50px;
+			height: 30px;
+			float:left;
+			text-align: center;
+			overflow: hidden;
+			padding: 3px;
+		}
+
+		#dates .box {		
+			width:  50px;
+			height: 60px;
+			border: 1px solid lightpink;
+		}
+
+		#dates .box .d {
+			font-size: 1em;
+			float: left;
+		}
+
+		#dates .box .activities {
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			padding: 3px;
+			font-size: 1.4em;
+		}
+
+		i {
+			margin-right: 3px;
+		}
+
+		#dates .box .duty {
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			padding: 3px;
+			color: brown;
+		}
+
+		.header {
+			color: silver;
+		}
+
+		body {
+			color: HotPink ;
+			background-color: white;
+		}
+
+		#dateDetails {
+			font-size: 44px;
+		}
+
+
+	</style>
+</head>
+<body ontouchstart="">
+
+    <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
+	<div class="content-padded" id="cal">
+		<div>
+			<h1> 
+				<span class="pull-right"> 
+					<i class="fa fa-angle-left fa-lg" id="prevMonth" style="padding-right:10px"></i>
+					<i class="fa fa-angle-right fa-lg" id="nextMonth" style="padding-right:10px"></i>
+				</span>
+				<span id="monthName"></span> 
+				<small><span id="yearName"></span></small> 
+			</h1>
+		</div>
+    	<div style="margin-top:20px">
+    		<div id="calDetails">
+    			<div class="header">
+	    			<div class="box">Su</div>
+	    			<div class="box">M</div>
+	    			<div class="box">T</div>
+	    			<div class="box">W</div>
+	    			<div class="box">Th</div>
+	    			<div class="box">F</div>
+	    			<div class="box">Sa</div>
+	    		</div>
+
+	    		<div id="dates"></div>
+    		</div>
+
+    		<div style="clear:both; margin:20px">&nbsp;</div>
+
+    		<h4> <span id="dateName"></span> </h4>
+			<div id="dateDetails"></div>
+    	</div>
+    </div>
+</body>
+</html>

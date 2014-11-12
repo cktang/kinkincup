@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
+
+    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+
+	<link href="js/jquery.tagsinput.css" rel="stylesheet">
+	<link href="js/bootstrap-3.1.1-dist//css/bootstrap.css" rel="stylesheet">
+
+	<link href="css/silly.css" rel="stylesheet">
+
+	<script src="pagejs/index.js"></script>
+
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+
+	<style>
+		.well {
+			padding:10px;
+			margin-left: 20px;
+			width: 250px;
+			float:left;
+			background-color: white;
+		}
+
+		.well-nodecor {
+			background-color: transparent;
+			padding: 0px;
+			border: 0px;
+		}
+
+		.well .well {
+			margin: 0px;
+			margin-bottom: 10px;
+		}
+
+		.well h5 {
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body ontouchstart="">
+	<div class="container-fluid">
+		<div class="list-group" id="groups">
+			<div class="list-group-item">
+				<div class="pull-right">
+					Share Buttons: FB/ TW/ EMail <br>
+					Login user info
+				</div>
+				<h4 style="line-height:1.6em">  Event Name </h4>
+				<div> Event description </div>
+			</div>
+		</div>
+
+		<div class="row" style="position:relative; padding-right:200px">
+			<div class="well well-nodecor" style="height:1000px">
+				<div class="well">
+					<h5> Info </h5>
+					<div>
+						Basic info like time and place <br>
+						<br>
+						Tag name for the event like #HappyHour1115
+						<br>
+						and descriptions of the event <br>
+						<br>
+						can place temporary solutions for voting <Br>
+						<br>
+						could have routes, and checkpoints for events like hiking or running, showing in map <br>
+					</div>
+				</div>
+
+				<div class="well">
+					<h5> Attendence </h5>
+					<div> 
+						Everyone has to tick their names <br>
+						<br>
+						Connect with facebook or Google or email <br>
+						<br>
+						this part should be put in more important place as many other components depend on it like reminders or map
+					</div>
+				</div>
+			</div>
+
+			<div class="well">
+				<h5> To-Dos </h5>
+				<div>
+					Check lists <br>
+					<br>
+					reminders <br>
+					<br>
+					able to assign people to the job <br>
+					<br>
+					able to say its completed <Br>
+					<br>
+					notification before event start
+				</div>
+			</div>	
+
+			<div class="well">
+				<h5> Topics </h5>
+				<div>
+					Topics like finding mates to go together by taxi for example to the event venue<br>
+					<br>
+					Can pick people, can do voting
+				</div>
+			</div>	
+
+			<div class="well">
+				<h5> Map </h5>
+				<div> 
+					Ask people to reveal location 30 mins before event start  <br>
+					<br>
+					showing in the same map 
+				</div>
+			</div>
+
+			<div class="well">
+				<h5> Photos/Videos </h5>
+				<div> 
+					Allow posting directly<br>
+					<br>
+					or posting through facebook or twitter using the tag name of the event
+					<Br>
+					allow comments, can be designed to combine with discussions
+					<br>
+					allow to be viewed as a separate page
+					<br>
+					live refreshing
+				</div>
+			</div>
+
+
+			<div class="well">
+				<h5> Others </h5>
+				<div> 
+					these cards should be draggable<br>
+					<br>
+					Templates should be offered for various types of events like wedding, drinks, hiking, ball games, trips etc.
+				</div>
+			</div>
+
+			<div class="well well-nodecor" style="position:absolute; right:10px; top:0px;">
+				<div class="well">
+					<h5> Discussions </h5>
+					<div> 
+						Discussion board for chatting mainly, can reply to other people's post <br>
+						<Br>
+						this could be pinned to the right most
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>
