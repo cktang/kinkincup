@@ -234,12 +234,12 @@
 	$(document).ready(function() {
 		ref = new Firebase("https://eventshk.firebaseio.com");
 
-		// alert('trying to login with fb');
-		// ref.authWithOAuthPopup("facebook", function(error, authData) {
-		// 	alert('fb result');
-		// 	console.log(authData);
-		// 	console.log(error);
-		// });
+		alert('trying to login with fb');
+		ref.auth("facebook", function(error, authData) {
+			alert('fb result');
+			console.log(authData);
+			console.log(error);
+		});
 	});
 </script>
 </html>
