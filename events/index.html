@@ -232,10 +232,11 @@
 
 	var ref;
 	$(document).ready(function() {
-		alert('trying to login');
 		ref = new Firebase("https://eventshk.firebaseio.com");
 
+		alert('trying to login with fb');
 		ref.authWithOAuthPopup("facebook", function(error, authData) {
+			alert('fb result');
 			console.log(authData);
 			console.log(error);
 		});
