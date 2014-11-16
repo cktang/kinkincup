@@ -74,14 +74,17 @@
 				<div class="well">
 					<h5> Facebook </h5>
 					<div>
+						<span class="btn btn-default" onclick="fblogin()"> FB Login </span>
 						<script>
-							ref.authWithOAuthPopup("facebook", function(error, authData) { 
-								console.log(authData);
-								console.log(error);
-							}, {
-							  remember: "sessionOnly",
-							  scope: "public_profile,email,user_friends"
-							});
+							function fblogin() {
+								ref.authWithOAuthPopup("facebook", function(error, authData) { 
+									console.log(authData);
+									console.log(error);
+								}, {
+								  remember: "sessionOnly",
+								  scope: "public_profile,email,user_friends"
+								});
+							}
 						</script>
 					</div>
 				</div>
