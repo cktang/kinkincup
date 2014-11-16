@@ -235,13 +235,10 @@
 		alert('trying to login');
 		ref = new Firebase("https://eventshk.firebaseio.com");
 
-		var authData = ref.getAuth();
-		if (authData) {
-		  // user authenticated with Firebase
-		  console.log("User ID: " + authData.uid + ", Provider: " + authData.provider);
-		} else {
-		  // user is logged out
-		}
+		ref.authWithOAuthPopup("facebook", function(error, authData) {
+			console.log(authData);
+			console.log(error);
+		});
 	});
 </script>
 </html>
