@@ -234,7 +234,17 @@
 	$(document).ready(function() {
 		alert('trying to login');
 		ref = new Firebase("https://eventshk.firebaseio.com");
-		console.log(ref);
+
+		ref.onAuth(function(authData) {
+		  if (authData) {
+		    // user authenticated with Firebase
+		    console.log("User ID: " + authData.uid + ", Provider: " + authData.provider);
+		    console.log(authData);
+		  } else {
+		  	console.log('no user');
+		    // user is logged out
+		  }
+		});
 	});
 </script>
 </html>
