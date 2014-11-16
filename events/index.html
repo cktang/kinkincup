@@ -234,22 +234,24 @@
 	$(document).ready(function() {
 		ref = new Firebase("https://eventshk.firebaseio.com");
 
-		alert('trying to login with fb');
-		ref.authWithOAuthPopup("facebook", function(error, authData) {
-			alert('fb result');
-			pageAccessToken = authData.facebook.accessToken;
-			console.log(authData);
-			console.log(error);
+		setTimeout(function() {
+			alert('trying to login with fb');
+			ref.authWithOAuthPopup("facebook", function(error, authData) {
+				alert('fb result');
+				pageAccessToken = authData.facebook.accessToken;
+				console.log(authData);
+				console.log(error);
 
-			alert('fb try friendlist');
-			FB.api('/me/friendlist', {
-			  access_token : pageAccessToken
-			}, function(response) {
-				alert(response);
-			});		
-		}, {
-			scope: "email,user_likes" 
-		});
+				alert('fb try friendlist');
+				FB.api('/me/friendlist', {
+				  access_token : pageAccessToken
+				}, function(response) {
+					alert(response);
+				});		
+			}, {
+				scope: "email,user_likes,user_friends" 
+			});
+		}, 5000);
 	});
 </script>
 </html>
