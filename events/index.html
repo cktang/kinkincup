@@ -72,6 +72,20 @@
 		<div class="row" style="position:relative; padding-right:200px">
 			<div class="well well-nodecor" style="height:1000px">
 				<div class="well">
+					<h5> Facebook </h5>
+					<div>
+						<script>
+							ref.authWithOAuthPopup("facebook", function(error, authData) { 
+								console.log(authData);
+								console.log(error);
+							}, {
+							  remember: "sessionOnly",
+							  scope: "public_profile,email,user_friends"
+							});
+						</script>
+					</div>
+				</div>
+				<div class="well">
 					<h5> Info </h5>
 					<div>
 						Basic info like time and place <br>
