@@ -40,15 +40,15 @@ App.Calendar = Backbone.View.extend({
 	},
 
 	createBox: function(content) {
-		return $('<div class="box btn btn-outlined"></div>').append(
-			'<span class="d">' + content + '</span>' + '<br>' + 
-			'<span class="duty">' + 
-				'C1' +
-			'</span>' +
+		var rand = Math.random();
+		var duty = rand < 0.3? 'd1': rand < 0.6? 'd2': rand < 0.8? 'd3': 'o';
+
+		return $('<div class="link box btn btn-outlined ' + duty + '"></div>').append(
+			'<span class="d">' + content + '</span>' + '<br>' +  
 			'<span class="activities">' + 
-				(Math.random() > 0.3? '<i class="fa fa-music fa-lg"></i>': '') +
-				(Math.random() > 0.3? '<i class="icon-food-1"></i>': '') +
-				(Math.random() > 0.3? '<i class="fa fa-plus-square fa-lg"></i>': '') +
+				(Math.random() > 0.3? '<span class="type music"><i class="fa fa-music"></i></span>': '') +
+				(Math.random() > 0.3? '<span class="type food"><i class="fa fa-birthday-cake"></i></span>': '') +
+				(Math.random() > 0.3? '<span class="type ams"><i class="fa fa-ambulance"></i></span>': '') +
 			'</span>'
 		);
 	},

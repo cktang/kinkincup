@@ -29,10 +29,15 @@
     <link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
 
 	<meta name="viewport" content="width=device-width,user-scalable=no">
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,700,300italic,100italic,300,400italic,500,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'>
 
 	<style>
+		* {
+			font-family: 'roboto';
+		}
+
 		.box {
-			width:  50px;
+			width:  53px;
 			height: 30px;
 			float:left;
 			text-align: center;
@@ -41,34 +46,27 @@
 		}
 
 		#dates .box {		
-			width:  50px;
+			width:  53px;
 			height: 60px;
-			border: 1px solid lightpink;
+			margin-bottom: 15px;
+			border: 0px;
 		}
 
 		#dates .box .d {
-			font-size: 1em;
-			float: left;
+			position:absolute;
+			font-size: 2.2em;
+			left: 5px;
+			top: 5px;
+			opacity: 0.2;
+			color: #777;
 		}
 
 		#dates .box .activities {
 			position: absolute;
 			bottom: 0px;
 			left: 0px;
-			padding: 3px;
+			padding: 1px 0px;
 			font-size: 1.4em;
-		}
-
-		i {
-			margin-right: 3px;
-		}
-
-		#dates .box .duty {
-			position: absolute;
-			top: 0px;
-			right: 0px;
-			padding: 3px;
-			color: brown;
 		}
 
 		.header {
@@ -80,15 +78,75 @@
 			background-color: white;
 		}
 
-		#dateDetails {
-			font-size: 44px;
+		.type {
+			background-color: transparent;
+			color: white;
+			padding: 0.2em 0.2em;
+			font-size: 12px;
 		}
 
+		.type.music {
+			color: deepskyblue;
+		}
 
+		.type.food {
+			color: goldenrod;
+		}
+
+		.type.ams {
+			color: green;
+		}
+
+		.box.d1 {
+			background: #ccadca; /* Old browsers */
+background: -moz-linear-gradient(top,  #ccadca 0%, #ffffff 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccadca), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #ccadca 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #ccadca 0%,#ffffff 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #ccadca 0%,#ffffff 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #ccadca 0%,#ffffff 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ccadca', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+
+		}
+
+		.box.d2 {
+background: #ffd3f0; /* Old browsers */
+background: -moz-linear-gradient(top,  #ffd3f0 0%, #ffffff 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffd3f0), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #ffd3f0 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #ffd3f0 0%,#ffffff 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #ffd3f0 0%,#ffffff 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #ffd3f0 0%,#ffffff 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffd3f0', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+
+
+		}
+
+		.box.d3 {
+			background: #ffeffa; /* Old browsers */
+background: -moz-linear-gradient(top,  #ffeffa 0%, #ffffff 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffeffa), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #ffeffa 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #ffeffa 0%,#ffffff 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #ffeffa 0%,#ffffff 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #ffeffa 0%,#ffffff 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffeffa', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+
+		}
+
+		.box.o {
+			background-color: #fff;
+		}
 	</style>
 </head>
 <body ontouchstart="">
-
+	<!--
+		1/2/3
+		egg/veggie/food
+		ams
+		piano
+		choir
+	-->
     <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
 	<div class="content-padded" id="cal">
 		<div>
@@ -101,7 +159,7 @@
 				<small><span id="yearName"></span></small> 
 			</h1>
 		</div>
-    	<div style="margin-top:20px">
+    	<div style="margin:-10px; margin-top:20px">
     		<div id="calDetails">
     			<div class="header">
 	    			<div class="box">Su</div>
@@ -115,11 +173,6 @@
 
 	    		<div id="dates"></div>
     		</div>
-
-    		<div style="clear:both; margin:20px">&nbsp;</div>
-
-    		<h4> <span id="dateName"></span> </h4>
-			<div id="dateDetails"></div>
     	</div>
     </div>
 </body>
