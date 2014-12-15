@@ -5,3 +5,4 @@ var host = "https://queencal.firebaseio.com/";
 
 App.Items = App.Collection.extend({ firebase: host + "items/" });
 App.Types = App.Collection.extend({ firebase: host + "types/" });
+ 

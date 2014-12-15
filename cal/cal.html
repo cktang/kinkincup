@@ -18,15 +18,14 @@
 
 	<script src="pagejs/cal.js"></script>
 
+    <link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
     <!-- Include the compiled Ratchet CSS -->
     <link href="js/ratchet-v2.0.2/css/ratchet.css" rel="stylesheet">
     <link href="js/ratchet-v2.0.2/css/ratchet-theme-ios.css" rel="stylesheet">
 
     <!-- Include the compiled Ratchet JS -->
     <script src="js/ratchet-v2.0.2/js/ratchet.js"></script>
-
-    <link href="css/fontello-cefa6602/css/fontello.css" rel="stylesheet">
-    <link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
 
 	<meta name="viewport" content="width=device-width,user-scalable=no">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,700,300italic,100italic,300,400italic,500,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'>
@@ -43,12 +42,13 @@
 			text-align: center;
 			overflow: hidden;
 			padding: 3px;
+			border-radius: 0px;
 		}
 
 		#dates .box {		
 			width:  53px;
 			height: 60px;
-			margin-bottom: 15px;
+			margin-bottom: 10px;
 			border: 0px;
 		}
 
@@ -67,6 +67,11 @@
 			left: 0px;
 			padding: 1px 0px;
 			font-size: 1.4em;
+		}
+
+		#dates .box .l {
+			float:right;
+			opacity: 0.5;
 		}
 
 		.header {
@@ -98,40 +103,15 @@
 		}
 
 		.box.d1 {
-			background: #ccadca; /* Old browsers */
-background: -moz-linear-gradient(top,  #ccadca 0%, #ffffff 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccadca), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  #ccadca 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  #ccadca 0%,#ffffff 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  #ccadca 0%,#ffffff 100%); /* IE10+ */
-background: linear-gradient(to bottom,  #ccadca 0%,#ffffff 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ccadca', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-
+			background-color: #bab;
 		}
 
 		.box.d2 {
-background: #ffd3f0; /* Old browsers */
-background: -moz-linear-gradient(top,  #ffd3f0 0%, #ffffff 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffd3f0), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  #ffd3f0 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  #ffd3f0 0%,#ffffff 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  #ffd3f0 0%,#ffffff 100%); /* IE10+ */
-background: linear-gradient(to bottom,  #ffd3f0 0%,#ffffff 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffd3f0', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-
-
+			background-color: #dcd;
 		}
 
 		.box.d3 {
-			background: #ffeffa; /* Old browsers */
-background: -moz-linear-gradient(top,  #ffeffa 0%, #ffffff 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffeffa), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  #ffeffa 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  #ffeffa 0%,#ffffff 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  #ffeffa 0%,#ffffff 100%); /* IE10+ */
-background: linear-gradient(to bottom,  #ffeffa 0%,#ffffff 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffeffa', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-
+			background-color: #fef;
 		}
 
 		.box.o {
@@ -139,7 +119,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffeffa', end
 		}
 	</style>
 </head>
-<body ontouchstart="">
+<body>
 	<!--
 		1/2/3
 		egg/veggie/food
@@ -175,5 +155,64 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffeffa', end
     		</div>
     	</div>
     </div>
+
+	<div id="form" class="modal">
+	  <header class="bar bar-nav">
+	    <a class="icon icon-close pull-right" href="#form"></a>
+	    <h1 class="title"><span id="date"></span></h1>
+	  </header>
+
+	  <style>
+	  	#form .t {
+	  		margin-bottom: 5px;
+	  	}
+	  </style>
+	  <div class="content">
+		<ul class="table-view" style="margin:0px">
+		  <li class="table-view-cell">
+		    <div class="t">Duty</div>
+			<div class="segmented-control" >
+			  <a class="control-item" data-id='d' data-value='1'>Duty 1</a>
+			  <a class="control-item" data-id='d' data-value='2'>Duty 2</a>
+			  <a class="control-item" data-id='d' data-value='3'>Duty 3</a>
+			  <a class="control-item" data-id='d' data-value='o'>Off</a>
+			</div>
+		  </li>
+		  <li class="table-view-cell">
+		    <div class="t">Location</div>
+			<div class="segmented-control" >
+			  <a class="control-item" data-id='l' data-value='csw'>Cheung Sha Wan</a>
+			  <a class="control-item" data-id='l' data-value='sw'>Sai Wan</a>
+			  <a class="control-item" data-id='l' data-value='o'>Off</a>
+			</div>
+		  </li>
+		  <li class="table-view-cell">
+		    Piano
+		    <div class="toggle" data-id='piano'>
+		      <div class="toggle-handle"></div>
+		    </div>
+		  </li>
+		  <li class="table-view-cell">
+		    AMS
+		    <div class="toggle" data-id='ams'>
+		      <div class="toggle-handle"></div>
+		    </div>
+		  </li>
+		  <li class="table-view-cell">
+		    Learners Choir
+		    <div class="toggle" data-id='choir'>
+		      <div class="toggle-handle"></div>
+		    </div>
+		  </li>
+
+		  <li class="table-view-cell">
+		    Food Sampling
+		    <div class="toggle" data-id='food'>
+		      <div class="toggle-handle"></div>
+		    </div>
+		  </li>		  
+		</ul>	  	
+	  </div>
+	</div>
 </body>
 </html>
