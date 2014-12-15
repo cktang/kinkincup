@@ -34,8 +34,6 @@ App.CalendarDetails = Backbone.View.extend({
 		var self = this;
 
 		_(model.toJSON()).each(function(v, k) {
-			console.log(v + "|" + k);
-			console.log($(self.el).find('[data-id=' + k + '][data-value='+v+']').length);
 			$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
 
 			if (v == 1) {
@@ -50,7 +48,7 @@ App.CalendarDetails = Backbone.View.extend({
 		data.id = $('#date').html();
 
 		data.d = data.d || 'o';
-		data.l = data.l || 'o';
+		data.l = data.l || 'o'; 
 
 		this.collection.add(data, {merge:true});
 	}
@@ -100,14 +98,15 @@ App.Calendar = Backbone.View.extend({
 			);
 
 		return $('<div class="link box btn btn-outlined d' + model.get('d') + '"></div>').append(
-			'<span class="l">' + model.get('l') + '</span>' +
+			'<span class="l">' + (model.get('l')||'') + '</span>' +
 			'<span class="dd" style="display:none">' + fulldate + '</span>' + '<br>' +  
 			'<span class="d">' + content + '</span>' + '<br>' +  
 			'<span class="activities">' + 
 				(model.get('piano')? '<span class="type music"><i class="fa fa-music"></i></span>': '') +
-				(model.get('choir')? '<span class="type food"><i class="fa fa-birthday-cake"></i></span>': '') +
 				(model.get('ams')? '<span class="type ams"><i class="fa fa-ambulance"></i></span>': '') +
-				(model.get('food')? '<span class="type ams"><i class="fa fa-plus"></i></span>': '') +
+				'<br>' +
+				(model.get('choir')? '<span class="type choir"><i class="fa fa-book"></i></span>': '') +
+				(model.get('food')? '<span class="type food"><i class="fa fa-star"></i></span>': '') +
 			'</span>'
 		);
 	},
