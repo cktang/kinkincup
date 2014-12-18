@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Movie finder</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="js/ratchet-v2.0.2/css/ratchet.min.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/ratchet-v2.0.2/js/ratchet.min.js"></script>
+
+    <style>
+      li.media {
+        border-top:1px solid white;
+        overflow: hidden;
+        padding: 0px;
+        position: relative;
+        background-color: white;
+      }
+      
+      li.media img {
+        width:100%;
+        min-height: 50px;
+        max-height: 150px;
+        opacity: 0.8;
+      }
+
+      li.media div.text {
+        position: absolute;
+        bottom: 0px;
+        padding:10px;
+        width: 100%;
+        color: white;
+        text-shadow: 2px 2px black;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(0,0,0,0.8)));
+      }
+
+      li.media div.text .t {
+        font-size: 24px;
+        line-height: 1.4em;
+      }
+
+      li.media div.text .d {
+        font-size: 16px;
+        line-height: 1.4em;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bar bar-nav">
+      <a class="icon icon-plus pull-right" href="#settingsModal"></a>
+      <h1 class="title">Events</h1>
+    </header>
+
+    <div class="content" id="profile">
+    Test
+    </div>
+
+    <div class="content" id="home">
+
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">This week</li>
+        <li class="table-view-cell media">
+          <a class="navigate-right" href="choose-theater.html" data-transition="slide-in">
+            <img class="media-object pull-left" src="https://anthemevents.com/wp-content/uploads/2014/01/ticketing-header.jpg" alt="Placeholder image for Argo's poster">
+          </a>
+          <div class="text"> 
+            <div class="t">Concert</div>
+            <div class="d">Text about event</div>
+          </div>
+        </li>
+        <li class="table-view-cell media">
+          <a class="navigate-right" href="choose-theater.html" data-transition="slide-in">
+            <img class="media-object pull-left" src="http://files.hostgator.co.in/hostgator217175/image/york-house-hotel-wedding-events-01-83773_s.jpg" alt="Placeholder image for Argo's poster">
+          </a>
+          <div class="text"> 
+            <div class="t">Birthday</div>
+            <div class="d">Text about event</div>
+          </div>
+        </li>
+        <li class="table-view-cell media">
+          <a class="navigate-right" href="choose-theater.html" data-transition="slide-in">
+            <img class="media-object pull-left" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTOnlA2cYBnASGkyrxrBBKqN-tx93kn15NUXfmTqdqbOi5lVJjw" alt="Placeholder image for Argo's poster">
+          </a>
+          <div class="text"> 
+            <div class="t">BBQ</div>
+            <div class="d">Text about event</div>
+          </div>
+        </li>
+      </ul>
+    </div><!-- /.content -->
+
+    <!-- Settings modal -->
+    <div id="settingsModal" class="modal">
+      <header class="bar bar-nav">
+        <a class="icon icon-close pull-right" href="#settingsModal"></a>
+        <h1 class="title">Settings</h1>
+      </header>
+
+      <div class="content">
+        <form class="input-group">
+          <input type="text" placeholder="Full name">
+          <input type="email" placeholder="Email">
+          <input type="text" placeholder="Username">
+        </form>
+
+        <h5 class="content-padded">App settings</h5>
+
+        <ul class="table-view">
+          <li class="table-view-cell media">
+            <span class="media-object pull-left icon icon-sound"></span>
+            <div class="media-body">
+              Enable sounds
+            </div>
+            <div class="toggle">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+          <li class="table-view-cell media">
+            <span class="media-object pull-left icon icon-person"></span>
+            <div class="media-body">
+              Parental controls
+            </div>
+            <div class="toggle">
+              <div class="toggle-handle"></div>
+            </div>
+          </li>
+        </ul>
+        <div class="content-padded">
+          <button class="btn btn-positive btn-block">Save settings</button>
+        </div>
+      </div>
+    </div><!-- /.modal -->
+
+    <nav class="bar bar-tab">
+      <a class="tab-item active" href="index.html" data-transition="slide-in">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
+      </a>
+      <a class="tab-item" href="event.html" data-transition="slide-in">
+        <span class="icon icon-person"></span>
+        <span class="tab-label">Event</span>
+      </a>
+      <a class="tab-item" href="#">
+        <span class="icon icon-star-filled"></span>
+        <span class="tab-label">Favorites</span>
+      </a>
+      <a class="tab-item" href="#">
+        <span class="icon icon-search"></span>
+        <span class="tab-label">Search</span>
+      </a>
+      <a class="tab-item" href="#">
+        <span class="icon icon-gear"></span>
+        <span class="tab-label">Settings</span>
+      </a>
+    </nav>
+  </body>
+</html>
