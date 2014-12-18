@@ -105,8 +105,8 @@ App.Calendar = Backbone.View.extend({
 				(model.get('piano')? '<span class="type music"><i class="fa fa-music"></i></span>': '') +
 				(model.get('ams')? '<span class="type ams"><i class="fa fa-ambulance"></i></span>': '') +
 				'<br>' +
-				(model.get('choir')? '<span class="type choir"><i class="fa fa-book"></i></span>': '') +
-				(model.get('food')? '<span class="type food"><i class="fa fa-star"></i></span>': '') +
+				(model.get('choir')? '<span class="type choir"><i class="fa fa-headphones"></i></span>': '') +
+				(model.get('food')? '<span class="type food"><i class="ionicons ion-egg"></i><i class="fa fa-'+model.get('food')+'"></i></span>': '') +
 			'</span>'
 		);
 	},

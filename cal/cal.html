@@ -19,6 +19,7 @@
 	<script src="pagejs/cal.js"></script>
 
     <link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href="css/ionicons.min.css" rel="stylesheet">
 
     <!-- Include the compiled Ratchet CSS -->
     <link href="js/ratchet-v2.0.2/css/ratchet.css" rel="stylesheet">
@@ -72,6 +73,7 @@
 		#dates .box .l {
 			float:right;
 			opacity: 0.5;
+			color: black;
 		}
 
 		.header {
@@ -81,6 +83,7 @@
 		body {
 			color: HotPink ;
 			background-color: white;
+			max-width: 375px !important;
 		}
 
 		.type {
@@ -126,7 +129,7 @@
 <body>
 	<!--
 		1/2/3
-		egg/veggie/food
+		egg/veggie/fruit
 		ams
 		piano
 		choir
@@ -179,15 +182,15 @@
 			  <a class="control-item" data-id='d' data-value='1'>Duty 1</a>
 			  <a class="control-item" data-id='d' data-value='2'>Duty 2</a>
 			  <a class="control-item" data-id='d' data-value='3'>Duty 3</a>
-			  <a class="control-item" data-id='d' data-value='o'>Off</a>
+			  <a class="control-item" data-id='d' data-value=''>Off</a>
 			</div>
 		  </li>
 		  <li class="table-view-cell">
 		    <div class="t">Location</div>
 			<div class="segmented-control" >
 			  <a class="control-item" data-id='l' data-value='csw'>Cheung Sha Wan</a>
-			  <a class="control-item" data-id='l' data-value='sw'>Sai Wan</a>
-			  <a class="control-item" data-id='l' data-value='o'>Off</a>
+			  <a class="control-item" data-id='l' data-value='w'>Western</a>
+			  <a class="control-item" data-id='l' data-value=''>Off</a>
 			</div>
 		  </li>
 		  <li class="table-view-cell">
@@ -210,10 +213,13 @@
 		  </li>
 
 		  <li class="table-view-cell">
-		    Food Sampling
-		    <div class="toggle" data-id='food'>
-		      <div class="toggle-handle"></div>
-		    </div>
+		    <div class="t">Food Sampling</div>
+			<div class="segmented-control" >
+			  <a class="control-item" data-id='food' data-value='egg'>Egg</a>
+			  <a class="control-item" data-id='food' data-value='tree'>Veggie</a>
+			  <a class="control-item" data-id='food' data-value='apple'>Fruit</a>
+			  <a class="control-item" data-id='food' data-value=''>Off</a>
+			</div>
 		  </li>		  
 		</ul>	  	
 	  </div>
