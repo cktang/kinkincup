@@ -16,6 +16,9 @@
 	<script src="js/backbone-listeners.js"></script>
 	<script src="js/moment.js"></script>
 
+	<script src="js/jquery-ui-1.11.2/jquery-ui.js"></script>
+    <link href="js/jquery-ui-1.11.2/jquery-ui.css" rel="stylesheet">
+
 	<script src="pagejs/cal.js"></script>
 
     <link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
@@ -114,11 +117,11 @@
 		}
 
 		.box.d2 {
-			background-color: #dcd;
+			background-color: #fef;
 		}
 
 		.box.d3 {
-			background-color: #fef;
+			background-color: #dcd;
 		}
 
 		.box.o {
@@ -149,13 +152,13 @@
     	<div style="margin:-10px; margin-top:20px">
     		<div id="calDetails">
     			<div class="header">
-	    			<div class="box">Su</div>
-	    			<div class="box">M</div>
-	    			<div class="box">T</div>
-	    			<div class="box">W</div>
-	    			<div class="box">Th</div>
-	    			<div class="box">F</div>
-	    			<div class="box">Sa</div>
+	    			<div class="box" style="display:none">Su</div>
+	    			<div class="box" style="display:none">M</div>
+	    			<div class="box" style="display:none">T</div>
+	    			<div class="box" style="display:none">W</div>
+	    			<div class="box" style="display:none">Th</div>
+	    			<div class="box" style="display:none">F</div>
+	    			<div class="box" style="display:none">Sa</div>
 	    		</div>
 
 	    		<div id="dates"></div>
@@ -167,9 +170,9 @@
 	  <header class="bar bar-nav">
 	    <a class="icon icon-close pull-right" href="#form"></a>
 	    <h1 class="title">
-	    	<i class="fa fa-angle-left fa-lg" id="prevMonth" style="padding-right:10px"></i>
+	    	<i class="fa fa-angle-left fa-lg" id="prevDate" style="padding-right:10px"></i>
 			<span id="date"></span>
-			<i class="fa fa-angle-right fa-lg" id="nextMonth" style="padding-right:10px"></i>
+			<i class="fa fa-angle-right fa-lg" id="nextDate" style="padding-left:10px"></i>
 	    </h1>
 	  </header>
 
@@ -186,7 +189,7 @@
 			  <a class="control-item" data-id='d' data-value='1'>Duty 1</a>
 			  <a class="control-item" data-id='d' data-value='2'>Duty 2</a>
 			  <a class="control-item" data-id='d' data-value='3'>Duty 3</a>
-			  <a class="control-item" data-id='d' data-value=''>Off</a>
+			  <a class="control-item" data-id='d' data-value='X'>Off</a>
 			</div>
 		  </li>
 		  <li class="table-view-cell">
@@ -194,7 +197,7 @@
 			<div class="segmented-control" >
 			  <a class="control-item" data-id='l' data-value='csw'>Cheung Sha Wan</a>
 			  <a class="control-item" data-id='l' data-value='w'>Western</a>
-			  <a class="control-item" data-id='l' data-value=''>Off</a>
+			  <a class="control-item" data-id='l' data-value='X'>Off</a>
 			</div>
 		  </li>
 		  <li class="table-view-cell">
@@ -219,10 +222,10 @@
 		  <li class="table-view-cell">
 		    <div class="t">Food Sampling</div>
 			<div class="segmented-control" >
-			  <a class="control-item" data-id='food' data-value='egg'>Egg</a>
-			  <a class="control-item" data-id='food' data-value='tree'>Veggie</a>
-			  <a class="control-item" data-id='food' data-value='apple'>Fruit</a>
-			  <a class="control-item" data-id='food' data-value=''>Off</a>
+			  <a class="control-item" data-id='food' data-value='E'>Egg</a>
+			  <a class="control-item" data-id='food' data-value='V'>Veggie</a>
+			  <a class="control-item" data-id='food' data-value='F'>Fruit</a>
+			  <a class="control-item" data-id='food' data-value='X'>Off</a>
 			</div>
 		  </li>		  
 		</ul>	  	

@@ -24,7 +24,9 @@ $(document).ready(function() {
 
 App.CalendarDetails = Backbone.View.extend({
 	events: {
-		'click li': 'update'
+		'click li': 'update',
+		'click #prevDate': 'prevDate',
+		'click #nextDate': 'nextDate'		
 	},
 
 	render: function(model) {
@@ -34,6 +36,8 @@ App.CalendarDetails = Backbone.View.extend({
 		var self = this;
 
 		_(model.toJSON()).each(function(v, k) {
+			console.log("k=" + k + " v=" + v);
+			if (v == '')return ;
 			$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
 
 			if (v == 1) {
@@ -46,11 +50,23 @@ App.CalendarDetails = Backbone.View.extend({
 		var temp = _($('#form .active')).map(function(e) { return {name:$(e).attr('data-id'), value:$(e).attr('data-value')||1 }; })
 		var data = _.object(_.map(temp, function(x){return [x.name, x.value]}));
 		data.id = $('#date').html();
-
-		data.d = data.d || 'o';
-		data.l = data.l || 'o'; 
-
 		this.collection.add(data, {merge:true});
+	},
+
+	prevDate: function() {
+		var d = moment($(this.el).find('#date').text(), 'YYYY-MM-DD')
+			.subtract(1, 'days')
+			.format('YYYY-MM-DD');
+		$(this.el).find('#date').html(d);
+		this.render(this.collection.get(d));
+	},
+
+	nextDate: function() {
+		var d = moment($(this.el).find('#date').text(), 'YYYY-MM-DD')
+			.add(1, 'days')
+			.format('YYYY-MM-DD');
+		$(this.el).find('#date').html(d);
+		this.render(this.collection.get(d));
 	}
 })
 
@@ -106,7 +122,7 @@ App.Calendar = Backbone.View.extend({
 				(model.get('ams')? '<span class="type ams"><i class="fa fa-ambulance"></i></span>': '') +
 				'<br>' +
 				(model.get('choir')? '<span class="type choir"><i class="fa fa-headphones"></i></span>': '') +
-				(model.get('food')? '<span class="type food"><i class="ionicons ion-egg"></i><i class="fa fa-'+model.get('food')+'"></i></span>': '') +
+				(model.get('food')? '<span class="type food">'+model.get('food')+'</span>': '') +
 			'</span>'
 		);
 	},
@@ -134,5 +150,7 @@ App.Calendar = Backbone.View.extend({
 		$(this.el).find('.link').on('click', function() {
 			$('#formButton').click();
 		});
+
+		$(this.el).find('.box').hide().show('blind');
 	}
 })
