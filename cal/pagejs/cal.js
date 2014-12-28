@@ -39,10 +39,6 @@ App.CalendarDetails = Backbone.View.extend({
 			console.log("k=" + k + " v=" + v);
 			if (v == '')return ;
 			$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
-
-			if (v == 1) {
-				$(self.el).find('[data-id=' + k + ']').addClass('active');
-			}
 		});
 	},
 
