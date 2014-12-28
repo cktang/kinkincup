@@ -30,6 +30,7 @@ App.CalendarDetails = Backbone.View.extend({
 	},
 
 	render: function(model) {
+		$(this.el).addClass('active');
 		$(this.el).find('.active').removeClass('active');
 
 		if (!model) return;
@@ -40,6 +41,7 @@ App.CalendarDetails = Backbone.View.extend({
 			if (v == '')return ;
 			$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
 		});
+
 	},
 
 	update: function() {
@@ -85,11 +87,10 @@ App.Calendar = Backbone.View.extend({
 	chooseDate: function(e) {
 		var d = $(e.currentTarget).find('.d').text();
 		var dd = $(e.currentTarget).find('.dd').text();
-		if (d.length = 0) return;
+		if (d.length == 0) return;
 		$(this.el).find('#dateName').html(this.moment.clone().date(d).format('Do'));
 		$(this.el).find('#dateDetails').html($(e.currentTarget).find('i'));
 		$('#date').html(dd);
-		$('#form').addClass('active');
 		this.trigger('dateClicked', this.collection.get(dd));
 	},
 
