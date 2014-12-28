@@ -43,7 +43,9 @@ App.CalendarDetails = Backbone.View.extend({
 	},
 
 	update: function() {
+		//unselect OFF choices
 		$(this.el).find('[data-value=OFF]').removeClass('active');
+
 		var temp = _($('#form .active')).map(function(e) { return {name:$(e).attr('data-id'), value:$(e).attr('data-value')||1 }; })
 		var data = _.object(_.map(temp, function(x){return [x.name, x.value]}));
 		data.id = $('#date').html();
