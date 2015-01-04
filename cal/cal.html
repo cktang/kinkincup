@@ -112,16 +112,8 @@
 			color: navy;
 		}
 
-		.box.d1 {
-			background-color: #bab;
-		}
-
-		.box.d2 {
+		.box.work {
 			background-color: #fef;
-		}
-
-		.box.d3 {
-			background-color: #dcd;
 		}
 
 		.box.o {
@@ -183,22 +175,22 @@
 	  </style>
 	  <div class="content">
 		<ul class="table-view" style="margin:0px">
-		  <li class="table-view-cell">
+		  <style>
+		  	#duty-choices .control-item {
+		  		min-width: 44px;
+		  	}
+		  </style>
+		  <li class="table-view-cell" id="duty-choices">
 		    <div class="t">Duty</div>
 			<div class="segmented-control" >
-			  <a class="control-item" data-id='d' data-value='1'>Duty 1</a>
-			  <a class="control-item" data-id='d' data-value='2'>Duty 2</a>
-			  <a class="control-item" data-id='d' data-value='3'>Duty 3</a>
-			  <a class="control-item" data-id='d' data-value='*'>C*</a>
+			  <a class="control-item" data-id='d' data-value='C1'>C1</a>
+			  <a class="control-item" data-id='d' data-value='C2'>C2</a>
+			  <a class="control-item" data-id='d' data-value='C3'>C3</a>
+			  <a class="control-item" data-id='d' data-value='W1'>W1</a>
+			  <a class="control-item" data-id='d' data-value='W2'>W2</a>
+			  <a class="control-item" data-id='d' data-value='W3'>W3</a>
+			  <a class="control-item" data-id='d' data-value='C*'>C*</a>
 			  <a class="control-item" data-id='d' data-value='OFF'>Off</a>
-			</div>
-		  </li>
-		  <li class="table-view-cell">
-		    <div class="t">Location</div>
-			<div class="segmented-control" >
-			  <a class="control-item" data-id='l' data-value='csw'>Cheung Sha Wan</a>
-			  <a class="control-item" data-id='l' data-value='w'>Western</a>
-			  <a class="control-item" data-id='l' data-value='OFF'>Off</a>
 			</div>
 		  </li>
 		  <li class="table-view-cell">
