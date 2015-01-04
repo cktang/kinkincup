@@ -37,29 +37,10 @@ App.CalendarDetails = Backbone.View.extend({
 		var self = this;
 
 		_(model.toJSON()).each(function(v, k) {
-			console.log("k=" + k + " v=" + v);
+			// console.log("k=" + k + " v=" + v);
 			if (v == '')return ;
 			$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
 		});
-
-
-
-		var d, l;
-		if (model.get('l') == 'csw') l = 'C';
-		if (model.get('l') == 'w') l = 'W';
-
-		if (model.get('d') == '1') d = 1;
-		if (model.get('d') == '2') d = 2;
-		if (model.get('d') == '3') d = 3;
-
-		if (d && l) {
-			model.set('d', l + d);
-			model.set('l', null);
-		} else {
-			model.set('d', null);
-			model.set('l', null);
-		}
-
 	},
 
 	update: function() {
@@ -98,6 +79,7 @@ App.Calendar = Backbone.View.extend({
 	},
 
 	initialize: function(options) {
+		this.today = moment().format('YYYY-MM-DD');
 		this.moment = moment().date(1).minute(0).hour(0).second(0);
 		this.collection.on('all', this.render, this);
 	},
@@ -125,6 +107,8 @@ App.Calendar = Backbone.View.extend({
 	createBox: function(content, fulldate) {
 		var model = this.collection.get(fulldate);
 		var duty = model? model.get('d'): '';
+		var isToday = this.today == fulldate;
+
 		duty = duty || '';
 		if (duty == 'X') duty = '';
 
@@ -134,7 +118,9 @@ App.Calendar = Backbone.View.extend({
 				'<span class="d">' + content + '</span>' + '<br>' 
 			);
 
-		return $('<div class="link box btn btn-outlined ' + (model.get('d')?'work':'') + '"></div>').append(
+		return $('<div class="link box btn btn-outlined ' + 
+				(model.get('d')?'work':'') + 
+				' ' + (isToday?'today':'') + '"></div>').append(
 			'<span class="l">' + duty + '</span>' +
 			'<span class="dd" style="display:none">' + fulldate + '</span>' + '<br>' +  
 			'<span class="d">' + content + '</span>' + '<br>' +  
