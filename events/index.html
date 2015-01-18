@@ -204,12 +204,6 @@
     </header>
 
     <div class="content" style="padding-left:10px; padding-right:10px" >
-      <script>
-        $('#templates li').click(function(e) {
-          $('#templates li').removeClass('icon icon-check');
-          $(e.delegateTarget).addClass('icon icon-check');
-        })
-      </script>
       <ul class="table-view" id="templates">
         <li class="table-view-cell">
           <a>
@@ -227,6 +221,12 @@
           </a>
         </li>
       </ul>
+      <script>
+        $('#templates').click(function(e) {
+          $('#templates li').removeClass('icon icon-check');
+          $(e.delegateTarget).addClass('icon icon-check');
+        })
+      </script>
       <form>
         <a class="btn btn-positive btn-block" href="#newEvent4">Next</a>
       </form>
