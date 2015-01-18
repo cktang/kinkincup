@@ -204,7 +204,13 @@
     </header>
 
     <div class="content" style="padding-left:10px; padding-right:10px" >
-      <ul class="table-view">
+      <script>
+        $('#templates a').click(function(e) {
+          $('#templates a').removeClass('icon icon-check');
+          $(e.target).addClass('icon icon-check');
+        })
+      </script>
+      <ul class="table-view" id="templates">
         <li class="table-view-cell">
           <a class="icon-check">
             Birthday
