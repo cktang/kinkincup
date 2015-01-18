@@ -292,11 +292,13 @@
       $('#newEvent').removeClass('active');
     }
 
-    var eventModel = new Backbone.model;
+    var eventModel = new Backbone.Model;
 
     var eventView = Backbone.view.extend({
+      model: eventModel,
+
       saveEvent1: function(form) {
-        eventModel.name = $(form).find('[name=name]');
+        this.model.name = $(form).find('[name=name]');
       },
 
       saveEvent2: function() {
