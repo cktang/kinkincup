@@ -294,7 +294,7 @@
 
     var eventModel = new Backbone.Model;
 
-    var eventView = Backbone.View.extend({
+    EventView = Backbone.View.extend({
       model: eventModel,
 
       saveEvent1: function(form) {
@@ -305,5 +305,7 @@
 
       }
     });
+
+    var eventView = new EventView;
   </script>
 </html>
