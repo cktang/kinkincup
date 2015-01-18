@@ -266,19 +266,20 @@
 
   <div id="newEvent6" class="modal">
     <header class="bar bar-nav">
-      <a class="icon icon-close pull-right" href="#newEvent6"></a>
+      <a class="icon icon-close pull-right" onclick="closeAllNewEventModals()"></a>
       <h1 class="title">Summary</h1>
     </header>
 
     <div class="content" style="padding-left:10px; padding-right:10px" >
       <form>
-        <a class="btn btn-positive btn-block" onclick="closeAllNewEventModals()">Finish</a>
+        <a class="btn btn-positive btn-block" onclick="closeAllNewEventModals(true)">Finish</a>
       </form>
     </div>
   </div>
 
   <script>
-    function closeAllNewEventModals() {
+    function closeAllNewEventModals(confirmed) {
+      if (!confirmed) confirm('Cancel event creation?');
       $('#newEvent6').removeClass('active');
       $('#newEvent5').removeClass('active');
       $('#newEvent4').removeClass('active');
