@@ -13,6 +13,8 @@
 
     <script src="js/jquery-2.1.1.min.js"></script>
 
+    <script src="js/underscore-min.js"></script>
+    <script src="js/backbone-min.js"></script>
     <style>
       li.media {
         border-top:1px solid white;
@@ -148,6 +150,8 @@
     </nav>
   </body>
 
+  <!-- new event below -->
+
   <div id="newEvent" class="modal">
     <header class="bar bar-nav">
       <a class="icon icon-close pull-right" href="#newEvent"></a>
@@ -156,9 +160,9 @@
 
     <div class="content" style="padding-left:10px; padding-right:10px" >
       <form>
-        <input type="text" placeholder="Event Name">
-        <textarea rows="5" placeholder="Descriptions"></textarea>
-        <a class="btn btn-positive btn-block" href="#newEvent2">Next</a>
+        <input type="text" name=name placeholder="Event Name">
+        <textarea rows="5" name=description placeholder="Descriptions"></textarea>
+        <a class="btn btn-positive btn-block" href="#newEvent2" onclick="view.saveEvent1()">Next</a>
       </form>
     </div>
   </div>
@@ -287,5 +291,17 @@
       $('#newEvent2').removeClass('active');
       $('#newEvent').removeClass('active');
     }
+
+    var eventModel = new Backbone.model;
+
+    var eventView = Backbone.view.extend({
+      saveEvent1: function(form) {
+        eventModel.name = $(form).find('[name=name]');
+      },
+
+      saveEvent2: function() {
+
+      }
+    });
   </script>
 </html>
