@@ -205,9 +205,9 @@
 
     <div class="content" style="padding-left:10px; padding-right:10px" >
       <script>
-        $('#templates a').click(function(e) {
-          $('#templates a').removeClass('icon icon-check');
-          $(e.target).addClass('icon icon-check');
+        $('#templates li').click(function(e) {
+          $('#templates li').removeClass('icon icon-check');
+          $(e.delegateTarget).addClass('icon icon-check');
         })
       </script>
       <ul class="table-view" id="templates">
