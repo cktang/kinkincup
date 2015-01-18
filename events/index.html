@@ -207,24 +207,24 @@
       <ul class="table-view" id="templates">
         <li class="table-view-cell">
           <a>
-            Birthday
+            <span class="icon"></span> Birthday
           </a>
         </li>
         <li class="table-view-cell">
           <a>
-            Wedding
+            <span class="icon"></span> Wedding
           </a>
         </li>
         <li class="table-view-cell">
           <a>
-            Hiking
+            <span class="icon"></span> Hiking
           </a>
         </li>
       </ul>
       <script>
         $('#templates li').click(function(e) {
-          $('#templates li').removeClass('icon icon-check');
-          $(e.delegateTarget).addClass('icon icon-check');
+          $('#templates span').removeClass('icon-check');
+          $(e.delegateTarget).find('span').addClass('icon-check');
         })
       </script>
       <form>
