@@ -15,42 +15,6 @@
 
     <script src="js/underscore-min.js"></script>
     <script src="js/backbone-min.js"></script>
-    <style>
-      li.media {
-        border-top:1px solid white;
-        overflow: hidden;
-        padding: 0px;
-        position: relative;
-        background-color: white;
-      }
-      
-      li.media img {
-        width:100%;
-        min-height: 50px;
-        max-height: 150px;
-        opacity: 0.8;
-      }
-
-      li.media div.text {
-        position: absolute;
-        bottom: 0px;
-        padding:10px;
-        width: 100%;
-        color: white;
-        text-shadow: 2px 2px black;
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(0,0,0,0.8)));
-      }
-
-      li.media div.text .t {
-        font-size: 24px;
-        line-height: 1.4em;
-      }
-
-      li.media div.text .d {
-        font-size: 16px;
-        line-height: 1.4em;
-      }
-    </style>
   </head>
   <body>
     <header class="bar bar-nav">
@@ -162,7 +126,7 @@
       <form>
         <input type="text" name=name placeholder="Event Name">
         <textarea rows="5" name=description placeholder="Descriptions"></textarea>
-        <a class="btn btn-positive btn-block" href="#newEvent2" onclick="alert('here'); eventView.saveEvent1()">Next</a>
+        <a class="btn btn-positive btn-block" href="#newEvent2">Next</a>
       </form>
     </div>
   </div>
@@ -283,7 +247,10 @@
 
   <script>
     function closeAllNewEventModals(confirmed) {
-      if (!confirmed) confirm('Cancel event creation?');
+      if (!confirmed) {
+        if (!confirm('Cancel event creation?') return;
+      }
+
       $('#newEvent6').removeClass('active');
       $('#newEvent5').removeClass('active');
       $('#newEvent4').removeClass('active');
