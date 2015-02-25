@@ -16,10 +16,15 @@
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
 
 	<div class="container">	
-		<h4> Event Name </h4>
-		<h6> Event Description </h6>
+		<h4 class="btn"> Event Name ??? </h4>
+		<Br>
+		<h6 class="btn"> Event Description ??? </h6>
 
 		<style>
+			h4.btn, h6.btn {
+				background-color: #eee;
+			}
+
 			.dashboard .btn {
 				height: 100px;
 				font-size: 20px;
@@ -66,37 +71,32 @@
 		</style>
 
 		<div class="row dashboard">
-		  <div class="col-xs-10 btn link"> 
+		  <div class="col-xs-10 btn"> 
 		  	<span class="icon"><img src="img/calendar.png"/></span>
-		  	<span class="sub">
-		  		<div><span class="badge">2</span>25/12 10:30</div>
-		  		<div><span class="badge">1</span>26/12 12:00</div>
-		  	</span>
 		  	<span class="main">
-		  		<span class="badge">3</span> 24/12 9:30
+		  		Time ???
 		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn link">
+		  <div class="col-xs-5 btn">
 		  	<span class="icon"><img src="img/location.png"/></span>
-		  	<span class="main"><span class="badge">5</span>海洋公園</span>
+		  	<span class="main">
+		  		Venue ???
+		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn link">
+		  <div class="col-xs-5 btn">
 		  	<span class="icon"><img src="img/running.png"/></span>
-		  	<span class="main">9</span>
+		  	<span class="main">
+		  		Participants ???
+		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn new">
-		  	<span class="main">Create New Topic</span>
+		  	<span class="main"> Gift?? Reminder??? Travel Tips?? </span>
 		  </div>
 		</div>
 
-		<script>
-			$('.dashboard .btn.link').click(function() {
-				location.href="eventtopic.html";
-			})
-			$('.dashboard .btn.new').click(function() {
-				location.href="neweventtopic.html";
-			})
-		</script>
+		<hr>
+		<a href="eventsummary.html" class="btn btn-block btn-warning"> Submit </a>
+
 		<div class="bottomplaceholder"></div>
 	</div>
 </body>
