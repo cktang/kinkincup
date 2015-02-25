@@ -76,11 +76,11 @@
 		  		<span class="badge">3</span> 24/12 9:30
 		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn">
+		  <div class="col-xs-5 btn link">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main"><span class="badge">5</span>海洋公園</span>
 		  </div>
-		  <div class="col-xs-5 btn">
+		  <div class="col-xs-5 btn link">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">9</span>
 		  </div>
@@ -90,8 +90,11 @@
 		</div>
 
 		<script>
-			$('.dashboard .btn').click(function() {
+			$('.dashboard .btn.link').click(function() {
 				location.href="eventtopic.html";
+			})
+			$('.dashboard .btn.new').click(function() {
+				location.href="neweventtopic.html";
 			})
 		</script>
 		<div class="bottomplaceholder"></div>
