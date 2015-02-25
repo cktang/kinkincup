@@ -1,0 +1,38 @@
+.headerplaceholder {
+	position:fixed;
+	background-color: #ddd;
+	height: 50px; 
+	margin-bottom: 5px;
+	width:100%;
+	z-index: 1000;
+	font-size: 24px;
+	padding: 8px;
+	width: 375px !important;
+}
+
+.footerplaceholder {
+	position:fixed;
+	bottom:0px;
+	background-color: #ddd;
+	height: 50px; 
+	width:100%;
+	z-index: 1000;
+	width: 375px !important;
+}
+
+* {
+	font-family: 'Oswald'
+}
+
+html, body, .container {
+	height: 763px !important;
+	width: 375px !important;
+}
+
+.container {
+	padding-top: 50px;
+}
+
+.container .bottomplaceholder {
+	height:60px;
+}

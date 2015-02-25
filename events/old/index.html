@@ -17,92 +17,32 @@
     <script src="js/backbone-min.js"></script>
   </head>
   <body>
-    <header class="bar bar-nav">
-      <a class="icon icon-plus pull-right" href="#newEvent"></a>
-      <h1 class="title">Events</h1>
-    </header>
 
-    <div class="content" id="home">
+    <div id="buttons" class="pull-right" style="padding:10px">
+      <a class="btn btn-xs" href="#newEvent"> New Event </a>
+    </div>
 
-      <ul class="table-view">
-        <li class="table-view-cell table-view-divider">This week</li>
-        <li class="table-view-cell media">
-          <div class="text"> 
-            <div class="t">Concert</div>
-            <div class="d">Text about event</div>
-          </div>
-        </li>
-        <li class="table-view-cell media">
-          <div class="text"> 
-            <div class="t">Birthday</div>
-            <div class="d">Text about event</div>
-          </div>
-        </li>
-        <li class="table-view-cell media">
-          <div class="text"> 
-            <div class="t">BBQ</div>
-            <div class="d">Text about event</div>
-          </div>
-        </li>
-      </ul>
-    </div><!-- /.content -->
-
-    <!-- Settings modal -->
-    <div id="settingsModal" class="modal">
-      <header class="bar bar-nav">
-        <a class="icon icon-close pull-right" href="#settingsModal"></a>
-        <h1 class="title">Settings</h1>
-      </header>
-
-      <div class="content">
-        <form class="input-group">
-          <input type="text" placeholder="Full name">
-          <input type="email" placeholder="Email">
-          <input type="text" placeholder="Username">
-        </form>
-
-        <h5 class="content-padded">App settings</h5>
-
-        <ul class="table-view">
-          <li class="table-view-cell media">
-            <span class="media-object pull-left icon icon-sound"></span>
-            <div class="media-body">
-              Enable sounds
-            </div>
-            <div class="toggle">
-              <div class="toggle-handle"></div>
-            </div>
-          </li>
-          <li class="table-view-cell media">
-            <span class="media-object pull-left icon icon-person"></span>
-            <div class="media-body">
-              Parental controls
-            </div>
-            <div class="toggle">
-              <div class="toggle-handle"></div>
-            </div>
-          </li>
-        </ul>
-        <div class="content-padded">
-          <button class="btn btn-positive btn-block">Save settings</button>
+    <ul class="table-view">
+      <li class="table-view-cell table-view-divider">This week</li>
+      <li class="table-view-cell media">
+        <div class="text"> 
+          <div class="t">Concert</div>
+          <div class="d">Text about event</div>
         </div>
-      </div>
-    </div><!-- /.modal -->
-
-    <nav class="bar bar-tab">
-      <a class="tab-item active" data-transition="slide-in">
-        <span class="icon icon-home"></span>
-        <span class="tab-label">Home</span>
-      </a>
-      <a class="tab-item" href="event.html" data-transition="slide-in">
-        <span class="icon icon-person"></span>
-        <span class="tab-label">Event</span>
-      </a>
-      <a class="tab-item" href="#">
-        <span class="icon icon-gear"></span>
-        <span class="tab-label">Settings</span>
-      </a>
-    </nav>
+      </li>
+      <li class="table-view-cell media">
+        <div class="text"> 
+          <div class="t">Birthday</div>
+          <div class="d">Text about event</div>
+        </div>
+      </li>
+      <li class="table-view-cell media">
+        <div class="text"> 
+          <div class="t">BBQ</div>
+          <div class="d">Text about event</div>
+        </div>
+      </li>
+    </ul>
   </body>
 
   <!-- new event below -->
@@ -117,8 +57,7 @@
       <form>
         <input type="text" name=name placeholder="Event Name">
         <textarea rows="5" name=description placeholder="Descriptions"></textarea>
-        <a class="btn btn-negative btn-block" style="width:40%; display:a !important" href="#newEvent2">Back</a>
-        <a class="btn btn-positive btn-block" style="width:58%; display:a !important" href="#newEvent2">Next</a>
+        <a class="btn btn-positive btn-block" href="#newEvent2">Next</a>
       </form>
     </div>
   </div>
@@ -151,7 +90,8 @@
         </li>
       </ul>
       <form>
-        <a class="btn btn-positive btn-block" href="#newEvent3">Next</a>
+        <a class="btn btn-negative btn-block" style="width:40%; display:table !important" href="#newEvent2">Back</a>
+        <a class="btn btn-positive btn-block" style="width:58%; display:table !important" href="#newEvent3">Next</a>
       </form>
     </div>
   </div>
@@ -240,7 +180,7 @@
   <script>
     function closeAllNewEventModals(confirmed) {
       if (!confirmed) {
-        if (!confirm('Cancel event creation?') return;
+        if (!confirm('Cancel event creation?')) return;
       }
 
       $('#newEvent6').removeClass('active');
