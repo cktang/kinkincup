@@ -14,10 +14,75 @@
 <body ontouchstart="">
 	<div class="headerplaceholder" ng-include="'header.html'"></div>
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
+	<style>
+		h5 {
+			margin-top: 20px;
+		}
+
+		.choices > .btn {
+			margin-top: 0px;
+			font-size: 16px;
+			line-height: 2.5em;
+			text-align: center;
+			position:relative;
+			border-radius: 0px;
+		}
+
+		.choices .glyphicon-ok {
+			color: transparent;
+			position: absolute;
+			right: 5%;
+			top: 30%;
+		}
+
+		.choices .badge {
+			position: absolute;
+			left: 5%;
+			top: 30%;
+		}
+
+		.choices .btn-success .glyphicon-ok {
+			color: white;
+		}
+	</style>
 
 	<div class="container">	
 		<h4> <a href="eventsummary.html"><small> Event Name </small></a> > Event Topic </h4>
 
+		<h5> Descriptions </h5>
+		<h6> blah blah blah <br> blah blah blahhhh </h6>
+
+		<h5> Vote </h5>
+		<div class="choices">
+			<div class="btn btn-block btn-success"> 
+				<span class="badge"> 6 </span>
+				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+				<span>Choice 1</span>
+			</div>
+			<div class="btn btn-block btn-default"> 
+				<span class="badge"> 2 </span>
+				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
+				<span>Choice 2</span>
+			</div>
+			<div class="btn btn-block btn-default"> 
+				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
+				<span>Choice 3</span>
+			</div>
+			<div class="btn btn-block btn-default"> 
+				<span class="badge"> 1 </span>
+				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
+				<span>Choice 4</span>
+			</div>
+		</div>
+
+		<h5> Chats </h5>
+
+		<script>
+			$('.choices .btn').click(function() {
+				$('.choices .btn').removeClass('btn-success').addClass('btn-default');
+				$(this).addClass('btn-success');
+			});
+		</script>
 
 		<div class="bottomplaceholder"></div>
 	</div>
