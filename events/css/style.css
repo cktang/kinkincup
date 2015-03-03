@@ -34,11 +34,47 @@ html, body, .container {
 }
 
 .container .bottomplaceholder {
-	height:50px;
+	height: 50px;
 }
 
 h5 {
 	padding: 10px 5px;
 	margin-bottom: 0px;
 	background-color: #f4f4f4;
+}
+
+.full {
+	margin: 0px -15px;
+}
+
+.full.title {
+	margin-bottom: 0px;
+	margin-top: 0px;
+
+	border-top: 1px solid #aab;
+	border-bottom: 1px solid #aab;
+
+	background-color: #dde;
+	padding: 10px;
+}
+
+/*** colors ***/
+
+
+div.modal-header {
+	background-color: #eee;
+	border-radius: 5px 5px 0px 0px;
+}
+
+div.modal-footer {
+	background-color: #f7f7f7;
+	border-radius: 0px 0px 5px 5px;
+}
+
+.good {
+	background-color: #CEC !important;
+}
+
+.bad {
+	background-color: #FCC !important;
 }
