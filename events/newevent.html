@@ -20,6 +20,7 @@
 			$scope.times = [];
 			$scope.venues = [];
 			$scope.users = [];
+			$scope.participants = [];
 			$scope.p = function(arr) {
 				arr.push({});
 			}
@@ -34,9 +35,11 @@
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
 
 	<div class="container">	
-      	<h4 class="btn" modal="form1" ng-class="{good:name, bad:!name}"> {{name || 'Event Name ???'}} </h4>
-		<Br>
-		<h6 class="btn" modal="form1" ng-class="{good:description}"> {{description || 'Event Description ???'}}  </h6>
+      	<h4 class="btn" modal="form1" ng-class="{good:name, bad:!name}"> 
+      		{{name || 'Event Name ???'}}
+			<Br>
+			<small>{{description || 'Event Description ???'}}</small>
+		</h4>
 
 		<style>
 			h4.btn, h6.btn {
@@ -122,7 +125,7 @@
 		  		Participants ???
 		  	</span>
 		  </div>
-		  <div class="col-xs-10 btn new">
+		  <div class="col-xs-10 btn new" modal="form5">
 		  	<span class="main"> Gift?? Reminder??? Travel Tips?? </span>
 		  </div>
 		</div>
@@ -144,7 +147,7 @@
 				    <input type="text" class="form-control" placeholder="Event Name" ng-model="name">
 				  </div>
 				  <div class="form-group">
-				    <label for="description">Password</label>
+				    <label for="description">Description</label>
 				    <textarea type="description" class="form-control" placeholder="Event Description" ng-model="description"></textarea>
 				  </div>		      	
 		      </div>
@@ -238,20 +241,63 @@
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		        <h4 class="modal-title" id="myModalLabel">Participants</h4>
 		      </div>
+		      <div class="modal-body" style="padding-top:0px">
+		      		<h4 class="full title"> Facebook </h4>
+	      			<h5 class="full"> Facebook Ppl 1 </h5>
+	      			<h5 class="full"> Facebook Ppl 2 </h5>
+	      			<h5 class="full label-success"> 
+	      				<span><i class="pull-right glyphicon glyphicon-ok"></i></span> 
+	      				<div>Facebook Ppl 3</div>
+	      			</h5>
+
+		      		<h4 class="full title"> Friends in EventHK </h4>
+	      			<h5 class="full"> Francois Lam </h5>
+	      			<h5 class="full"> Phillippe Lam </h5>
+	      			<h5 class="full label-success"> 
+	      				<span><i class="pull-right glyphicon glyphicon-ok"></i></span> 
+	      				<div>Kin Tang</div>
+	      			</h5>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-primary">Confirm</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="form5" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Topic</h4>
+		      </div>
 		      <div class="modal-body">
-		      	<div ng-repeat="v in venues">
-		      	<div class="choice">
-			        <button type="button" class="close" ng-click="r(venues, $index)"><i class="glyphicon glyphicon-remove"></i></button>
-
-		      	  <div class="form-group field">
-			            <input type="text" class="form-control" ng-model="v.name"/>
-       			  </div>
-				  <div style="clear:both; margin:5px"></div>
-				</div>
-				</div>
-
-				<div> <button class="btn btn-primary" ng-click="p(venues)"><i class="glyphicon glyphicon-plus"></i></button> </div>
-
+		      	  <div class="form-group">
+				    <label for="name">Name</label>
+				    <input type="text" class="form-control" placeholder="Topic Name" ng-model="name">
+				  </div>
+				  <div class="form-group">
+				    <label for="description">Description</label>
+				    <textarea type="description" class="form-control" placeholder="Topic Description" ng-model="description"></textarea>
+				  </div>	
+				  <div class="form-group">
+				    <label for="description">Type</label>
+				    <select class="form-control" ng-model="type">
+					    <option selected> Vote </option>
+					    <option > List </option>
+				    </select>
+				  </div>	
+				  <div class="form-group">
+				    <label for="description">Choices</label>
+					<div> <button class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></button> </div>
+				  </div>		      	
+				  <div class="form-group">
+				    <label for="description">List</label>
+					<div> <button class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></button> </div>
+				  </div>		      	
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
