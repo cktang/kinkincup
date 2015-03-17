@@ -67,8 +67,11 @@
 	  						$scope.events = sync.$asArray();					  
 
 	  						$scope.goto = function(id) {
-	  							linkEvent("eventsummary.html?id=" + id);
-	  							// $window.location.href = "eventsummary.html?id=" + id;
+	  							if (linkEvent) {
+		  							linkEvent("eventsummary.html?id=" + id);
+	  							} else {
+		  							$window.location.href = "eventsummary.html?id=" + id;
+	  							}
 	  						}
 						}
 					]);
