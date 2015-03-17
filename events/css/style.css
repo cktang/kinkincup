@@ -8,7 +8,7 @@
 	z-index: 1000;
 	font-size: 24px;
 	padding: 8px;
-	width: 375px !important;
+	width: 100% !important;
 
 	display:none;
 }
@@ -20,7 +20,7 @@
 	height: 50px; 
 	width:100%;
 	z-index: 1000;
-	width: 375px !important;
+	width: 100% !important;
 
 	display:none;
 }
@@ -31,7 +31,7 @@
 
 html, body, .container {
 	height: 763px !important;
-	width: 375px !important;
+	width: 360px !important;
 }
 
 .container {
