@@ -32,6 +32,7 @@
 html, body, .container {
 	height: 763px !important;
 	width: 360px !important;
+	overflow-x: hidden;
 }
 
 .container {
