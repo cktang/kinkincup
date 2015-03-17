@@ -4,4 +4,6 @@ $(document).ready(function() {
 	// 	linkEvent(e);
 	// 	return false;
 	// });
+
+	document.body.addEventListener('touchstart', function(e){ e.preventDefault(); });
 });
