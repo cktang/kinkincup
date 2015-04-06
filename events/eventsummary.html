@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="app">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +10,11 @@
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
 	<link href="css/style.css" rel="stylesheet">
 	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 </head>
+
 <body ontouchstart="">
 	<div class="headerplaceholder" ng-include="'header.html'"></div>
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
@@ -103,5 +107,40 @@
 		</script>
 		<div class="bottomplaceholder"></div>
 	</div>
+
+	<script>
+		var app = angular
+					.module("app", ["firebase", 'ui.bootstrap', 'ng-route'])
+					.controller("controller", 
+						function($scope, $firebaseObject, $window) {
+						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + id);
+						    $scope.events = $firebaseObject(ref);
+
+							$scope.addEvent = function() {
+								console.log('adding event');
+								$scope.events.$add($scope.newEvent).then(function(response) {
+									$scope.goto(response.key());
+								});
+							}
+
+							$scope.p = function(arr) {
+								arr.push({});
+							}
+							
+							$scope.r = function(arr, $index) {
+								arr.splice($index, 1);
+							}	
+
+							$scope.goto = function(id) {
+	  							if (angular.defined(linkEvent)) {
+		  							linkEvent("eventsummary.html?id=" + id);
+	  							} else {
+		  							$window.location.href = "eventsummary.html?id=" + id;
+	  							}
+	  						}
+
+						}
+					);
+	</script>
 </body>
 </html>
