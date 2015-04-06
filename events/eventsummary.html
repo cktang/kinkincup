@@ -107,16 +107,6 @@
 					.module("app", ["firebase", 'ui.bootstrap'])
 					.controller("controller", 
 						function($scope, $firebaseObject, $window) {
-						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id'));
-						     var obj = $firebaseObject(ref);
-
-						     // to take an action after the data loads, use the $loaded() promise
-						     obj.$loaded().then(function() {
-						        console.log("loaded record:", obj.$id);
-						     });
-
-						     // For three-way data bindings, bind it to the scope instead
-						     obj.$bindTo($scope, "event");
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
@@ -133,6 +123,16 @@
 							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 							};
 
+						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id'));
+						     var obj = $firebaseObject(ref);
+
+						     // to take an action after the data loads, use the $loaded() promise
+						     obj.$loaded().then(function() {
+						        console.log("loaded record:", obj.$id);
+						     });
+
+						     // For three-way data bindings, bind it to the scope instead
+						     obj.$bindTo($scope, "event");
 						}
 					);
 	</script>
