@@ -116,7 +116,8 @@
 					.module("app", ["firebase", 'ui.bootstrap', 'ngRoute'])
 					.controller("controller", 
 						function($scope, $firebaseObject, $window, $routeParams) {
-						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + id);
+							console.log($routeParams);
+						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id);
 						    $scope.events = $firebaseObject(ref);
 
 							$scope.addEvent = function() {
