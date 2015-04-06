@@ -60,10 +60,9 @@
 	<script>
 		var app = angular
 					.module("app", ["firebase", 'ui.bootstrap'])
-					.controller("controller", ["$scope", "$firebase", '$window', 
-						function($scope, $firebase, $window, $modalInstance) {
-						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
-						    $scope.events = $firebase(ref);
+					.controller("controller", ["$scope", "$firebaseArray", '$window', 
+						function($scope, $firebaseArray, $window) {
+						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
 	  						$scope.goto = function(id) {
 	  							if (linkEvent) {
