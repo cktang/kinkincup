@@ -319,7 +319,7 @@
 							$scope.participants = [];
 
 							$scope.addEvent = function() {
-								if (!scope.newEvent.name || !scope.newEvent.description) {
+								if (!scope.newEvent || !scope.newEvent.name || !scope.newEvent.description) {
 									alert('fill in name and description');
 									return;
 								}
