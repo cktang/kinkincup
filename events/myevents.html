@@ -59,7 +59,7 @@
 
 	<script>
 		var app = angular
-					.module("app", ["firebase", 'ui.bootstrap'])
+					.module("app", ["firebase", 'ui.bootstrap', 'ngTouch'])
 					.controller("controller", ["$scope", "$firebaseArray", '$window', 
 						function($scope, $firebaseArray, $window) {
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
