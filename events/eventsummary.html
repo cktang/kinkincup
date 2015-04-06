@@ -106,6 +106,16 @@
 	<script>
 		var app = angular
 					.module("app", ["firebase", 'ui.bootstrap', 'ngRoute'])
+  
+					.config(['$routeProvider',
+					  function($routeProvider) {
+					    $routeProvider.
+					      otherwise({
+					        redirectTo: '/addOrder',
+					        controller: 'controller'
+					      });
+					  }])
+
 					.controller("controller", 
 						function($scope, $firebaseObject, $window, $routeParams, $route) {
 							console.log($routeParams);
