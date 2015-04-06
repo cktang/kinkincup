@@ -23,8 +23,8 @@
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
 
 	<div class="container">	
-		<h4 class="full title"> Event Name </h4>
-		<h6> Event Description </h6>
+		<h4 class="full title" ng-bind="event.name"></h4>
+		<h6 ng-bind="event.description"></h6>
 
 		<style>
 			.dashboard .btn {
@@ -110,14 +110,15 @@
 						function($scope, $firebaseObject, $window, $routeParams, $route) {
 							console.log($routeParams);
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id'));
-						    $scope.events = $firebaseObject(ref);
+						     var obj = $firebaseObject(ref);
 
-							$scope.addEvent = function() {
-								console.log('adding event');
-								$scope.events.$add($scope.newEvent).then(function(response) {
-									$scope.goto(response.key());
-								});
-							};
+						     // to take an action after the data loads, use the $loaded() promise
+						     obj.$loaded().then(function() {
+						        console.log("loaded record:", obj.$id);
+						     });
+
+						     // For three-way data bindings, bind it to the scope instead
+						     obj.$bindTo($scope, "event");
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
