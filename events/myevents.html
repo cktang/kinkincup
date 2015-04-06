@@ -40,8 +40,10 @@
 
       	<ul class="list-group">
 		  <li ng-repeat="e in events" ng-click="aaaa(e.id)" class="list-group-item" style="background-color:#eee">
-		  	<h3 ng-bind="e.name"></h3>
-		  	<h6 ng-bind="e.description"></h6>
+		  	<a href="abc.html">
+			  	<h3 ng-bind="e.name"></h3>
+			  	<h6 ng-bind="e.description"></h6>
+			</a>
 		  </li>
 		</ul>
 
