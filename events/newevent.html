@@ -311,7 +311,7 @@
 	<script>
 		var app = angular
 					.module("m", ["firebase", 'ui.bootstrap'])
-					.controller("controller", ["$scope", "$firebaseArray", '$window', 
+					.controller("controller", 
 						function($scope, $firebaseArray, $window, $modalInstance) {
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
 						    var sync = $firebaseArray(ref);
@@ -339,7 +339,7 @@
 	  						}
 
 						}
-					]);
+					);
 	</script>
 </body>
 </html>
