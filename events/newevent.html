@@ -310,10 +310,10 @@
 	<script>
 		var app = angular
 					.module("m", ["firebase", 'ui.bootstrap'])
-					.controller("controller", ["$scope", "$firebase", '$window', 
+					.controller("controller", ["$scope", "$firebaseArray", '$window', 
 						function($scope, $firebase, $window, $modalInstance) {
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
-						    var sync = $firebase(ref);
+						    var sync = $firebaseArray(ref);
 							sync.$bindTo($scope, "events");
 
 							$scope.times = [];
