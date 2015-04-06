@@ -323,7 +323,10 @@
 
 							$scope.addEvent = function() {
 								console.log('adding event');
-								$scope.events.$add($scope.newEvent);
+								$scope.events.$add($scope.newEvent).then(function(response) {
+									var id = response.key();
+									console.log("added record with id " + id);
+								});
 							}
 
 							$scope.p = function(arr) {
