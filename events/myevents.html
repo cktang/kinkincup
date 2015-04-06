@@ -39,8 +39,9 @@
 		</style>
 
       	<ul class="list-group">
-		  <li ng-repeat="e in events" ng-click="goto(e.$id)" class="list-group-item" style="background-color:#eee">
-		  	<h3 ng-bind="e.name"></h3>
+		  <li ng-repeat="e in events" class="list-group-item" style="background-color:#eee">
+		  	<h6 ng-bind="e.id"></h6>
+		  	<h3 ng-click="goto(e.$id)" ng-bind="e.name"></h3>
 		  	<h6 ng-bind="e.description"></h6>
 		  </li>
 		</ul>
