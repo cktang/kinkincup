@@ -13,23 +13,6 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 
-<script>
-	angular
-		.module('m', ['ui.bootstrap'])
-		.controller('controller', function($scope) {
-			$scope.times = [];
-			$scope.venues = [];
-			$scope.users = [];
-			$scope.participants = [];
-			$scope.p = function(arr) {
-				arr.push({});
-			}
-			$scope.r = function(arr, $index) {
-				arr.splice($index, 1);
-			}
-		});
-</script>
-
 <body ontouchstart="" ng-controller="controller">
 	<div class="headerplaceholder" ng-include="'header.html'"></div>
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
@@ -317,5 +300,31 @@
 
 		<div class="bottomplaceholder"></div>
 	</div>
+
+	
+	<script>
+		var app = angular
+					.module("app", ["firebase", 'ui.bootstrap'])
+					.controller("controller", ["$scope", "$firebase", '$window', 
+						function($scope, $firebase, $window, $modalInstance) {
+						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
+						    var sync = $firebase(ref);
+							sync.$bindTo($scope, "events");
+
+							$scope.times = [];
+							$scope.venues = [];
+							$scope.users = [];
+							$scope.participants = [];
+
+							$scope.p = function(arr) {
+								arr.push({});
+							}
+							
+							$scope.r = function(arr, $index) {
+								arr.splice($index, 1);
+							}	
+						}
+					]);
+	</script>
 </body>
 </html>
