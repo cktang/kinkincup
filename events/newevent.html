@@ -323,6 +323,15 @@
 							$scope.r = function(arr, $index) {
 								arr.splice($index, 1);
 							}	
+
+							$scope.goto = function(id) {
+	  							if (linkEvent) {
+		  							linkEvent("eventsummary.html?id=" + id);
+	  							} else {
+		  							$window.location.href = "eventsummary.html?id=" + id;
+	  							}
+	  						}
+
 						}
 					]);
 	</script>
