@@ -109,7 +109,7 @@
 					.controller("controller", 
 						function($scope, $firebaseObject, $window, $routeParams, $route) {
 							console.log($routeParams);
-						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id);
+						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id'));
 						    $scope.events = $firebaseObject(ref);
 
 							$scope.addEvent = function() {
@@ -117,7 +117,7 @@
 								$scope.events.$add($scope.newEvent).then(function(response) {
 									$scope.goto(response.key());
 								});
-							}
+							};
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
@@ -125,7 +125,14 @@
 	  							} else {
 		  							$window.location.href = "eventsummary.html?id=" + id;
 	  							}
-	  						}
+	  						};	  						
+	  						
+	  						$scope.getParam = function(name) {
+							    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+							    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+							    results = regex.exec($window.location.search);
+							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+							};
 
 						}
 					);
