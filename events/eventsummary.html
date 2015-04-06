@@ -106,20 +106,6 @@
 	<script>
 		var app = angular
 					.module("app", ["firebase", 'ui.bootstrap', 'ngRoute'])
-
-					.config(function($routeProvider){
-					  return $routeProvider
-					    .when('/', {
-					      controller: 'controller',
-					      templateUrl: 'eventsummary.html'
-					    })
-					    .when('/:id', {
-					      controller: 'controller',
-					      templateUrl: 'eventsummary.html'
-					    })
-					    .otherwise({ redirectTo: '/' });
-					})
-
 					.controller("controller", 
 						function($scope, $firebaseObject, $window, $routeParams, $route) {
 							console.log($routeParams);
