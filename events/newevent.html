@@ -90,9 +90,9 @@
 
 	<div class="container">	
       	<h4 class="btn" modal="form1" ng-class="{good:name, bad:!name}"> 
-      		{{name || 'Event Name ???'}}
+      		{{newEvent.name || 'Event Name ???'}}
 			<Br>
-			<small>{{description || 'Event Description ???'}}</small>
+			<small>{{newEvent.description || 'Event Description ???'}}</small>
 		</h4>
 
 		<div class="row dashboard">
@@ -133,11 +133,11 @@
 		      <div class="modal-body">
 		      	  <div class="form-group">
 				    <label for="name">Name</label>
-				    <input type="text" class="form-control" placeholder="Event Name" ng-model="name">
+				    <input type="text" class="form-control" placeholder="Event Name" ng-model="newEvent.name">
 				  </div>
 				  <div class="form-group">
 				    <label for="description">Description</label>
-				    <textarea type="description" class="form-control" placeholder="Event Description" ng-model="description"></textarea>
+				    <textarea type="description" class="form-control" placeholder="Event Description" ng-model="newEvent.description"></textarea>
 				  </div>		      	
 		      </div>
 		      <div class="modal-footer">
@@ -323,9 +323,7 @@
 
 							$scope.addEvent = function() {
 								console.log('adding event');
-								$scope.events.$add({
-									name: "test"
-								})
+								$scope.events.$add($scope.newEvent);
 							}
 
 							$scope.p = function(arr) {
