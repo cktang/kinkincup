@@ -6,16 +6,19 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
 	<link href="css/style.css" rel="stylesheet">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 
-	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
-	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+	<!-- AngularJS -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 
+	<!-- Firebase -->
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+
+	<!-- AngularFire -->
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 </head>
 
 <body ontouchstart="" ng-controller="controller">
@@ -311,7 +314,7 @@
 		var app = angular
 					.module("m", ["firebase", 'ui.bootstrap'])
 					.controller("controller", ["$scope", "$firebaseArray", '$window', 
-						function($scope, $firebase, $window, $modalInstance) {
+						function($scope, $firebaseArray, $window, $modalInstance) {
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
 						    var sync = $firebaseArray(ref);
 							sync.$bindTo($scope, "events");
