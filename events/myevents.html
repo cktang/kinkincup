@@ -63,8 +63,7 @@
 					.controller("controller", ["$scope", "$firebase", '$window', 
 						function($scope, $firebase, $window, $modalInstance) {
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
-						    var sync = $firebase(ref);
-	  						$scope.events = sync.$asArray();					  
+						    $scope.events = $firebase(ref);
 
 	  						$scope.goto = function(id) {
 	  							if (linkEvent) {
