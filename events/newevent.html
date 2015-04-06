@@ -324,8 +324,7 @@
 							$scope.addEvent = function() {
 								console.log('adding event');
 								$scope.events.$add($scope.newEvent).then(function(response) {
-									var id = response.key();
-									console.log("added record with id " + id);
+									$scope.goto(response.key());
 								});
 							}
 
