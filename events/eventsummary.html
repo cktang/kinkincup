@@ -100,14 +100,6 @@
 
 		<a class="btn btn-block btn-success" href="chat.html" style="margin-left:-5px"> Chat </a>
 
-		<script>
-			$('.dashboard .btn.link').click(function() {
-				location.href="eventtopic.html";
-			})
-			$('.dashboard .btn.new').click(function() {
-				location.href="neweventtopic.html";
-			})
-		</script>
 		<div class="bottomplaceholder"></div>
 	</div>
 
@@ -126,14 +118,6 @@
 									$scope.goto(response.key());
 								});
 							}
-
-							$scope.p = function(arr) {
-								arr.push({});
-							}
-							
-							$scope.r = function(arr, $index) {
-								arr.splice($index, 1);
-							}	
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
