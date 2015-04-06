@@ -120,7 +120,7 @@
 		</div>
 
 		<hr>
-		<a href="eventsummary.html" class="btn btn-block btn-warning"> Submit </a>
+		<a href="eventsummary.html" ng-click="addEvent()" class="btn btn-block btn-warning"> Submit </a>
 
 		<!-- Modal -->
 		<div class="modal fade" id="form1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -314,13 +314,19 @@
 					.controller("controller", 
 						function($scope, $firebaseArray, $window) {
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
-						    var sync = $firebaseArray(ref);
-							sync.$bindTo($scope, "events");
+						    $scope.events = $firebaseArray(ref);
 
 							$scope.times = [];
 							$scope.venues = [];
 							$scope.users = [];
 							$scope.participants = [];
+
+							$scope.addEvent = function() {
+								console.log('adding event');
+								$scope.event.$add({
+									name: test
+								})
+							}
 
 							$scope.p = function(arr) {
 								arr.push({});
