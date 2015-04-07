@@ -105,7 +105,7 @@
 		  		Venue ???
 		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn" ng-class="{good:users.length > 0, bad:users.length <= 0}" modal="form4">
+		  <div class="col-xs-5 btn" ng-class="{good:newEvent.users.length > 0, bad:newEvent.users.length <= 0}" modal="form4">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
 		  		Participants ???
@@ -228,21 +228,10 @@
 		        <h4 class="modal-title" id="myModalLabel">Participants</h4>
 		      </div>
 		      <div class="modal-body" style="padding-top:0px">
-		      		<h4 class="full title"> Facebook </h4>
-	      			<h5 class="full"> Facebook Ppl 1 </h5>
-	      			<h5 class="full"> Facebook Ppl 2 </h5>
-	      			<h5 class="full label-success"> 
-	      				<span><i class="pull-right glyphicon glyphicon-ok"></i></span> 
-	      				<div>Facebook Ppl 3</div>
-	      			</h5>
-
-		      		<h4 class="full title"> Friends in EventHK </h4>
-	      			<h5 class="full"> Francois Lam </h5>
-	      			<h5 class="full"> Phillippe Lam </h5>
-	      			<h5 class="full label-success"> 
-	      				<span><i class="pull-right glyphicon glyphicon-ok"></i></span> 
-	      				<div>Kin Tang</div>
-	      			</h5>
+				  <h5 ng-repeat="u in users" class="full">
+				  	<span><i class="pull-right glyphicon glyphicon-ok"></i></span> 
+				  	<span>{{u.name}}</span>
+				  </h5>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -310,8 +299,8 @@
 					.module("m", ["firebase", 'ui.bootstrap'])
 					.controller("controller", 
 						function($scope, $firebaseArray, $window) {
-						    var ref = new Firebase("https://eventshk.firebaseio.com/event");
-						    $scope.events = $firebaseArray(ref);
+						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
 							$scope.times = [];
 							$scope.venues = [];
