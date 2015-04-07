@@ -340,12 +340,11 @@
 							}	
 
 							$scope.goto = function(id) {
-								alert(angular.isDefined(linkEvent));
-
-	  							if (angular.isDefined(linkEvent)) {
-		  							linkEvent("eventsummary.html?id=" + id);
-	  							} else {
-		  							$window.location.href = "eventsummary.html?id=" + id;
+								var url = "eventsummary.html?id=" + id;
+								try {
+		  							linkEvent(url);
+								} catch (e) {
+		  							$window.location.href = url;
 	  							}
 	  						}
 
