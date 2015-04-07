@@ -299,8 +299,8 @@
 					.module("m", ["firebase", 'ui.bootstrap'])
 					.controller("controller", 
 						function($scope, $firebaseArray, $window) {
-						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
 							$scope.times = [];
 							$scope.venues = [];
@@ -313,7 +313,6 @@
 									return;
 								}
 
-								console.log('adding event');
 								$scope.events.$add($scope.newEvent).then(function(response) {
 									alert('event created!');
 									$scope.goto(response.key());
