@@ -228,7 +228,7 @@
 		        <h4 class="modal-title" id="myModalLabel">Participants</h4>
 		      </div>
 		      <div class="modal-body" style="padding-top:0px">
-				  <h5 ng-repeat="u in users" class="full" ng-click="u.selected = !u.selected">
+				  <h5 ng-repeat="u in users" class="full" ng-click="u.selected = !u.selected" ng-class="{'label-success': u.selected}">
 				  	<span ng-show="u.selected"><i class="pull-right glyphicon glyphicon-ok"></i></span> 
 				  	<span>{{u.name}}</span>
 				  </h5>
