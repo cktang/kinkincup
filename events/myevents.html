@@ -63,13 +63,12 @@
 						function($scope, $firebaseArray, $window) {
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
-						    console.log($scope.events);
-
-	  						$scope.goto = function(id) {
-	  							if (linkEvent) {
-		  							linkEvent("eventsummary.html?id=" + id);
-	  							} else {
-		  							$window.location.href = "eventsummary.html?id=" + id;
+							$scope.goto = function(id) {
+								var url = "eventsummary.html?id=" + id;
+								try {
+		  							linkEvent(url);
+								} catch (e) {
+		  							$window.location.href = url;
 	  							}
 	  						}
 						}
