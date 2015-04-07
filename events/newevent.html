@@ -311,13 +311,15 @@
 
 							$scope.times = [];
 							$scope.venues = [];
-							$scope.participants = [];
 
 							$scope.addEvent = function() {
 								if (!$scope.newEvent || !$scope.newEvent.name || !$scope.newEvent.description) {
 									alert('fill in name and description');
 									return;
 								}
+
+								//add users
+								$scope.newEvent.users = $scope._($scope.users).filter({ selected: true });
 
 								$scope.events.$add($scope.newEvent).then(function(response) {
 									alert('event created!');
