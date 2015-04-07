@@ -40,8 +40,10 @@
 
       	<ul class="list-group">
 		  <li ng-repeat="e in events" class="list-group-item" style="background-color:#eee">
-		  	<h3 ng-click="goto(e.$id)">{{e.name}} <small> {{ e.$id }}</small></h3>
-		  	<h6 ng-bind="e.description"></h6>
+		  	<button ng-click="goto(e.$id)">
+			  	<h3>{{e.name}} <small> {{ e.$id }}</small></h3>
+			  	<h6 ng-bind="e.description"></h6>
+			</button>
 		  </li>
 		</ul>
 
