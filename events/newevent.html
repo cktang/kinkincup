@@ -319,7 +319,7 @@
 								}
 
 								//add users
-								$scope.newEvent.users = $scope._($scope.users).filter({ selected: true });
+								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).pluck('$id').value();
 
 								$scope.events.$add($scope.newEvent).then(function(response) {
 									alert('event created!');
