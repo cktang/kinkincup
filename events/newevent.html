@@ -244,7 +244,7 @@
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
 									alert('event created!');
-									$scope.events[$scope.events.$indexFor(ref.key())].$bindTo($scope, "newEvent");
+									$scope.newEvent = $scope.events.$getRecord(ref.key());
 									$scope.saveTopics(ref.key());									
 								});
 							};
