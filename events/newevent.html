@@ -270,7 +270,7 @@
 							$scope.updateEvent = function() {
 								console.log('update event');
 								$scope.newEvent.topics = $scope.newTopicIds;
-								$scope.events.save($scope.events.length).then(function() {
+								$scope.events.$save($scope.events.length).then(function() {
 									$scope.goto($scope.newEvent.$id);
 								});
 							}
