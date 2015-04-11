@@ -271,7 +271,7 @@
 
 							$scope.openTopic = function(id) {
 								$scope.currentTopic = newTopics[id];
-								$scope.currentTopic =  $scope.currentTopic || { decision = "NOT_DECIDED" };
+								$scope.currentTopic = $scope.currentTopic || { decision: "NOT_DECIDED" };
 								$scope.topicId = id;
 								$('#form5').modal();
 							};
