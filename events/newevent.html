@@ -97,7 +97,7 @@
 
 		<div class="row dashboard">
 		  <div class="col-xs-10 btn" ng-class="{good:times.length > 0, bad:times.length <= 0}" 
-		  	ng-class="{good: newTopics['time'], bad: !newTopics['time']}" 
+		  	ng-class="{good: newTopics['time']!=null, bad: !newTopics['time']==null}" 
 		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
