@@ -251,15 +251,17 @@
 
 							$scope.saveTopics = function(id) {
 								console.log('save topics');
+
+								$scope.newTopicIds = [];
+
+								$scope.$watch($scope.newTopicIds, function(){
+									if ($scope.newTopicIds.length == _($scope.newTopics).values().length) {
+										$scope.updateEvent();
+									}
+								} ,true);
+									
 								_($scope.newTopics).each(function(topic) {
 									topic.event = id;
-									$scope.newTopicIds = [];
-
-									$scope.$watch($scope.newTopicIds, function(){
-										if ($scope.newTopicIds.length == _($scope.newTopics).values().length) {
-											$scope.updateEvent();
-										}
-									} ,true);
 
 									$scope.topics.$add(topic).then(function(ref) {
 										$scope.newTopicIds.push(ref.key());
