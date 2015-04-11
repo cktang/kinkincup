@@ -96,26 +96,26 @@
 		</h4>
 
 		<div class="row dashboard">
-		  <div class="col-xs-10 btn" ng-class="{good:times.length > 0, bad:times.length <= 0}" modal="form2"> 
+		  <div class="col-xs-10 btn" ng-class="{good:times.length > 0, bad:times.length <= 0}" modal="form5"> 
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
 		  		Time ???
 		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn" ng-class="{good:venues.length > 0, bad:venues.length <= 0}" modal="form3">
+		  <div class="col-xs-5 btn" ng-class="{good:venues.length > 0, bad:venues.length <= 0}" modal="form5">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
 		  		Venue ???
 		  	</span>
 		  </div>
 		  <div class="col-xs-5 btn" 
-		  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" modal="form3">
+		  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" modal="form5">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
 		  		Participants ???
 		  	</span>
 		  </div>
-		  <div class="col-xs-10 btn new" modal="form4">
+		  <div class="col-xs-10 btn new" modal="form5">
 		  	<span class="main"> Gift?? Reminder??? Travel Tips?? </span>
 		  </div>
 		</div>
@@ -150,6 +150,31 @@
 
 		<!-- Modal -->
 		<div class="modal fade" id="form4" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Participants</h4>
+		      </div>
+		      <div class="modal-body" style="padding-top:0px; padding-bottom:0px">
+				  <h5 	ng-repeat="u in users" 
+				  		class="full" 
+				  		style="border-bottom:1px solid silver" 
+				  		ng-click="u.selected = !u.selected" 
+				  		ng-class="{'label-success': u.selected}">
+				  	<span ng-show="u.selected"><i class="pull-right glyphicon glyphicon-ok"></i></span> 
+				  	<span>{{u.name}}</span>
+				  </h5>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="form5" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -193,6 +218,8 @@
 			$('[modal]').click(function() {
 				$('#' + $(this).attr('modal')).modal();
 			})
+
+			/*$('[modal=form1]').click();*/
 		</script>
 
 		<div class="bottomplaceholder"></div>
