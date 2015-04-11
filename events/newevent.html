@@ -253,7 +253,7 @@
 
 							$scope.saveTopic = function(id) {
 								topics[$scope.topicId] = $scope.currentTopic;
-								$('#form5').modal('close');
+								$('#form5').modal({show:false});
 							};
 
 							$scope.goto = function(id) {
