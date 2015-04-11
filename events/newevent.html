@@ -243,7 +243,6 @@
 								// $scope.newEvent.topics = $scope._($scope.newTopics).chain().filter({ selected: true }).pluck('$id').value();
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
-									alert('event created!');
 									$scope.newEvent = $scope.events.$getRecord(ref.key());
 									$scope.saveTopics(ref.key());									
 								});
@@ -270,7 +269,7 @@
 							$scope.updateEvent = function() {
 								console.log('update event');
 								$scope.newEvent.topics = $scope.newTopicIds;
-								$scope.events.$save($scope.events.length).then(function() {
+								$scope.events.$save($scope.newEvent).then(function() {
 									$scope.goto($scope.newEvent.$id);
 								});
 							}
