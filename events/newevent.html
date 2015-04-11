@@ -221,11 +221,12 @@
 						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 
 							$scope.times = [];
 							$scope.venues = [];
 
-							var topics = {};
+							var newTopics = {};
 
 							$scope.addEvent = function() {
 								if (!$scope.newEvent || !$scope.newEvent.name || !$scope.newEvent.description) {
@@ -235,21 +236,48 @@
 
 								//add users
 								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).pluck('$id').value();
+								// $scope.newEvent.topics = $scope._($scope.newTopics).chain().filter({ selected: true }).pluck('$id').value();
 
-								$scope.events.$add($scope.newEvent).then(function(response) {
+								$scope.events.$add($scope.newEvent).then(function(ref) {
 									alert('event created!');
-									$scope.goto(response.key());
+									$scope.newEvent = $scope.events.$indexFor(ref.key());
+									$scope.saveTopics(ref.key());									
 								});
 							};
 
+							$scope.saveTopics = function(id) {
+								_($scope.newTopics).each(function(topic) {
+									topic.id = id;
+									$scope.newTopicIds = [];
+
+									$watch($scope.newTopicIds, function(){
+										if ($scope.newTopicIds.length == $scope.newTopics.length) {
+											$scope.updateEvent();
+										}
+									} ,true);
+
+									$scope.topics.$add(topic).then(function(ref) {
+										$scope.newTopicIds.add(ref.key());
+									});
+								});
+
+
+							};
+
+							$scope.updateEvent = function() {
+								$scope.newEvent.topics = $scope.newTopicIds;
+								$scope.goto(response.key());
+							}
+
 							$scope.openTopic = function(id) {
-								$scope.currentTopic = topics[id];
+								$scope.currentTopic = newTopics[id];
+								$scope.currentTopic.decision = "NOT_DECIDED"; 
 								$scope.topicId = id;
 								$('#form5').modal();
 							};
 
 							$scope.saveTopic = function(id) {
-								topics[$scope.topicId] = $scope.currentTopic;
+								topics[$scope.newTopics] = $scope.currentTopic;
 								$('#form5').modal('hide');
 							};
 
