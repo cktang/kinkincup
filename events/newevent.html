@@ -269,8 +269,8 @@
 
 							$scope.updateEvent = function() {
 								console.log('update event');
-								$scope.newEvent.topics = $scope.newTopicIds;
-								$scope.newEvent.$save().then(function() {
+								$scope.events.$getRecord($scope.newEvent.$id).topics = $scope.newTopicIds;
+								$scope.events.$save().then(function() {
 									$scope.goto($scope.newEvent.$id);
 								});
 							}
