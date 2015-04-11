@@ -250,12 +250,13 @@
 							};
 
 							$scope.saveTopics = function(id) {
+								console.log('save topics');
 								_($scope.newTopics).each(function(topic) {
 									topic.event = id;
 									$scope.newTopicIds = [];
 
 									$scope.$watch($scope.newTopicIds, function(){
-										if ($scope.newTopicIds.length == $scope.newTopics.length) {
+										if ($scope.newTopicIds.length == _($scope.newTopics).values().length) {
 											$scope.updateEvent();
 										}
 									} ,true);
@@ -267,6 +268,7 @@
 							};
 
 							$scope.updateEvent = function() {
+								console.log('update event');
 								$scope.newEvent.topics = $scope.newTopicIds;
 								$scope.goto(response.key());
 							}
