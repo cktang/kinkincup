@@ -112,7 +112,7 @@
 		  </div>
 		  <div class="col-xs-5 btn" 
 		  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" 
-		  	ng-click="openTopic('partipants')">
+		  	ng-click="openParticipants()">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
 		  		Participants ???
@@ -240,20 +240,21 @@
 									alert('event created!');
 									$scope.goto(response.key());
 								});
-
-								console.log($scope.topics);
-							}
+							};
 
 							$scope.openTopic = function(id) {
 								$scope.currentTopic = topics[id];
 								$scope.topicId = id;
-
 								$('#form5').modal();
 							};
 
 							$scope.saveTopic = function(id) {
 								topics[$scope.topicId] = $scope.currentTopic;
 								$('#form5').modal('hide');
+							};
+
+							$scope.openParticipants = function() {
+								$('#form4').modal();
 							};
 
 							$scope.goto = function(id) {
@@ -263,8 +264,7 @@
 								} catch (e) {
 		  							$window.location.href = url;
 	  							}
-	  						}
-
+	  						};
 						}
 					);
 	</script>
