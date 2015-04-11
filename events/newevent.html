@@ -187,13 +187,16 @@
 				    <input type="text" class="form-control" placeholder="Topic Name" ng-model="name">
 				  </div>
 				  <div class="form-group">
+				    <label for="description">Description</label>
+				    <textarea type="description" class="form-control" placeholder="Event Description" ng-model="newEvent.description"></textarea>
+				  </div>		      	
+				  <div class="form-group">
 				    <label for="choices">Choices</label>
-				    <input type="text" class="form-control" placeholder="Choice" ng-model="choices[0]"/>
-				    <input type="text" class="form-control" placeholder="Choice" ng-model="choices[1]"/>
-				    <input type="text" class="form-control" placeholder="Choice" ng-model="choices[2]"/>
-				    <input type="text" class="form-control" placeholder="Choice" ng-model="choices[3]"/>
-				    <input type="text" class="form-control" placeholder="Choice" ng-model="choices[4]"/>
-					<div> <button class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></button> </div>
+				    <input type="text" class="form-control" placeholder="Choice 1" ng-model="choices[0]"/>
+				    <input type="text" class="form-control" placeholder="Choice 2" ng-model="choices[1]"/>
+				    <input type="text" class="form-control" placeholder="Choice 3" ng-model="choices[2]"/>
+				    <input type="text" class="form-control" placeholder="Choice 4" ng-model="choices[3]"/>
+				    <input type="text" class="form-control" placeholder="Choice 5" ng-model="choices[4]"/>
 				  </div>	
 		      </div>
 		      <div class="modal-footer">
