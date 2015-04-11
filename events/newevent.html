@@ -89,7 +89,7 @@
 	</style>
 
 	<div class="container">	
-      	<h4 class="btn" modal="form1" ng-class="{good:newEvent.name, bad:!newEvent.name}"> 
+      	<h4 class="btn" modal="form1" ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
       		{{newEvent.name || 'Event Name ???'}}
 			<Br>
 			<small>{{newEvent.description || 'Event Description ???'}}</small>
@@ -289,6 +289,10 @@
 
 							$scope.openParticipants = function() {
 								$('#form4').modal();
+							};
+
+							$scope.openEvent = function() {
+								$('#form1').modal();
 							};
 
 							$scope.goto = function(id) {
