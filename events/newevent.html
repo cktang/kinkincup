@@ -244,14 +244,14 @@
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
 									alert('event created!');
-									$scope.newEvent = $scope.events.$indexFor(ref.key());
+									$scope.events[$scope.events.$indexFor(ref.key())].$bindTo($scope, "newEvent");
 									$scope.saveTopics(ref.key());									
 								});
 							};
 
 							$scope.saveTopics = function(id) {
 								_($scope.newTopics).each(function(topic) {
-									topic.id = id;
+									topic.event = id;
 									$scope.newTopicIds = [];
 
 									$scope.$watch($scope.newTopicIds, function(){
