@@ -254,7 +254,7 @@
 									topic.id = id;
 									$scope.newTopicIds = [];
 
-									$watch($scope.newTopicIds, function(){
+									$scope.$watch($scope.newTopicIds, function(){
 										if ($scope.newTopicIds.length == $scope.newTopics.length) {
 											$scope.updateEvent();
 										}
