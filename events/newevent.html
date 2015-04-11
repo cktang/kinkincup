@@ -97,6 +97,7 @@
 
 		<div class="row dashboard">
 		  <div class="col-xs-10 btn" ng-class="{good:times.length > 0, bad:times.length <= 0}" 
+		  	ng-class="{good: newTopics['time'], bad: !newTopics['time']}" 
 		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
@@ -104,6 +105,7 @@
 		  	</span>
 		  </div>
 		  <div class="col-xs-5 btn" ng-class="{good:venues.length > 0, bad:venues.length <= 0}"		  	
+		  	ng-class="{good: newTopics['venue'], bad: !newTopics['venue']}" 
 		  	ng-click="openTopic('venue')">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
