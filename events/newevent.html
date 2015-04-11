@@ -269,10 +269,11 @@
 
 							$scope.updateEvent = function() {
 								console.log('update event');
-								$scope.events.$getRecord($scope.newEvent.$id).topics = $scope.newTopicIds;
-								$scope.events.$save().then(function() {
+								$scope.newEvent.topics = $scope.newTopicIds;
+								
+								setTimeout(function() {
 									$scope.goto($scope.newEvent.$id);
-								});
+								}, 1000);
 							}
 
 							$scope.openTopic = function(id) {
