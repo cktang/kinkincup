@@ -96,20 +96,23 @@
 		</h4>
 
 		<div class="row dashboard">
-		  <div class="col-xs-10 btn" ng-class="{good:times.length > 0, bad:times.length <= 0}" modal="form5"> 
+		  <div class="col-xs-10 btn" ng-class="{good:times.length > 0, bad:times.length <= 0}" 
+		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
 		  		Time ???
 		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn" ng-class="{good:venues.length > 0, bad:venues.length <= 0}" modal="form5">
+		  <div class="col-xs-5 btn" ng-class="{good:venues.length > 0, bad:venues.length <= 0}"		  	
+		  	ng-click="openTopic('venue')">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
 		  		Venue ???
 		  	</span>
 		  </div>
 		  <div class="col-xs-5 btn" 
-		  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" modal="form5">
+		  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" 
+		  	ng-click="openTopic('partipants')">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
 		  		Participants ???
@@ -207,14 +210,6 @@
 		  </div>
 		</div>
 
-		<script>
-			$('[modal]').click(function() {
-				$('#' + $(this).attr('modal')).modal();
-			})
-
-			/*$('[modal=form1]').click();*/
-		</script>
-
 		<div class="bottomplaceholder"></div>
 	</div>
 
@@ -230,6 +225,8 @@
 							$scope.times = [];
 							$scope.venues = [];
 
+							var topics = {};
+
 							$scope.addEvent = function() {
 								if (!$scope.newEvent || !$scope.newEvent.name || !$scope.newEvent.description) {
 									alert('fill in name and description');
@@ -243,15 +240,21 @@
 									alert('event created!');
 									$scope.goto(response.key());
 								});
+
+								console.log($scope.topics);
 							}
 
-							$scope.p = function(arr) {
-								arr.push({});
-							}
-							
-							$scope.r = function(arr, $index) {
-								arr.splice($index, 1);
-							}	
+							$scope.openTopic = function(id) {
+								if (!topics[id]) return;
+
+								$scope.currentTopic = topics[id];
+
+								$('#form5')).modal();
+							};
+
+							$scope.saveTopic = function(id) {
+								topics[id] = $scope.currentTopic;
+							};
 
 							$scope.goto = function(id) {
 								var url = "eventsummary.html?id=" + id;
