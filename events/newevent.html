@@ -90,7 +90,7 @@
 	</style>
 
 	<div class="container">	
-      	<h4 class="btn" modal="form1" ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
+      	<h4 class="col-xs-10 btn" modal="form1" ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
       		{{newEvent.name || 'Event Name ???'}}
 			<Br>
 			<small>{{newEvent.description || 'Event Description ???'}}</small>
@@ -102,7 +102,7 @@
 		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
-		  		Time ???
+		  		WHEN ???
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn" 
@@ -110,7 +110,7 @@
 		  	ng-click="openTopic('venue')">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
-		  		Venue ???
+		  		WHERE ???
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn" 
@@ -118,7 +118,7 @@
 		  	ng-click="openParticipants()">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
-		  		Participants ???
+		  		WHO ???
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn new" ng-click="openTopic('newTopic')">
