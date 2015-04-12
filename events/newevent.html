@@ -90,13 +90,14 @@
 	</style>
 
 	<div class="container">	
-      	<h4 class="col-xs-10 btn" modal="form1" ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
-      		{{newEvent.name || 'Event Name ???'}}
-			<Br>
-			<small>{{newEvent.description || 'Event Description ???'}}</small>
-		</h4>
-
 		<div class="row dashboard">
+	      	<div class="col-xs-10 btn" modal="form1" 
+	      		ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
+	      		{{newEvent.name || 'Event Name ???'}}
+				<Br>
+				<small>{{newEvent.description || 'Event Description ???'}}</small>
+			</div>
+
 		  <div class="col-xs-10 btn" 
 		  	ng-class="{good: newTopics['time'], bad: !newTopics['time']}" 
 		  	ng-click="openTopic('time')">
