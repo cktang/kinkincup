@@ -85,6 +85,13 @@
 		#form3 .field {
 			width:80%;
 		}
+
+		.btn .topicName {
+			float:right;
+			top:5px;
+			right:5px;
+			font-size:14px;
+		}
 	</style>
 
 	<div class="container">	
@@ -124,8 +131,8 @@
 		  <div 	ng-repeat="t in newTopics" 
 		  		class="good col-xs-10 btn" 
 		  		ng-click="openTopic(t.name)">
+		  	<span ng-bind="t.name" class="topicName"></span>
 		  	<span class="main"> 
-		  		<span ng-bind="t.name"></span>
 		  		<Br>
 		  		<div ng-repeat="c in t.choices">
 			  		<small ng-bind="c"></small><Br>
