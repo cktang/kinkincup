@@ -122,6 +122,7 @@
 		  	ng-click="openTopic('venue')">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
+		  		<span ng-hide="newTopics['venue'].choices[0]"> WHERE ?? </span>
 		  		<div ng-repeat="c in newTopics['venue'].choices" style="line-height:20px">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
