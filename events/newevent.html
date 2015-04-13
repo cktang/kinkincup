@@ -127,7 +127,9 @@
 		  	<span class="main"> 
 		  		<span ng-bind="t.name"></span>
 		  		<Br>
-		  		<small ng-bind="t.choices[0]"></small>
+		  		<div ng-repeat="c in t.chocies">
+			  		<small ng-bind="c"></small><Br>
+		  		</div>
 		  	</span>
 		  </div>
 
