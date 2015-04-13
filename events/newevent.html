@@ -112,7 +112,9 @@
 		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
-		  		{{ newTopics['time'].choices[0] || "WHEN ???" }}
+		  		<div ng-repeat="c in newTopics['time'].choices" style="line-height:20px">
+			  		<small ng-bind="c"></small><Br>
+		  		</div>
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn" 
@@ -120,7 +122,9 @@
 		  	ng-click="openTopic('venue')">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
-		  		{{ newTopics['venue'].choices[0] || "WHERE ???" }}
+		  		<div ng-repeat="c in newTopics['venue'].choices" style="line-height:20px">
+			  		<small ng-bind="c"></small><Br>
+		  		</div>
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn" 
