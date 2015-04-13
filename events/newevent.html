@@ -136,7 +136,7 @@
 		  	<span class="main"> 
 		  		<span ng-hide="_(users).filter({selected:true}).length > 0"> WHO ?? </span>
 		  		<div ng-repeat="c in _(users).filter({selected:true})" style="line-height:20px">
-			  		<small ng-bind="c"></small><Br>
+			  		<small ng-bind="c.name"></small><Br>
 		  		</div>
 		  	</span>
 		  </div>
@@ -148,7 +148,7 @@
 		  	<span ng-bind="t.name" class="topicName"></span>
 		  	<span class="main"> 
 		  		<div ng-repeat="c in t.choices" style="line-height:20px">
-			  		<small ng-bind="c.name"></small><Br>
+			  		<small ng-bind="c"></small><Br>
 		  		</div>
 		  	</span>
 		  </div>
