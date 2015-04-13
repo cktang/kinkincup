@@ -112,6 +112,7 @@
 		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
+		  		<span ng-hide="newTopics['time'].choices[0]"> WHEN ?? </span>
 		  		<div ng-repeat="c in newTopics['time'].choices" style="line-height:20px">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
@@ -133,7 +134,10 @@
 		  	ng-click="openParticipants()">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main"> 
-		  		{{ _(users).filter({ selected: true }).length || "WHO ???" }}
+		  		<span ng-hide="_(users).filter({selected:true}).length > 0"> WHO ?? </span>
+		  		<div ng-repeat="c in _(users).filter({selected:true})" style="line-height:20px">
+			  		<small ng-bind="c"></small><Br>
+		  		</div>
 		  	</span>
 		  </div>
 
@@ -144,7 +148,7 @@
 		  	<span ng-bind="t.name" class="topicName"></span>
 		  	<span class="main"> 
 		  		<div ng-repeat="c in t.choices" style="line-height:20px">
-			  		<small ng-bind="c"></small><Br>
+			  		<small ng-bind="c.name"></small><Br>
 		  		</div>
 		  	</span>
 		  </div>
