@@ -127,7 +127,7 @@
 		  	<span class="main"> 
 		  		<span ng-bind="t.name"></span>
 		  		<Br>
-		  		<small ng-bind="t.description"></small>
+		  		<small ng-bind="t.choices[0]"></small>
 		  	</span>
 		  </div>
 
@@ -286,8 +286,8 @@
 							}
 
 							$scope.openTopic = function(id) {
-								if (id == 'newEvent') {
-									id = 'newEvent ' + count++;
+								if (id == 'newTopic') {
+									id = 'newTopic ' + count++;
 								}
 
 								$scope.currentTopic = $scope.newTopics[id];
