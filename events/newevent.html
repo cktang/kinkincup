@@ -117,7 +117,7 @@
 		  	ng-click="openParticipants()">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
-		  		{{ _(users).chain().filter({ selected: true }).pluck('$id').value() || "WHO ???" }}
+		  		{{ _(users).chain().filter({ selected: true }).length > 0? _(users).chain().filter({ selected: true }).length: "WHO ???" }}
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn new" ng-click="openTopic('newTopic')">
