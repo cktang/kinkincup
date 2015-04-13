@@ -92,6 +92,10 @@
 			right:5px;
 			font-size:14px;
 		}
+
+		.btn small {
+			line-height: 25px;
+		}
 	</style>
 
 	<div class="container">	
@@ -133,7 +137,6 @@
 		  		ng-click="openTopic(t.name)">
 		  	<span ng-bind="t.name" class="topicName"></span>
 		  	<span class="main"> 
-		  		<Br>
 		  		<div ng-repeat="c in t.choices">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
