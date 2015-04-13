@@ -101,7 +101,7 @@
 		  	ng-click="openTopic('time')">
 		  	<span class="icon"><img src="img/calendar.png"/></span>
 		  	<span class="main">
-		  		WHEN ???
+		  		{{ newTopics['time'].choices[0] || "WHEN ???" }}
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn" 
@@ -109,7 +109,7 @@
 		  	ng-click="openTopic('venue')">
 		  	<span class="icon"><img src="img/location.png"/></span>
 		  	<span class="main">
-		  		WHERE ???
+		  		{{ newTopics['venue'].choices[0] || "WHERE ???" }}
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn" 
@@ -117,7 +117,7 @@
 		  	ng-click="openParticipants()">
 		  	<span class="icon"><img src="img/running.png"/></span>
 		  	<span class="main">
-		  		WHO ???
+		  		{{ _(users).chain().filter({ selected: true }).pluck('$id').value() || "WHO ???" }}
 		  	</span>
 		  </div>
 		  <div class="col-xs-10 btn new" ng-click="openTopic('newTopic')">
@@ -159,7 +159,7 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Participants</h4>
+		        <h4 class="modal-title" id="myModalLabel">Who</h4>
 		      </div>
 		      <div class="modal-body" style="padding-top:0px; padding-bottom:0px">
 				  <h5 	ng-repeat="u in users" 
