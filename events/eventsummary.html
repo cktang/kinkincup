@@ -77,12 +77,13 @@
 			div.choice {
 				line-height: 1.6em;
 				text-indent: 10px;
+				background-color: #eee;
 			}
 		</style>
 
 		<div class="row dashboard">
 		  <div 	ng-repeat="t in event.topics" 
-		  		class="col-xs-10" 
+		  		class="col-xs-5" 
 		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
