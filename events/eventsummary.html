@@ -75,9 +75,9 @@
 		  <div 	ng-repeat="t in event.topics" 
 		  		class="col-xs-10" 
 		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
-		  	<span ng-bind="t" class="topicName"></span>
 		  	<span class="main"> 
-		  		<div ng-repeat="c in topics.$getRecord(t).choices" style="line-height:20px">
+		  		<h4> {{topics.$getRecord(t).name}} <small> {{topics.$getRecord(t).$id}} </small>
+		  		<div ng-repeat="c in topics.$getRecord(t).choices">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
 		  	</span>
