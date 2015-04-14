@@ -59,7 +59,7 @@
 				float:right;
 				width:30%;
 				font-size: 12px;
-			}
+			}o
 
 			.dashboard .sub .badge {
 				font-size: 8px;
@@ -69,32 +69,20 @@
 			.dashboard .new {
 				border: 5px dotted silver;
 			}
-		</style>
+		</style>o
 
 		<div class="row dashboard">
-		  <div class="col-xs-10 btn link"> 
-		  	<span class="icon"><img src="img/calendar.png"/></span>
-		  	<span class="sub">
-		  		<div><span class="badge">2</span>25/12 10:30</div>
-		  		<div><span class="badge">1</span>26/12 12:00</div>
+		  <div 	ng-repeat="t in obj.topics" 
+		  		class="good col-xs-10 btn" 
+		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
+		  	<span ng-bind="topics.$getRecord(t).name" class="topicName"></span>
+		  	<span class="main"> 
+		  		<div ng-repeat="c in topics.$getRecord(t).choices" style="line-height:20px">
+			  		<small ng-bind="c"></small><Br>
+		  		</div>
 		  	</span>
-		  	<span class="main">
-		  		<span class="badge">3</span> 24/12 9:30
-		  	</span>
 		  </div>
-		  <div class="col-xs-5 btn link">
-		  	<span class="icon"><img src="img/location.png"/></span>
-		  	<span class="main"><span class="badge">5</span>海洋公園</span>
-		  </div>
-		  <div class="col-xs-5 btn link">
-		  	<span class="icon"><img src="img/running.png"/></span>
-		  	<span class="main">{{ event.users.length }}</span>
-		  </div>
-		  <div class="col-xs-10 btn new">
-		  	<span class="main">Create New Topic</span>
-		  </div>
-		  <div class="col-xs-10">
-		  </div>
+
 		</div>
 
 		<a class="btn btn-block btn-success" href="chat.html" style="margin-left:-5px"> Chat </a>
@@ -124,8 +112,8 @@
 							};
 
 						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id'));
-						     var obj = $firebaseObject(ref);
-
+						    var obj = $firebaseObject(ref);
+						    
 						     // to take an action after the data loads, use the $loaded() promise
 						     obj.$loaded().then(function() {
 						        console.log("loaded record:", obj.$id);
@@ -133,6 +121,9 @@
 
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event");
+
+						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topics"));
+
 						}
 					);
 	</script>
