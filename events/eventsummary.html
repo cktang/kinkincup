@@ -69,10 +69,6 @@
 				border: 5px dotted silver;
 			}
 
-			hr {
-				margin: 5px;
-			}
-
 			div.choice {
 				line-height: 1.6em;
 				text-indent: 10px;
@@ -81,15 +77,23 @@
 		</style>
 
 		<div class="row dashboard">
+		  <div
+		  		class="col-xs-6" >
+		  	<span class="main"> 
+		  		<h4 style="margin-bottom:5px"> Participants <br></h4>
+		  		<div ng-repeat="u in event.users" class="choice">
+			  		<small ng-bind="users.$getRecord(u).name"></small><Br>
+		  		</div>
+		  	</span>
+		  </div>
+
 		  <div 	ng-repeat="t in event.topics" 
-		  		class="col-xs-6" 
-		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
+		  		class="col-xs-6" >
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
 		  		<div ng-repeat="c in topics.$getRecord(t).choices" class="choice">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
-		  		<hr/>
 		  	</span>
 		  </div>
 		</div>
@@ -105,6 +109,7 @@
 					.controller("controller", 
 						function($scope, $firebaseObject, $firebaseArray, $window) {
 						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
+						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
