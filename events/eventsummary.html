@@ -121,13 +121,10 @@
 						     obj.$bindTo($scope, "event"); 
 
 						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
-						     $scope.topics.$loaded().then(function() {
-						        console.log("loaded record:", $scope.topics);
-						     });
 
-						     $scope.test = function($scope) {
+						     $scope.test = function() {
 						     	console.log('test');
-						     }
+						     };
 						}
 					);
 	</script>
