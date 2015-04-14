@@ -120,7 +120,7 @@
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
 
-						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topics"));
+						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 						     $scope.topics.$loaded().then(function() {
 						        console.log("loaded record:", $scope.topics);
 						     });
