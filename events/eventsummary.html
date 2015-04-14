@@ -73,6 +73,11 @@
 			hr {
 				margin: 0px;
 			}
+
+			div.choice {
+				line-height: 1.6em;
+				text-indent: 10px;
+			}
 		</style>
 
 		<div class="row dashboard">
@@ -81,7 +86,7 @@
 		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
-		  		<div ng-repeat="c in topics.$getRecord(t).choices" style="line-height:1.4em">
+		  		<div ng-repeat="c in topics.$getRecord(t).choices" class="choice">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
 		  		<hr/>
