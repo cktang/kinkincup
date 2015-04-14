@@ -72,7 +72,7 @@
 		</style>
 
 		<div class="row dashboard">
-		  <div 	ng-repeat="t in obj.topics" 
+		  <div 	ng-repeat="t in event.topics" 
 		  		class="good col-xs-10 btn" 
 		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
 		  	<span ng-bind="t" class="topicName"></span>
