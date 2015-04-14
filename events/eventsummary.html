@@ -94,6 +94,7 @@
 					.module("app", ["firebase", 'ui.bootstrap'])
 					.controller("controller", 
 						function($scope, $firebaseObject, $firebaseArray, $window) {
+						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
@@ -120,7 +121,6 @@
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
 
-						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 
 						     $scope.test = function() {
 						     	console.log('test');
