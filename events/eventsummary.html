@@ -119,9 +119,12 @@
 						     });
 
 						     // For three-way data bindings, bind it to the scope instead
-						     obj.$bindTo($scope, "event");
+						     obj.$bindTo($scope, "event"); 
 
 						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topics"));
+						     $scope.topics.$loaded().then(function() {
+						        console.log("loaded record:", obj.$id);
+						     });
 
 						}
 					);
