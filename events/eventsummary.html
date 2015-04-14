@@ -69,20 +69,19 @@
 			.dashboard .new {
 				border: 5px dotted silver;
 			}
-		</style>o
+		</style>
 
 		<div class="row dashboard">
 		  <div 	ng-repeat="t in obj.topics" 
 		  		class="good col-xs-10 btn" 
 		  		ng-hide="{{t.id=='venue' || t.id=='time'}}">
-		  	<span ng-bind="topics.$getRecord(t).name" class="topicName"></span>
+		  	<span ng-bind="t" class="topicName"></span>
 		  	<span class="main"> 
 		  		<div ng-repeat="c in topics.$getRecord(t).choices" style="line-height:20px">
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
 		  	</span>
 		  </div>
-
 		</div>
 
 		<a class="btn btn-block btn-success" href="chat.html" style="margin-left:-5px"> Chat </a>
