@@ -110,8 +110,7 @@
 							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 							};
 
-						    var ref = new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id'));
-						    var obj = $firebaseObject(ref);
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id')));
 						    
 						     // to take an action after the data loads, use the $loaded() promise
 						     obj.$loaded().then(function() {
@@ -123,7 +122,7 @@
 
 						     $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topics"));
 						     $scope.topics.$loaded().then(function() {
-						        console.log("loaded record:", obj.$id);
+						        console.log("loaded record:", $scope.topics);
 						     });
 
 						     $scope.test = function($scope) {
