@@ -64,7 +64,8 @@
 					.controller("controller", ["$scope", "$firebaseArray", '$window', '$localStorage',
 						function($scope, $firebaseArray, $window, $localStorage) {
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-
+						    $scope.local = $localStorage;
+						    
 							$scope.goto = function(id) {
 								var url = "eventsummary.html?id=" + id;
 								try {
