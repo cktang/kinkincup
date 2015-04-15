@@ -10,6 +10,11 @@
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
 	<link href="css/style.css" rel="stylesheet">
 	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
+
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 </head>
 <body ontouchstart="">
 	<div class="headerplaceholder" ng-include="'header.html'"></div>
@@ -25,6 +30,7 @@
 
 		<hr/>
 		<h4> Login </h4>
+<!-- 		
 		<div class="form-group">
 			<label for="email">Email address</label>
 			<input type="email" class="form-control" id="email" placeholder="Enter email">
@@ -33,7 +39,31 @@
 			<label for="password">Password</label>
 			<input type="password" class="form-control" id="password" placeholder="Password">
 		</div>
-		<button class="btn btn-block" onclick="location.href='myevents.html'"> Login </button>
+ -->
+		<div ng-repeat="u in users">
+			<button class="btn btn-block" ng-bind="u.name"></button>
+		</div> 		
+
+ 		<button class="btn btn-block" onclick="location.href='myevents.html'"> Login </button>
 	</div>
+
+	<script>
+		var app = angular
+					.module("app", ["firebase", 'ui.bootstrap'])
+					.controller("controller", ["$scope", "$firebaseArray", '$window', 
+						function($scope, $firebaseArray, $window) {
+						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+
+							$scope.goto = function(id) {
+								var url = "eventsummary.html?id=" + id;
+								try {
+		  							linkEvent(url);
+								} catch (e) {
+		  							$window.location.href = url;
+	  							}
+	  						}
+						}
+					]);
+	</script>
 </body>
 </html>
