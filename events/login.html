@@ -46,9 +46,8 @@
 		</div>
  		<button class="btn btn-block" onclick="location.href='myevents.html'"> Login </button>
  -->
-		<div ng-repeat="u in users">
-			<button class="btn btn-block" ng-bind="u.name" ng-click="login(u.$id)"></button>
-		</div> 		
+		
+		<button ng-repeat="u in users" class="btn btn-block" ng-bind="u.name" ng-click="login(u.$id)"></button>
 
 	</div>
 
