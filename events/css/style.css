@@ -16,7 +16,7 @@
 .footerplaceholder {
 	position:fixed;
 	bottom:0px;
-	background-color: #ddd;
+	/*background-color: #ddd;*/
 	height: 50px; 
 	width:100%;
 	z-index: 1000;
