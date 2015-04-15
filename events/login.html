@@ -47,7 +47,7 @@
  		<button class="btn btn-block" onclick="location.href='myevents.html'"> Login </button>
  -->
 		
-		<button ng-repeat="u in users" class="btn btn-block" ng-bind="u.name" ng-click="login(u.$id)"></button>
+		<button ng-repeat="u in users" class="btn btn-block" ng-bind="u.name" ng-click="login(u)"></button>
 
 	</div>
 
@@ -58,8 +58,8 @@
 						function($scope, $firebaseArray, $window, $localStorage) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
-						    $scope.login = function(id) {
-						    	$localStorage.user = id;
+						    $scope.login = function(user) {
+						    	$localStorage.user = user;
 						    	$scope.goto("myevents.html");
 						    };
 
