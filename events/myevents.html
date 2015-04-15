@@ -14,7 +14,8 @@
 	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
-    <script src="js/ngStorage.js"></script>
+    <script src="js/ngStorage.js"></script>	
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
 
 	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
@@ -40,7 +41,7 @@
 		</style>
 
       	<ul class="list-group">
-		  <li ng-repeat="e in events" ng-click="goto(e.$id)" class="list-group-item" style="background-color:#eee">
+		  <li ng-repeat="e in events" ng-click="goto(e.$id)" ng-show="_(e.users).contains(local.user.id)" class="list-group-item" style="background-color:#eee">
 		  	<h3>{{e.name}} <small> {{ e.$id }}</small></h3>
 		  	<h6 ng-bind="e.description"></h6>
 		  </li>
@@ -60,12 +61,12 @@
 
 	<script>
 		var app = angular
-					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage'])
+					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage', 'angular-underscore'])
 					.controller("controller", ["$scope", "$firebaseArray", '$window', '$localStorage',
 						function($scope, $firebaseArray, $window, $localStorage) {
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 						    $scope.local = $localStorage;
-						    
+
 							$scope.goto = function(id) {
 								var url = "eventsummary.html?id=" + id;
 								try {
