@@ -54,7 +54,7 @@
 	<script>
 		var app = angular
 					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage'])
-					.controller("controller", ["$scope", "$firebaseArray", '$window', 
+					.controller("controller", ["$scope", "$firebaseArray", '$window', '$storage'
 						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
