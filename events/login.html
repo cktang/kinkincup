@@ -54,12 +54,12 @@
 	<script>
 		var app = angular
 					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage'])
-					.controller("controller", ["$scope", "$firebaseArray", '$window', '$storage',
+					.controller("controller", ["$scope", "$firebaseArray", '$window', '$localStorage',
 						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
 						    $scope.login = function(id) {
-						    	$storage.user = id;
+						    	$localStorage.user = id;
 						    	$scope.goto("myevents.html");
 						    };
 
