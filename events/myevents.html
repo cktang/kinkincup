@@ -62,7 +62,7 @@
 	<script>
 		var app = angular
 					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage', 'angular-underscore'])
-					.controller("controller", ["$scope", "$firebaseArray", '$window', '$localStorage',
+					.controller("controller",
 						function($scope, $firebaseArray, $window, $localStorage) {
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 						    $scope.local = $localStorage;
@@ -76,7 +76,7 @@
 	  							}
 	  						}
 						}
-					]);
+					);
 	</script>
 </body>
 </html>
