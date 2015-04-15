@@ -13,7 +13,7 @@
 	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.1.5/angular-local-storage.js"></script>
+    <script src="js/ngStorage.js"></script>
 
 	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
@@ -53,13 +53,13 @@
 
 	<script>
 		var app = angular
-					.module("app", ["firebase", 'ui.bootstrap', 'localStorageService'])
-					.controller("controller", ["$scope", "$firebaseArray", '$window', 'localStorageService'
+					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage'])
+					.controller("controller", ["$scope", "$firebaseArray", '$window', '$storage'
 						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
 						    $scope.login = function(id) {
-						    	localStorageService.set('user', id);
+						    	$storage.user = id;
 						    	$scope.goto("myevents.html");
 						    };
 
