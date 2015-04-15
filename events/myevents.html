@@ -42,8 +42,9 @@
 		</style>
 
       	<ul class="list-group">
-		  <li ng-repeat="e in events" ng-click="goto(e.$id)" ng-show="_(e.users).contains(local.user.id)" class="list-group-item" style="background-color:#eee">
+		  <li ng-repeat="e in events" ng-click="goto(e.$id)" class="list-group-item" style="background-color:#eee">
 		  	<h3>{{e.name}} <small> {{ e.$id }}</small></h3>
+		  	<h6>{{ e.users }} {{ local.user.id }}</h6>
 		  	<h6 ng-bind="e.description"></h6>
 		  </li>
 		</ul>
