@@ -13,6 +13,8 @@
 	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
+    <script src="https://rawgithub.com/gsklee/ngStorage/master/ngStorage.js"></script>
+
 	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
 
@@ -42,23 +44,27 @@
 			<label for="password">Password</label>
 			<input type="password" class="form-control" id="password" placeholder="Password">
 		</div>
+ 		<button class="btn btn-block" onclick="location.href='myevents.html'"> Login </button>
  -->
 		<div ng-repeat="u in users">
-			<button class="btn btn-block" ng-bind="u.name"></button>
+			<button class="btn btn-block" ng-bind="u.name" ng-click="login(u.$id)"></button>
 		</div> 		
 
- 		<button class="btn btn-block" onclick="location.href='myevents.html'"> Login </button>
 	</div>
 
 	<script>
 		var app = angular
-					.module("app", ["firebase", 'ui.bootstrap'])
+					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage'])
 					.controller("controller", ["$scope", "$firebaseArray", '$window', 
 						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 
-							$scope.goto = function(id) {
-								var url = "eventsummary.html?id=" + id;
+						    $scope.login = function(id) {
+						    	$storage.user = id;
+						    	$scope.goto("myevents.html");
+						    };
+
+							$scope.goto = function(url) {
 								try {
 		  							linkEvent(url);
 								} catch (e) {
