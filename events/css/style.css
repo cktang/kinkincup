@@ -10,7 +10,7 @@
 	padding: 8px;
 	width: 100% !important;
 
-	display:none;
+	/*display:none;*/
 }
 
 .footerplaceholder {
@@ -22,7 +22,7 @@
 	z-index: 1000;
 	width: 100% !important;
 
-	display:none;
+	/*display:none;*/
 }
 
 * {
