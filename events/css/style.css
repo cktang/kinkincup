@@ -36,7 +36,7 @@ html, body, .container {
 }
 
 .link, .btn { transition: all .1s; }
-.link:active, .btn:active { transform: scale(0.95); }
+.link:active, .btn:active { transform: scale(0.95); opacity:0.8; }
 
 .container {
 	/*padding-top: 50px;*/
