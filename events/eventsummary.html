@@ -13,6 +13,10 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
 
+    <script src="js/ngStorage.js"></script>	
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
+
 	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 </head>
@@ -107,11 +111,12 @@
 
 	<script>
 		var app = angular
-					.module("app", ["firebase", 'ui.bootstrap'])
-					.controller("controller", 
-						function($scope, $firebaseObject, $firebaseArray, $window) {
+					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage', 'angular-underscore'])
+					.controller("controller",
+						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
 						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+						    $scope.local = $localStorage;
 
 							$scope.goto = function(id) {
 	  							if (angular.defined(linkEvent)) {
