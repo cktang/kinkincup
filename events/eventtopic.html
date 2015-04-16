@@ -61,7 +61,8 @@
 
 	<div class="container">	
 		<h4 class="full title"> 
-			<a href="eventsummary.html"><small> {{events.$getRecord(topic.event)}} </small></a> > {{topic.name}}
+			<small ng-click="goto('eventsummary.html', events.$getRecord(topic.event).$id)"> {{events.$getRecord(topic.event).name}} </small>
+			{{topic.name}}
 		</h4>
 
 		<h5 class="full"> Descriptions </h5>
@@ -69,6 +70,13 @@
 
 		<h5 class="full"> Vote </h5>
 		<h6 class="choices">
+			<div ng-repeat="c in topic.choices"
+				class="btn btn-block btn-default"> 
+				<!-- <span class="badge"> 2 </span> -->
+				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
+				<span ng-bind="c"></span>
+			</div>
+
 			<div class="btn btn-block btn-success"> 
 				<span class="badge"> 6 </span>
 				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
