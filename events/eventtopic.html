@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="app">
 <head>
-	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
+
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+    <script src="js/ngStorage.js"></script>
+
+	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+
 	<link href="css/style.css" rel="stylesheet">
-	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
-<body ontouchstart="">
+<body ontouchstart="" ng-controller="controller">
 	<div class="headerplaceholder" ng-include="'header.html'"></div>
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
 	<style>
@@ -48,7 +58,7 @@
 
 	<div class="container">	
 		<h4 class="full title"> 
-			<a href="eventsummary.html"><small> Event Name </small></a> > Event Topic 
+			<a href="eventsummary.html"><small> {{event.$getRecord(topic.event)}} </small></a> > {{topic.name}}
 		</h4>
 
 		<h5 class="full"> Descriptions </h5>
@@ -90,5 +100,42 @@
 
 		<div class="bottomplaceholder"></div>
 	</div>
+
+	<Script>
+		var app = angular
+					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage', 'angular-underscore'])
+					.controller("controller",
+						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
+							$scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+						    $scope.local = $localStorage;		
+
+	  						$scope.getParam = function(name) {
+							    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+							    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+							    results = regex.exec($window.location.search);
+							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+							};
+
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id')));
+						    
+						     // to take an action after the data loads, use the $loaded() promise
+						     obj.$loaded().then(function() {
+						        console.log("loaded record:", obj.$id);
+						     });
+
+						     // For three-way data bindings, bind it to the scope instead
+						     obj.$bindTo($scope, "topic"); 
+
+						     $scope.goto = function(page, id) {
+								var url = page + "?id=" + id;
+								try {
+		  							linkEvent(url);
+								} catch (e) {
+		  							$window.location.href = url;
+	  							}
+						     };
+						}
+					);
+	</script>
 </body>
 </html>
