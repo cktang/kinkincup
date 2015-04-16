@@ -92,7 +92,8 @@
 		  </div>
 
 		  <div 	ng-repeat="t in event.topics" 
-		  		class="col-xs-6 link" >
+		  		class="col-xs-6 link" 
+		  		ng-click="goto('eventtopic.html', t)">
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
 		  		<div ng-repeat="c in topics.$getRecord(t).choices" class="choice">
@@ -116,15 +117,7 @@
 						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
 						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
-						    $scope.local = $localStorage;
-
-							$scope.goto = function(id) {
-	  							if (angular.defined(linkEvent)) {
-		  							linkEvent("eventsummary.html?id=" + id);
-	  							} else {
-		  							$window.location.href = "eventsummary.html?id=" + id;
-	  							}
-	  						};	  						
+						    $scope.local = $localStorage;		
 
 	  						$scope.getParam = function(name) {
 							    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -143,9 +136,13 @@
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
 
-
-						     $scope.test = function() {
-						     	console.log('test');
+						     $scope.goto = function(page, id) {
+								var url = page + "?id=" + id;
+								try {
+		  							linkEvent(url);
+								} catch (e) {
+		  							$window.location.href = url;
+	  							}
 						     };
 						}
 					);
