@@ -35,6 +35,9 @@ html, body, .container {
 	overflow-x: hidden;
 }
 
+.link { transition: all .2s ease-in-out; }
+.link:active { transform: scale(0.9); }
+
 .container {
 	/*padding-top: 50px;*/
 
