@@ -61,22 +61,23 @@
 
 	<div class="container">	
 		<h4 class="full title"> 
-			<small ng-click="goto('eventsummary.html', events.$getRecord(topic.event).$id)"> {{events.$getRecord(topic.event).name}} </small>
+			<small class="link" ng-click="goto('eventsummary.html', events.$getRecord(topic.event).$id)"> {{events.$getRecord(topic.event).name}} </small>
+			> 
 			{{topic.name}}
 		</h4>
 
-		<h5 class="full"> Descriptions </h5>
-		<h6> {{topic.description}} </h6>
+		<h5 class="full" ng-bind="topic.description"></h5>
 
 		<h5 class="full"> Vote </h5>
 		<h6 class="choices">
 			<div ng-repeat="c in topic.choices"
-				class="btn btn-block btn-default"> 
+				class="btn btn-block btn-default"
+				ng-click="vote(c)"> 
 				<!-- <span class="badge"> 2 </span> -->
 				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
 				<span ng-bind="c"></span>
 			</div>
-
+<!-- 
 			<div class="btn btn-block btn-success"> 
 				<span class="badge"> 6 </span>
 				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -96,6 +97,7 @@
 				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
 				<span>Choice 4</span>
 			</div>
+-->		
 		</h6>
 
 		<hr/>
@@ -144,6 +146,10 @@
 								} catch (e) {
 		  							$window.location.href = url;
 	  							}
+						     };
+
+						     $scope.vote = function(choice) {
+
 						     };
 						}
 					);
