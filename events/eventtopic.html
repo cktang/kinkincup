@@ -76,7 +76,7 @@
 				<!-- <span class="badge"> 2 </span> -->
 				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
 				<span ng-bind="c"></span>
-			</div>
+			</div> 
 <!-- 
 			<div class="btn btn-block btn-success"> 
 				<span class="badge"> 6 </span>
@@ -149,7 +149,11 @@
 						     };
 
 						     $scope.vote = function(choice) {
+						     	_($scope.topic.choices).each(function(c) {
+						     		if (c == choice) {
 
+						     		}
+						     	})
 						     };
 						}
 					);
