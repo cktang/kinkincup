@@ -93,7 +93,7 @@
 					.controller("controller",
 						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
 							$scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-							$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id') + "/chat"));
+							$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id') + "/chats"));
 						    $scope.local = $localStorage;		
 
 	  						$scope.getParam = function(name) {
