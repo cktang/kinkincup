@@ -33,7 +33,7 @@
 		}
 
 		.choices > .btn {
-			min-height: 2em;
+			height: 2em;
 			margin-top: 0px;
 			font-size: 16px;
 			line-height: 2em;
@@ -70,9 +70,9 @@
 		<h5 class="full" ng-bind="topic.description"></h5>
 
 		<h5 class="full"> Vote </h5>
-		<h6 class="choices">
+		<h6 class="choices full">
 			<div ng-repeat="c in topic.choices"
-				class="btn btn-block btn-default full"
+				class="btn btn-block btn-default"
 				ng-class="{'btn-success': topic.votes[local.user.$id] == c}"
 				ng-click="topic.votes[local.user.$id] = c"> 
 				<span class="badge" ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length"></span>
