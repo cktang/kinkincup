@@ -102,16 +102,8 @@
 -->		
 		</h6>
 
-		<hr/>
-
-		<a class="btn btn-block btn-success" href="chat.html"> Chat </a>
-
-		<script>
-			$('.choices .btn').click(function() {
-				$('.choices .btn').removeClass('btn-success').addClass('btn-default');
-				$(this).addClass('btn-success');
-			});
-		</script>
+		<h5 class="full"> Vote </h5>
+		<div class="chatbox" ng-include="'chat.html'"></div>
 
 		<div class="bottomplaceholder"></div>
 	</div>
