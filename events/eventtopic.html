@@ -92,16 +92,16 @@
 					.module("app", ["firebase", 'ui.bootstrap', 'ngStorage', 'angular-underscore'])
 					.controller("controller",
 						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
-							$scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-							$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id') + "/chats"));
-						    $scope.local = $localStorage;		
-
 	  						$scope.getParam = function(name) {
 							    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 							    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 							    results = regex.exec($window.location.search);
 							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 							}; 
+
+							$scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+							$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id') + "/chats"));
+						    $scope.local = $localStorage;		
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id')));
 
