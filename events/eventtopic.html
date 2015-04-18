@@ -93,6 +93,7 @@
 					.controller("controller",
 						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
 							$scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+							$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id') + "/chat"));
 						    $scope.local = $localStorage;		
 
 	  						$scope.getParam = function(name) {
@@ -103,12 +104,6 @@
 							};
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id')));
-						 
-						     // to take an action after the data loads, use the $loaded() promise
-						     obj.$loaded().then(function() {
-						     	obj.chat = obj.chat || [];
-						        $scope.chat = obj.chat;
-						     });
 
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "topic"); 
@@ -122,16 +117,8 @@
 	  							}
 						     };
 
-						     $scope.vote = function(choice) {
-						     	_($scope.topic.choices).each(function(c) {
-						     		if (c == choice) {
-
-						     		}
-						     	})
-						     };
-
 						     $scope.newChat = function(text) {
-						     	$scope.chat.push({
+						     	$scope.chats.push({
 						     		user: $scope.local.user.$id,
 						     		timestamp: new Date,
 						     		text: text
