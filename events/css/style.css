@@ -36,20 +36,12 @@ html, body, .container {
 }
 
 .link, .btn { transition: all .1s; }
+.link:active, .btn:active { transform: scale(0.95); opacity:0.8; }
 
-.link:focus,
-.link:active:focus,
-.link.active:focus,
-.link.focus,
-.link:active.focus,
-.link.active.focus,
-.btn:focus,
-.btn:active:focus,
-.btn.active:focus,
-.btn.focus,
-.btn:active.focus,
-.btn.active.focus {
-	transform: scale(0.95); opacity:0.8;
+.container {
+	/*padding-top: 50px;*/
+
+	padding-top: 0px;
 }
 
 .container .bottomplaceholder {
