@@ -32,7 +32,7 @@
 	}
 </style>
 
-<div class="full" style="margin-bottom:10px;" ng-show="chats && chats.length > 0">
+<div class="full" style="margin-bottom:10px; padding:5px" ng-show="chats && chats.length > 0">
 	<div ng-repeat="c in chats" 
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
 		<div class="btn"> 
