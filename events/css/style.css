@@ -36,8 +36,13 @@ html, body, .container {
 }
 
 .link, .btn { transition: all .1s; }
-.link:checked {}
 
+.link:focus,
+.link:active:focus,
+.link.active:focus,
+.link.focus,
+.link:active.focus,
+.link.active.focus,
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus,
