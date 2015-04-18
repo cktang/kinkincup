@@ -108,9 +108,7 @@
 						     // to take an action after the data loads, use the $loaded() promise
 						     obj.$loaded().then(function() {
 						        if (!obj.chats) {
-						        	obj.chats = [{
-							     		temp: true
-						        	}];
+						        	obj.chats = [];
 						        }
 						     });
 
@@ -127,7 +125,7 @@
 						     };
 
 						     $scope.newChat = function(text) {
-						     	$scope.chats.push({
+						     	topic.chats.push({
 						     		user: $scope.local.user.$id,
 						     		timestamp: new Date,
 						     		text: text
