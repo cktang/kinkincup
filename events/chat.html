@@ -35,7 +35,7 @@
 <div ng-repeat="c in chats" 
 	ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
 	<div class="btn"> 
-		<small style="margin-bottom:5px" ng-bind="c.timestamp"> 2015-02-03 11:30pm </small>
+		<small style="margin-bottom:5px" ng-bind="c.timestamp"></small>
 		<br>
 		<span ng-bind="c.text"></span>
 	</div>
