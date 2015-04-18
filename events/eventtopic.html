@@ -101,7 +101,7 @@
 							    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 							    results = regex.exec($window.location.search);
 							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-							};
+							}; 
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id')));
 
