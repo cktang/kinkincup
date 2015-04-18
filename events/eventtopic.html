@@ -74,7 +74,7 @@
 				class="btn btn-block btn-default"
 				ng-class="{'btn-success': topic.votes[local.user.$id] == c}"
 				ng-click="topic.votes[local.user.$id] = c"> 
-				<!-- <span class="badge"> 2 </span> -->
+				<span class="badge" ng-bind="_(topic.votes).values().length"></span>
 				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
 				<span ng-bind="c"></span>
 			</div> 
