@@ -32,44 +32,12 @@
 	}
 </style>
 
-<div class="received">
-	<div ng-bind="chat.length"></div>
-
+<div ng-repeat="c in chat" class="received">
 	<div class="btn"> 
-		<small> 2015-02-03 11:30pm </small>
-		<hr/>
-		Received 
+		<small style="margin-bottom:5px" ng-bind="c.timestamp"> 2015-02-03 11:30pm </small>
 		<br>
-		More Received
-		<br>
-		More More Received
+		<span ng-bind="c.text"></span>
 	</div>
 </div>
 
-<div class="sent">
-	<div class="btn"> 
-		<small> 2015-02-03 11:30pm </small>
-		<hr/>
-		Sent 
-	</div>
-</div>
-
-<div class="received">
-	<div class="btn">
-		<small> 2015-02-03 11:30pm </small>
-		<hr/>
-		Received 
-	</div>
-</div>
-
-<div class="sent">
-	<div class="btn"> 
-		<small> 2015-02-03 11:30pm </small>
-		<hr/>
-		Sent 
-		<br>
-		More Sent
-		<br>
-		More More Sent
-	 </div>
-</div>
+<div ng-show="!chat"> No Chat </div>
