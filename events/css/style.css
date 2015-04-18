@@ -27,9 +27,12 @@
 
 * {
 	font-family: 'Oswald'; 
-	-webkit-user-select: none; /* disable selection/Copy of UIWebView */
-	-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 }
+
+*:not(input):not(textarea) {
+  -webkit-user-select: none; /* disable selection/Copy of UIWebView */
+  -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+}       
 
 html, body, .container {
 	height: 763px !important;
