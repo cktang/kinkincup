@@ -69,7 +69,7 @@
 
 		<h5 class="full" ng-bind="topic.description"></h5>
 
-		<h5 class="full"> Vote </h5>
+		<h5 class="full"> Chat </h5>
 		<h6 class="choices full">
 			<div ng-repeat="c in topic.choices"
 				class="btn btn-block btn-default"
@@ -125,6 +125,11 @@
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id')));
 						 
+						     // to take an action after the data loads, use the $loaded() promise
+						     obj.$loaded().then(function() {
+						        $scope.chat = obj.chat;
+						     });
+
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "topic"); 
 
