@@ -72,7 +72,7 @@
 		<h6 class="choices">
 			<div ng-repeat="c in topic.choices"
 				class="btn btn-block btn-default"
-				ng-class="{'btn-success': topic.votes[local.user.$id]}"
+				ng-class="{'btn-success': topic.votes[local.user.$id] == c}"
 				ng-click="topic.votes[local.user.$id] = c"> 
 				<!-- <span class="badge"> 2 </span> -->
 				<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
