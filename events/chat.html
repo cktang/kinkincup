@@ -32,7 +32,7 @@
 	}
 </style>
 
-<div ng-repeat="c in chat" 
+<div ng-repeat="c in chats" 
 	ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
 	<div class="btn"> 
 		<small style="margin-bottom:5px" ng-bind="c.timestamp"> 2015-02-03 11:30pm </small>
@@ -41,7 +41,7 @@
 	</div>
 </div>
 
-<h6 ng-show="!chat || chat.length==0"> No Chat </h6>
+<h6 ng-show="!chats || chats.length==0"> No Chat </h6>
 
 <div class="full" style="font-size:16px; margin-top:10px;">
 	<div class="col-xs-10 link" style="padding:0px !important;">
