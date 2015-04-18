@@ -66,7 +66,11 @@ h5 {
 	border-bottom: 1px solid #aab;
 
 	background-color: #dde;
-	padding-top:10px;
+	padding: 10px;
+}
+
+.full.subtitle {
+	padding-top:20px;
 }
 
 /*** colors ***/
