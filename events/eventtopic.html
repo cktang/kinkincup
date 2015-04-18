@@ -106,7 +106,7 @@
 						 
 						     // to take an action after the data loads, use the $loaded() promise
 						     obj.$loaded().then(function() {
-						     	obj.chat = obj.chat || {};
+						     	obj.chat = obj.chat || [];
 						        $scope.chat = obj.chat;
 						     });
 
