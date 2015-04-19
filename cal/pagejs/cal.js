@@ -31,7 +31,7 @@ App.CalendarDetails = Backbone.View.extend({
 
 	render: function(model) {
 		$(this.el).addClass('active');
-		$(this.el).find('.active').removeClass('active').show();
+		$(this.el).find('.active').removeClass('active').css('-webkit-transform', 'translate3d(0px, 0px, 0px);');
 
 		if (!model) return;
 		var self = this;
@@ -44,7 +44,7 @@ App.CalendarDetails = Backbone.View.extend({
 			if ($(self.el).find('[data-id=' + k + '][data-value='+v+']').length > 0) {
 				$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
 			} else {
-				$(self.el).find('[data-id=' + k + ']').addClass('active');
+				$(self.el).find('[data-id=' + k + ']').addClass('active').css('-webkit-transform', 'translate3d(17px, 0px, 0px);');
 			}
 		});
 	},
