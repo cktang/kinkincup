@@ -106,13 +106,6 @@
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id')));
 
-						     // to take an action after the data loads, use the $loaded() promise
-						     obj.$loaded().then(function() {
-						        if (!obj.chats) {
-						        	obj.chats = [];
-						        }
-						     });
-
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "topic"); 
 
