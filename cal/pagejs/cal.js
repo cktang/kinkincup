@@ -181,6 +181,6 @@ App.Calendar = Backbone.View.extend({
 			$('#formButton').click();
 		});
 
-		$(this.el).find('.box').hide().show('blind');
+		$(this.el).find('.box').show();
 	}
 })
