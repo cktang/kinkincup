@@ -95,7 +95,7 @@
 							};
 
 							$scope.getVote = function(topicId, choice) {
-								return _(topics.$getRecord(topicId).votes).groupBy()[choice].length;
+								return _($scope.topics.$getRecord(topicId).votes).groupBy()[choice].length;
 							};
 
 							$scope.maxVotes = function(topicId) {
