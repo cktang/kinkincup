@@ -113,13 +113,6 @@
 							};
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id')));
-						    
-						     // to take an action after the data loads, use the $loaded() promise
-						     obj.$loaded().then(function() {
-						        console.log("loaded record:", obj.$id);
-
-						        if (obj.chats) $scope.chats = obj.chats;
-						     });
 
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
@@ -133,6 +126,11 @@
 	  							}
 						     };
 
+						    //chat related
+						     obj.$loaded().then(function() {
+						        if (obj.chats) $scope.chats = obj.chats;
+						     });
+
 						     $scope.newChat = function(text) { 
 						     	if (!$scope.chats) $scope.chats = [];
 
@@ -144,11 +142,10 @@
 						     }
 
 						     $scope.$watch('chats', function(newValue, oldValue) {
-						     	console.log(arguments);
 						     	if (newValue == null) return;
 						     	$scope.event.chats = $scope.chats;
 						     }, true);
-
+						    //chat related
 						}
 					);
 	</script>
