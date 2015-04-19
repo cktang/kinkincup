@@ -1,21 +1,20 @@
 
-var calView, detailsView, items;
+var calView, detailsView, items, cache;
 
 $(document).ready(function() {
 	//recover from local
-	if (localStorage.items) {
-		var cache = JSON.parse(localStorage.items);
-		calView = new App.Calendar({ 
-			el: $('#cal'),
-			collection: new Backbone.Collection(cache)
-		});
+	// if (localStorage.items) {
+	// 	cache = JSON.parse(localStorage.items);
+	// 	calView = new App.Calendar({ 
+	// 		el: $('#cal'),
+	// 		collection: new Backbone.Collection(cache)
+	// 	});
 
-		detailsView = new App.CalendarDetails({
-			el: $('#form'),
-			collection: new Backbone.Collection(cache)
-		});
-	}
-
+	// 	detailsView = new App.CalendarDetails({
+	// 		el: $('#form'),
+	// 		collection: new Backbone.Collection(cache)
+	// 	});
+	// }
 
 	items = new App.Items;
 	var init = function() {
@@ -34,6 +33,8 @@ $(document).ready(function() {
 
 		calView.render();
 		calView.on('dateClicked', detailsView.render, detailsView);
+
+		$('body').trigger('touchstart');
 	}
 
 	items.on('sync', init);
