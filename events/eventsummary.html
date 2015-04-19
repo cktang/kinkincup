@@ -63,8 +63,8 @@
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
 		  		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
 		  				class="choice"
-						ng-class="{'chosen': _(topics.$getRecord(t).votes).groupBy()[c].length == _(topics.$getRecord(t).votes).chain().groupBy().map(function(e) { return e.length; }).max().value() }">
-					<span class="badge" ng-bind="_(topics.$getRecord(t).votes).groupBy()[c].length"></span>
+						ng-class="{ 'chosen': getVote(t, c) ==  maxVotes(t) }">
+					<span class="badge" ng-bind="getVote(t, c)"></span>
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
 		  	</span>
@@ -92,6 +92,14 @@
 							    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 							    results = regex.exec($window.location.search);
 							    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+							};
+
+							$scope.getVote = function(topicId, choice) {
+								return _(topics.$getRecord(topicId).votes).groupBy()[choice].length;
+							};
+
+							$scope.maxVotes = function(topicId) {
+								return _($scope.topics.$getRecord(topicId).votes).chain().groupBy().map(function(e) { return e.length; }).max().value();
 							};
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id')));
