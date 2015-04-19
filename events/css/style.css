@@ -48,9 +48,9 @@ html, body, .container {
 }
 
 .container {
-	/*padding-top: 50px;*/
+	padding-top: 50px;
 
-	padding-top: 0px;
+	/*padding-top: 0px;*/
 }
 
 .container .bottomplaceholder {
