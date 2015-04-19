@@ -143,7 +143,9 @@
 						     	});
 						     }
 
-						     $scope.$watch('chats', function () { 
+						     $scope.$watch('chats', function(newValue, oldValue) {
+						     	console.log(arguments);
+						     	if (newValue == null) return;
 						     	$scope.event.chats = $scope.chats;
 						     }, true);
 
