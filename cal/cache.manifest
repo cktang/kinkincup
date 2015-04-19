@@ -13,3 +13,9 @@ js/moment.min.js
 pagejs/cal.js
 js/ratchet-v2.0.2/css/ratchet.css
 js/ratchet-v2.0.2/css/ratchet-theme-ios.css
+http://fonts.googleapis.com/css?family=Roboto:400,100,700,300italic,100italic,300,400italic,500,500italic,700italic,900,900italic
+js/ratchet-v2.0.2/js/ratchet.js
+css/font-awesome-4.2.0/css/font-awesome.css
+css/ionicons.min.css
+js/ratchet-v2.0.2/fonts/ratchicons.woff
+js/ratchet-v2.0.2/fonts/ratchicons.ttf
