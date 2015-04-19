@@ -41,9 +41,9 @@ App.CalendarDetails = Backbone.View.extend({
 			if (v == '')return ;
 
 			if ($(self.el).find('[data-id=' + k + '][data-value='+v+']').length > 0) {
-				$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active').toggle('touchstart');
+				$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
 			} else {
-				$(self.el).find('[data-id=' + k + ']').addClass('active').toggle('touchstart');
+				$(self.el).find('[data-id=' + k + ']').addClass('active');
 			}
 		});
 	},
