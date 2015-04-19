@@ -37,7 +37,7 @@
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
 		<div class="btn"> 
 			<small ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></small>
-			<br>
+			<br ng-hide="c.user==local.user.$id" />
 			
 			<small style="margin-bottom:5px" ng-bind="c.ts"></small>
 			<br>
