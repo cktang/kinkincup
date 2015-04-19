@@ -3,16 +3,18 @@ var calView, detailsView, items;
 
 $(document).ready(function() {
 	//recover from local
-	var cache = JSON.parse(localStorage.items);
-	calView = new App.Calendar({ 
-		el: $('#cal'),
-		collection: cache
-	});
+	if (localStorage.items) {
+		var cache = JSON.parse(localStorage.items);
+		calView = new App.Calendar({ 
+			el: $('#cal'),
+			collection: cache
+		});
 
-	detailsView = new App.CalendarDetails({
-		el: $('#form'),
-		collection: cache
-	});
+		detailsView = new App.CalendarDetails({
+			el: $('#form'),
+			collection: cache
+		});
+	}
 
 
 	items = new App.Items;
