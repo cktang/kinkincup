@@ -29,42 +29,20 @@
 		<h4 class="full title">{{event.name}} <small>{{event.description}}</small></h4>
 
 		<style>
-			.dashboard .btn {
-				height: 100px;
-				font-size: 20px;
-				border: 0px solid silver;
-				border-radius: 5px;
-				background-color: #eee;
-				position:relative;
-				padding:10px;
-				margin:10px;
-			}
-
-			.dashboard .main {
-				line-height:75px;
-			}
-
-			.dashboard .sub .badge {
-				font-size: 8px;
-				font-weight: normal;
-			}
-
-			.dashboard .new {
-				border: 5px dotted silver;
-			}
-
 			div.choice {
 				line-height: 1.4em;
 				padding: 2px 5px;
-				background-color: #ddd;
-			}
-
-			.bold {
-				font-weight: bold;
+				background-color: #eee;
+				font-weight: normal;
 			}
 
 			div.topic {
 				margin-bottom: 10px;
+			}
+
+			div.choice.chosen {
+				font-weight: bold;
+				background-color: #ccc;
 			}
 		</style>
 
@@ -83,7 +61,13 @@
 		  		ng-click="goto('eventtopic.html', t)">
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
-		  		<div ng-repeat="c in topics.$getRecord(t).choices" class="choice">
+		  		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
+		  				class="choice"
+						ng-class="{
+							'chosen': 
+								_(topics.$getRecord(t).votes).groupBy()[c].length == 
+								_(topics.$getRecord(t).votes).chain().groupBy().map(function(e) { return e.length; }.max().value() )
+						}">
 					<span class="badge" ng-bind="_(topics.$getRecord(t).votes).groupBy()[c].length"></span>
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
