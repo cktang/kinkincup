@@ -39,6 +39,8 @@ App.CalendarDetails = Backbone.View.extend({
 		_(model.toJSON()).each(function(v, k) {
 			// console.log("k=" + k + " v=" + v);
 			if (v == '')return ;
+
+			$(self.el).find('[data-id=' + k + ']').click();
 			$(self.el).find('[data-id=' + k + '][data-value='+v+']').click();
 		});
 	},
