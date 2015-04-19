@@ -7,12 +7,12 @@ $(document).ready(function() {
 		var cache = JSON.parse(localStorage.items);
 		calView = new App.Calendar({ 
 			el: $('#cal'),
-			collection: cache
+			collection: new Backbone.Collection(cache)
 		});
 
 		detailsView = new App.CalendarDetails({
 			el: $('#form'),
-			collection: cache
+			collection: new Backbone.Collection(cache)
 		});
 	}
 
