@@ -4,18 +4,19 @@ var calView, detailsView, items;
 $(document).ready(function() {
 	items = new App.Items;
 
-	calView = new App.Calendar({ 
-		el: $('#cal'),
-		collection: items
-	});
-
-	detailsView = new App.CalendarDetails({
-		el: $('#form'),
-		collection: items
-	});
-
 	var init = function() {
 		localStorage['items'] = JSON.stringify(items);
+
+		calView = new App.Calendar({ 
+			el: $('#cal'),
+			collection: items
+		});
+
+		detailsView = new App.CalendarDetails({
+			el: $('#form'),
+			collection: items
+		})
+
 		calView.render();
 		calView.on('dateClicked', detailsView.render, detailsView);
 	}
