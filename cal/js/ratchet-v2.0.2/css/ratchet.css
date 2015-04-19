@@ -1092,6 +1092,8 @@ select {
   overflow: hidden;
   background-color: #fff;
   opacity: 0;
+  transform:translateZ(1px);
+
   -webkit-transition: -webkit-transform .25s, opacity 1ms .25s;
      -moz-transition:    -moz-transform .25s, opacity 1ms .25s;
           transition:         transform .25s, opacity 1ms .25s;
@@ -1102,6 +1104,8 @@ select {
 .modal.active {
   height: 100%;
   opacity: 1;
+  transform:translateZ(1px);
+
   -webkit-transition: -webkit-transform .25s;
      -moz-transition:    -moz-transform .25s;
           transition:         transform .25s;
