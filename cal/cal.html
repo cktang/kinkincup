@@ -84,7 +84,7 @@
 		}
 
 		body {
-			color: HotPink ;
+			color: hotPink ;
 			background-color: white;
 			max-width: 375px !important;
 		}
@@ -134,19 +134,20 @@
 		*:not(input):not(textarea) {
 		  -webkit-user-select: none; /* disable selection/Copy of UIWebView */
 		  -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
-		}      
+		}    
+
+	  	#form .t {
+	  		margin-bottom: 5px;
+	  	}  
+
+	  	#duty-choices .control-item {
+	  		min-width: 44px;
+	  	}
 	</style>
 </head>
-<body>
-	<!--
-		1/2/3
-		egg/veggie/fruit
-		ams
-		piano
-		choir
-	-->
-    <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
-	<div id="cal">
+
+<body ontouchstart="">
+	<div class="content-padded" id="cal">
 		<div>
 			<h1> 
 				<span class="pull-right"> 
@@ -184,18 +185,8 @@
 	    </h1>
 	  </header>
 
-	  <style>
-	  	#form .t {
-	  		margin-bottom: 5px;
-	  	}
-	  </style>
 	  <div class="content">
 		<ul class="table-view" style="margin:0px">
-		  <style>
-		  	#duty-choices .control-item {
-		  		min-width: 44px;
-		  	}
-		  </style>
 		  <li class="table-view-cell" id="duty-choices">
 		    <div class="t">Duty</div>
 			<div class="segmented-control" >
@@ -233,6 +224,7 @@
 			<div class="segmented-control" >
 			  <a class="control-item link" data-id='food' data-value='E'>Egg</a>
 			  <a class="control-item link" data-id='food' data-value='V'>Veggie</a>
+			  <a class="control-item link" data-id='food' data-value='E+V'>Egg + Veggie</a>
 			  <a class="control-item link" data-id='food' data-value='F'>Fruit</a>
 			  <a class="control-item link" data-id='food' data-value='OFF'>Off</a>
 			</div>
