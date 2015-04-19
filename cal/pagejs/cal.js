@@ -2,10 +2,23 @@
 var calView, detailsView, items;
 
 $(document).ready(function() {
-	items = new App.Items;
+	//recover from local
+	var cache = JSON.parse(localStorage.items);
+	calView = new App.Calendar({ 
+		el: $('#cal'),
+		collection: cache
+	});
 
+	detailsView = new App.CalendarDetails({
+		el: $('#form'),
+		collection: cache
+	});
+
+
+	items = new App.Items;
 	var init = function() {
-		// localStorage['items'] = JSON.stringify(items);
+		//save local
+		localStorage['items'] = JSON.stringify(_(items.models).filter(function(e) { return e.id.substring(0, 7) == moment().format('YYYY-MM'); }));
 
 		calView = new App.Calendar({ 
 			el: $('#cal'),
