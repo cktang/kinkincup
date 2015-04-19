@@ -39,6 +39,7 @@ App.CalendarDetails = Backbone.View.extend({
 		_(model.toJSON()).each(function(v, k) {
 			// console.log("k=" + k + " v=" + v);
 			if (v == '')return ;
+			if (k == 'id') return;
 
 			if ($(self.el).find('[data-id=' + k + '][data-value='+v+']').length > 0) {
 				$(self.el).find('[data-id=' + k + '][data-value='+v+']').addClass('active');
