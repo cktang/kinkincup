@@ -117,12 +117,14 @@
 						     // to take an action after the data loads, use the $loaded() promise
 						     obj.$loaded().then(function() {
 						        console.log("loaded record:", obj.$id);
+
+						       	if (!$scope.event.chats) $scope.event.chats = [];
 						        $scope.chats = obj.chats;
 						     });
 
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
-
+ 
 						     $scope.goto = function(page, id) {
 								var url = page + "?id=" + id;
 								try {
@@ -133,8 +135,6 @@
 						     };
 
 						     $scope.newChat = function(text) {
-						     	if (!$scope.event.chats) $scope.event.chats = [];
-
 						     	$scope.event.chats.push({
 						     		user: $scope.local.user.$id,
 						     		ts: new Date().toString(),
