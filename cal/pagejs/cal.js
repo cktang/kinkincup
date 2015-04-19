@@ -5,7 +5,7 @@ $(document).ready(function() {
 	items = new App.Items;
 
 	var init = function() {
-		localStorage['items'] = JSON.stringify(items);
+		// localStorage['items'] = JSON.stringify(items);
 
 		calView = new App.Calendar({ 
 			el: $('#cal'),
