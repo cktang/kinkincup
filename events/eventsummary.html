@@ -63,7 +63,8 @@
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
 		  		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
 		  				class="choice"
->					<span class="badge" ng-bind="_(topics.$getRecord(t).votes).groupBy()[c].length"></span>
+						ng-class="{'chosen': _(topics.$getRecord(t).votes).groupBy()[c].length == _(topics.$getRecord(t).votes).chain().groupBy().map(function(e) { return e.length; }).max().value() }">
+					<span class="badge" ng-bind="_(topics.$getRecord(t).votes).groupBy()[c].length"></span>
 			  		<small ng-bind="c"></small><Br>
 		  		</div>
 		  	</span>
