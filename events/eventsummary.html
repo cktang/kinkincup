@@ -50,9 +50,12 @@
 			}
 
 			.dashboard .new {
-				border: 5px dott
+				border: 5px dotted silver;
+			}
+
+			div.choice {
 				line-height: 1.6em;
-				text-indent: 10px;
+				padding:10px;
 				background-color: #ddd;
 			}
 
@@ -62,7 +65,8 @@
 		</style>
 
 		<div class="row dashboard">
-		  <div class="col-xs-6 link" >
+		  <div
+		  		class="col-xs-6" >
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> Participants <br></h4>
 		  		<div ng-repeat="u in event.users" class="choice">
