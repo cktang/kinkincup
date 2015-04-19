@@ -31,7 +31,7 @@ App.CalendarDetails = Backbone.View.extend({
 
 	render: function(model) {
 		$(this.el).addClass('active');
-		$(this.el).find('.active').toggle('touchstart').removeClass('active').show();
+		$(this.el).find('.active').removeClass('active').show();
 
 		if (!model) return;
 		var self = this;
