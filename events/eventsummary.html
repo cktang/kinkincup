@@ -133,7 +133,7 @@
 						     };
 
 						     $scope.newChat = function(text) {
-						     	$scope.event.chats = $scope.event.chats || [];
+						     	if (!$scope.event.chats) $scope.event.chats = [];
 
 						     	$scope.event.chats.push({
 						     		user: $scope.local.user.$id,
