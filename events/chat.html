@@ -36,8 +36,12 @@
 	<div ng-repeat="c in chats" 
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
 		<div class="btn"> 
-			<small style="margin-bottom:5px" ng-bind="c.ts"></small> <span ng-bind="users.$getRecord(c.user).name"></span>
+			<span ng-bind="users.$getRecord(c.user).name"></span>
 			<br>
+			
+			<small style="margin-bottom:5px" ng-bind="c.ts"></small>
+			<br>
+
 			<span ng-bind="c.text"></span>
 		</div>
 	</div>
