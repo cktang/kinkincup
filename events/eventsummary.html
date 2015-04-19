@@ -62,11 +62,14 @@
 			.bold {
 				font-weight: bold;
 			}
+
+			div.topic {
+				margin-bottom: 10px;
+			}
 		</style>
 
 		<div class="row dashboard">
-		  <div
-		  		class="col-xs-6" >
+		  <div class="col-xs-6 topic" >
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> Participants <br></h4>
 		  		<div ng-repeat="u in event.users" class="choice">
@@ -76,7 +79,7 @@
 		  </div>
 
 		  <div 	ng-repeat="t in event.topics" 
-		  		class="col-xs-6 link" 
+		  		class="col-xs-6 link topic" 
 		  		ng-click="goto('eventtopic.html', t)">
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
