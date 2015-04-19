@@ -130,6 +130,16 @@
 		  							$window.location.href = url;
 	  							}
 						     };
+
+						     $scope.newChat = function(text) {
+						     	$scope.event.chats = $scope.event.chats || [];
+
+						     	$scope.event.chats.push({
+						     		user: $scope.local.user.$id,
+						     		ts: new Date().toString(),
+						     		text: text
+						     	})
+						     }
 						}
 					);
 	</script>
