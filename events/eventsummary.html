@@ -40,28 +40,8 @@
 				margin:10px;
 			}
 
-			.dashboard .icon {
-				position:absolute;
-				left: 5px;
-				opacity: 0.3;
-			}
-
-			.dashboard .col-xs-10 {
-				 width:332px;
-			}
-
 			.dashboard .main {
 				line-height:75px;
-			}
-
-			.dashboard .badge {
-				vertical-align: super;
-			}
-
-			.dashboard .sub {
-				float:right;
-				width:30%;
-				font-size: 12px;
 			}
 
 			.dashboard .sub .badge {
@@ -70,19 +50,19 @@
 			}
 
 			.dashboard .new {
-				border: 5px dotted silver;
-			}
-
-			div.choice {
+				border: 5px dott
 				line-height: 1.6em;
 				text-indent: 10px;
 				background-color: #ddd;
 			}
+
+			.bold {
+				font-weight: bold;
+			}
 		</style>
 
 		<div class="row dashboard">
-		  <div
-		  		class="col-xs-6" >
+		  <div class="col-xs-6 link" >
 		  	<span class="main"> 
 		  		<h4 style="margin-bottom:5px"> Participants <br></h4>
 		  		<div ng-repeat="u in event.users" class="choice">
