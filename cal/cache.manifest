@@ -5,7 +5,7 @@ js/backbone-min.js
 js/firebase.js
 js/backbone-firebase.js
 js/handlebars.min.js
-js/jsonjs
+js/json2.js
 js/backbonemodel.js
 js/models/calmodels.js
 js/backbone-listeners.js
