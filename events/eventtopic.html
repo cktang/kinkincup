@@ -136,6 +136,7 @@
 
 						     $scope.$watch('chats', function(newValue, oldValue) {
 						     	if (newValue == null) return;
+						     	if (!$scope.topic) return;
 						     	$scope.topic.chats = $scope.chats;
 						     }, true);
 						    //chat related
