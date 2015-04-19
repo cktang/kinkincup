@@ -126,6 +126,7 @@
 						     };
 
 						     $scope.newChat = function(text) {
+						     	$scope.topic.chats = $scope.topics.chats || [];
 						     	$scope.topic.chats.push({
 						     		user: $scope.local.user.$id,
 						     		ts: new Date().toString(),
