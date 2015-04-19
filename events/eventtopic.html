@@ -100,7 +100,6 @@
 							}; 
 
 							$scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-							$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $scope.getParam('id') + "/chats"));
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 						    $scope.local = $localStorage;		
 
@@ -139,7 +138,7 @@
 						     	if (!$scope.topic) return;
 						     	$scope.topic.chats = $scope.chats;
 						     }, true);
-						    //chat related
+						    //chat related	
 
 						}
 					);
