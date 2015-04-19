@@ -118,8 +118,7 @@
 						     obj.$loaded().then(function() {
 						        console.log("loaded record:", obj.$id);
 
-						       	if (!$scope.event.chats) $scope.event.chats = [];
-						        $scope.chats = obj.chats;
+						        if (obj.chats) $scope.chats = obj.chats;
 						     });
 
 						     // For three-way data bindings, bind it to the scope instead
@@ -134,13 +133,20 @@
 	  							}
 						     };
 
-						     $scope.newChat = function(text) {
-						     	$scope.event.chats.push({
+						     $scope.newChat = function(text) { 
+						     	if (!$scope.chats) $scope.chats = [];
+
+						     	$scope.chats.push({
 						     		user: $scope.local.user.$id,
 						     		ts: new Date().toString(),
 						     		text: text
-						     	})
+						     	});
 						     }
+
+						     $scope.$watch('chats', function () { 
+						     	$scope.event.chats = $scope.chats;
+						     }, true);
+
 						}
 					);
 	</script>
