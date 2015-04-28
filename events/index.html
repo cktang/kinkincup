@@ -24,12 +24,12 @@
 </head>
 
 <body ontouchstart="">
-	<div class="ng-view">
+	<ng-view>
 		<div class="headerplaceholder" ng-include="'header.html'"></div>
 		<div class="footerplaceholder" ng-include="'footer.html'"></div>
 
 		<div class="container" ng-cloak class="ng-cloak"></div>
-	</div>
+	</ng-view>
 
 	<script>
 		var app = angular
