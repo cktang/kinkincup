@@ -34,6 +34,7 @@
 	<script>
 		var app = angular
 					.module('app', ["ngRoute", "firebase", "ui.bootstrap", "ngStorage"])
+		  			
 		  			.config(['$routeProvider', function($routeProvider) {
 					    $routeProvider.
 							when('/login', {
@@ -43,27 +44,20 @@
 							otherwise({
 								redirectTo: '/login'
 							});
-					}]);
-
+					}])
 					
-	app.controller("LoginController", 
-		function($scope, $firebaseArray, $window, $localStorage) {
-		    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+					.run(function($rootScope, $location) {
+					    $rootScope.login = function(user) {
+					    	$localStorage.user = user;
+					    	$location.path("myevents");
+					    };
+					})
 
-		    $scope.login = function(user) {
-		    	$localStorage.user = user;
-		    	$scope.goto("myevents.html");
-		    };
-
-			$scope.goto = function(url) {
-				try {
-					linkEvent(url);
-				} catch (e) {
-					$window.location.href = url;
-				}
-			}
-		}
-	);
+					.controller("LoginController", 
+						function($scope, $firebaseArray, $window, $localStorage) {
+						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+						}
+					);
 	</script>
 </body>
 </html>
