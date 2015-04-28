@@ -1,0 +1,33 @@
+
+<h3><img src="img/election.png" style="margin-top:-8px"/> Event HK </h3>
+
+<hr/>
+<h4> Signup </h4>
+<button class="btn btn-block btn-primary"> Facebook </button>
+<button class="btn btn-block btn-danger"> Google </button>
+
+<hr/>
+<h4> Login </h4>
+
+<button ng-repeat="u in users" class="btn btn-block" ng-bind="u.name" ng-click="login(u)"></button>
+
+<script>
+	app.controller("LoginController", 
+		function($scope, $firebaseArray, $window, $localStorage) {
+		    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+
+		    $scope.login = function(user) {
+		    	$localStorage.user = user;
+		    	$scope.goto("myevents.html");
+		    };
+
+			$scope.goto = function(url) {
+				try {
+					linkEvent(url);
+				} catch (e) {
+						$window.location.href = url;
+				}
+			}
+		}
+	]);
+</script>
