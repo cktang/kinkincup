@@ -46,7 +46,7 @@
 							});
 					}])
 					
-					.run(function($rootScope, $location) {
+					.run(function($rootScope, $location, $localStorage) {
 					    $rootScope.login = function(user) {
 					    	$localStorage.user = user;
 					    	$location.path("myevents");
@@ -54,7 +54,7 @@
 					})
 
 					.controller("LoginController", 
-						function($scope, $firebaseArray, $window, $localStorage) {
+						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 						}
 					);
