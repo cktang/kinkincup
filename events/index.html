@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
@@ -14,7 +15,9 @@
 	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
-    <script src="js/ngStorage.js"></script>
+    <script src="js/ngStorage.js"></script>	
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
 
 	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
@@ -27,13 +30,12 @@
 	<ng-view>
 		<div class="headerplaceholder" ng-include="'header.html'"></div>
 		<div class="footerplaceholder" ng-include="'footer.html'"></div>
-
 		<div class="container" ng-cloak class="ng-cloak"></div>
 	</ng-view>
 
 	<script>
 		var app = angular
-					.module('app', ["ngRoute", "firebase", "ui.bootstrap", "ngStorage"])
+					.module('app', ["ngRoute", "firebase", "ui.bootstrap", "ngStorage", 'angular-underscore'])
 		  			
 		  			.config(['$routeProvider', function($routeProvider) {
 					    $routeProvider.
@@ -41,12 +43,24 @@
 								templateUrl: 'templates/login.html',
 								controller: 'LoginController'
 							}).
+							when('/myevents', {
+								templateUrl: 'templates/myevents.html',
+								controller: 'MyEventsController'
+							}).
 							otherwise({
 								redirectTo: '/login' 
 							});
 					}])
 					
 					.run(function($rootScope, $location, $localStorage) {
+						$rootScope.goto = function(url) {
+							try {
+	  							linkEvent(url);
+							} catch (e) {
+	  							$location.path(url);
+  							}
+  						}
+
 					    $rootScope.login = function(user) {
 					    	$localStorage.user = user;
 					    	$location.path("myevents");
@@ -56,6 +70,16 @@
 					.controller("LoginController", 
 						function($scope, $firebaseArray, $window) {
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+						}
+					)
+
+					.controller("MyEventsController", 
+						function($scope, $firebaseArray, $window, $localStorage) {
+						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+						    $scope.local = $localStorage;
+
+						    
+
 						}
 					);
 	</script>
