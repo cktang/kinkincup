@@ -44,6 +44,26 @@
 								redirectTo: '/login'
 							});
 					}]);
+
+					
+	app.controller("LoginController", 
+		function($scope, $firebaseArray, $window, $localStorage) {
+		    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+
+		    $scope.login = function(user) {
+		    	$localStorage.user = user;
+		    	$scope.goto("myevents.html");
+		    };
+
+			$scope.goto = function(url) {
+				try {
+					linkEvent(url);
+				} catch (e) {
+					$window.location.href = url;
+				}
+			}
+		}
+	);
 	</script>
 </body>
 </html>
