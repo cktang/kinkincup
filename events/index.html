@@ -29,9 +29,7 @@
 <body ontouchstart="">
 	<div class="headerplaceholder" ng-include="'header.html'"></div>
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
-	<ng-view>
-		<div class="container" ng-cloak class="ng-cloak"></div>
-	</ng-view>
+	<div class="container ng-view"></div>
 
 	<script>
 		var app = angular
@@ -78,7 +76,7 @@
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 						    $scope.local = $localStorage;
 
-						    
+
 
 						}
 					);
