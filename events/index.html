@@ -23,11 +23,13 @@
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
 
-<body ontouchstart="" class="ng-view">
-	<div class="headerplaceholder" ng-include="'header.html'"></div>
-	<div class="footerplaceholder" ng-include="'footer.html'"></div>
+<body ontouchstart="">
+	<div class="ng-view">
+		<div class="headerplaceholder" ng-include="'header.html'"></div>
+		<div class="footerplaceholder" ng-include="'footer.html'"></div>
 
-	<div class="container" ng-cloak class="ng-cloak"></div>
+		<div class="container" ng-cloak class="ng-cloak"></div>
+	</div>
 
 	<script>
 		var app = angular
