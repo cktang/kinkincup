@@ -1,0 +1,56 @@
+
+<h4 class="full title">{{event.name}} <small>{{event.description}}</small></h4>
+
+<style>
+	div.choice {
+		line-height: 1.4em;
+		padding: 2px 5px;
+		background-color: #eee;
+		font-weight: normal;
+	}
+
+	div.topic {
+		margin-bottom: 10px;
+	}
+
+	div.choice .badge {
+		font-weight: normal !important;
+	}
+
+	div.choice.chosen {
+		font-weight: bold !important;
+		background-color: #ccc;
+	}
+</style>
+
+<h5 class="full subtitle">Topics</h5>
+
+<div class="row dashboard">
+  <div class="col-xs-6 topic" >
+  	<span class="main"> 
+  		<h4 style="margin-bottom:5px"> Participants <br></h4>
+  		<div ng-repeat="u in event.users" class="choice">
+	  		<small ng-bind="users.$getRecord(u).name"></small><Br>
+  		</div>
+  	</span>
+  </div>
+
+  <div 	ng-repeat="t in event.topics" 
+  		class="col-xs-6 link topic" 
+  		ng-click="goto('eventtopic.html', t)">
+  	<span class="main"> 
+  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
+  		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
+  				class="choice"
+				ng-class="{ 'chosen': getVote(t, c) ==  maxVotes(t) }">
+			<span class="badge" ng-bind="getVote(t, c)"></span>
+	  		<small ng-bind="c"></small><Br>
+  		</div>
+  	</span>
+  </div>
+</div>
+
+<div style="clear:both"></div>
+
+<h5 class="full subtitle">Chat</h5>
+<div class="chatbox" ng-include="'chat.html'"></div>

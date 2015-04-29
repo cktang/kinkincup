@@ -66,6 +66,13 @@
 					    	$localStorage.user = user;
 					    	$location.path("myevents");
 					    };
+
+  						$rootScope.getParam = function(name) {
+						    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+						    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+						    results = regex.exec($window.location.search);
+						    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+						};
 					})
 
 					.controller("LoginController", 
@@ -79,6 +86,55 @@
 						function($scope, $firebaseArray, $window, $localStorage) {
 							console.log('myEvents::start');
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+						}
+					)
+
+					.controller("controller",
+						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
+						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
+						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+						    $scope.local = $localStorage;	
+
+							$scope.getVote = function(topicId, choice) {
+								try {
+									return _($scope.topics.$getRecord(topicId).votes).groupBy()[choice].length;
+								} catch(e) { return 0;  }
+							};
+
+							$scope.maxVotes = function(topicId) {
+								return _($scope.topics.$getRecord(topicId).votes)
+									.chain()
+									.groupBy()
+									.map(function(e) { return e.length; })
+									.max()
+									.value();
+							};
+
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id')));
+
+						     // For three-way data bindings, bind it to the scope instead
+						     obj.$bindTo($scope, "event"); 
+
+						    //chat related
+						     obj.$loaded().then(function() {
+						        if (obj.chats) $scope.chats = obj.chats;
+						     });
+
+						     $scope.newChat = function(text) { 
+						     	if (!$scope.chats) $scope.chats = [];
+
+						     	$scope.chats.push({
+						     		user: $scope.local.user.$id,
+						     		ts: new Date().toString(),
+						     		text: text
+						     	});
+						     }
+
+						     $scope.$watch('chats', function(newValue, oldValue) {
+						     	if (newValue == null) return;
+						     	$scope.event.chats = $scope.chats;
+						     }, true);
+						    //chat related
 						}
 					);
 	</script>
