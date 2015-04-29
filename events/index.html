@@ -50,7 +50,7 @@
 							});
 					}])
 					
-					.run(function($rootScope, $location, $localStorage) {
+					.run(function($rootScope, $location, $localStorage, $firebaseArray) {
 						console.log('rootScope::start');
 					    $rootScope.local = $localStorage;
 					    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
@@ -79,7 +79,7 @@
 					})
 
 					.controller("EmptyController", 
-						function($scope, $firebaseArray, $window) { }
+						function() { }
 					)
 
 					.controller("controller",
