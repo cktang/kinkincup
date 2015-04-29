@@ -40,10 +40,10 @@
 							when('/login', {
 								templateUrl: 'templates/login.html'
 							}).
-							when('/myevents', {
+							when('/myEvents', {
 								templateUrl: 'templates/myevents.html'
 							}).
-							when('/myevents', {
+							when('/eventSummary/:eventId', {
 								templateUrl: 'templates/myevents.html',
 								controller: 'eventSummaryController'
 							}).
@@ -69,7 +69,7 @@
 
 					    $rootScope.login = function(user) {
 					    	$localStorage.user = user;
-					    	$location.path("myevents");
+					    	$location.path("myEvents");
 					    };
 
   						$rootScope.getParam = function(name) {
@@ -81,7 +81,7 @@
 					})
 
 					.controller("eventSummaryController",
-						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 
 							$scope.getVote = function(topicId, choice) {
 								try {
@@ -98,7 +98,7 @@
 									.value();
 							};
 
-						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $scope.getParam('id')));
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.eventId));
 
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
