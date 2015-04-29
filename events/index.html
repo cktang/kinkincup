@@ -63,9 +63,9 @@
 					    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
-					    $rootScope.newChat = function(text) {
+					    $rootScope.newChat = function(chats, text) {
 					     	try {
-						     	$scope.chats.push({
+						     	chats.$add({
 						     		user: $scope.local.user.$id,
 						     		ts: new Date().toString(),
 						     		text: text
