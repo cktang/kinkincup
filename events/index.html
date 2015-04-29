@@ -48,7 +48,11 @@
 								templateUrl: 'templates/main.html'
 							})
 							.when('/myEvents', {
-								templateUrl: 'templates/myevents.html'
+								templateUrl: 'templates/myevents.html',
+								controller: 'newEventController'
+							})
+							.when('/newEvent', {
+								templateUrl: 'templates/newevent.html'
 							})
 							.when('/eventSummary/:id', {
 								templateUrl: 'templates/eventsummary.html',
@@ -125,6 +129,83 @@
 						    obj.$bindTo($scope, "topic"); 
 
 						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id + "/chats"));
+						}
+					)
+
+					.controller("newEventController", 
+						function($scope, $firebaseArray, $window) {
+							$scope.times = [];
+							$scope.venues = [];
+
+							$scope.newTopics = {};
+
+							var count = 1;
+
+							$scope.addEvent = function() {
+								if (!$scope.newEvent || !$scope.newEvent.name || !$scope.newEvent.description) {
+									alert('fill in name and description');
+									return;
+								}
+
+								//add users
+								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).pluck('$id').value();
+								// $scope.newEvent.topics = $scope._($scope.newTopics).chain().filter({ selected: true }).pluck('$id').value();
+
+								$scope.events.$add($scope.newEvent).then(function(ref) {
+									$scope.newEvent = $scope.events.$getRecord(ref.key());
+									$scope.saveTopics(ref.key());									
+								});
+							};
+
+							$scope.saveTopics = function(id) {
+								console.log('save topics');
+
+								$scope.newTopicIds = [];
+
+								_($scope.newTopics).each(function(topic) {
+									topic.event = id;
+
+									$scope.topics.$add(topic).then(function(ref) {
+										$scope.newTopicIds.push(ref.key());
+
+										if ($scope.newTopicIds.length == _($scope.newTopics).values().length) {
+											$scope.updateEvent();
+										}
+									});
+								});
+							};
+
+							$scope.updateEvent = function() {
+								console.log('update event');
+								$scope.newEvent.topics = $scope.newTopicIds;
+								$scope.events.$save($scope.newEvent).then(function() {
+									$scope.goto("eventSummary/" + $scope.newEvent.$id);
+								});
+							}
+
+							$scope.openTopic = function(id) {
+								if (id == 'newTopic') {
+									id = 'newTopic ' + count++;
+								}
+
+								$scope.currentTopic = $scope.newTopics[id];
+								$scope.currentTopic = $scope.currentTopic || { id:id, name:id, decision:"NOT_DECIDED" };
+								$scope.topicId = id;
+								$('#form5').modal();
+							};
+
+							$scope.saveTopic = function(id) {
+								$scope.newTopics[$scope.topicId] = $scope.currentTopic;
+								$('#form5').modal('hide');
+							};
+
+							$scope.openParticipants = function() {
+								$('#form4').modal();
+							};
+
+							$scope.openEvent = function() {
+								$('#form1').modal();
+							};
 						}
 					);
 	</script>
