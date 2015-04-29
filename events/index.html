@@ -63,16 +63,6 @@
 					    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
-					    $rootScope.newChat = function(chats, text) {
-					     	try {
-						     	chats.$add({
-						     		user: $scope.local.user.$id,
-						     		ts: new Date().toString(),
-						     		text: text
-						     	});				     		
-					     	} catch (e) { console.error(e); }
-					    };
-
 						$rootScope.goto = function(url) {
 							try {
 	  							linkEvent(url);
@@ -99,7 +89,7 @@
 							     	});				     		
 						     	} catch (e) { console.error(e); }
 						    };
-					    
+
 							$scope.getVote = function(topicId, choice) {
 								try {
 									return _($scope.topics.$getRecord(topicId).votes).groupBy()[choice].length;
@@ -130,6 +120,16 @@
 
 						    var c = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id + "/chats"));
 						    c.$bindTo($scope, "chats"); 
+
+						    $scope.newChat = function(chats, text) {
+						     	try {
+							     	chats.$add({
+							     		user: $scope.local.user.$id,
+							     		ts: new Date().toString(),
+							     		text: text
+							     	});				     		
+						     	} catch (e) { console.error(e); }
+						    };
 						}
 					);
 	</script>
