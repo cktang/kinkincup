@@ -38,12 +38,14 @@
 		  			.config(['$routeProvider', function($routeProvider) {
 					    $routeProvider.
 							when('/login', {
-								templateUrl: 'templates/login.html',
-								controller: 'EmptyController'
+								templateUrl: 'templates/login.html'
+							}).
+							when('/myevents', {
+								templateUrl: 'templates/myevents.html'
 							}).
 							when('/myevents', {
 								templateUrl: 'templates/myevents.html',
-								controller: 'EmptyController'
+								controller: 'eventSummaryController'
 							}).
 							otherwise({
 								redirectTo: '/login' 
@@ -78,11 +80,7 @@
 						};
 					})
 
-					.controller("EmptyController", 
-						function() { }
-					)
-
-					.controller("controller",
+					.controller("eventSummaryController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
 
 							$scope.getVote = function(topicId, choice) {
