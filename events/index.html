@@ -43,8 +43,8 @@
 							.when('/myEvents', {
 								templateUrl: 'templates/myevents.html'
 							})
-							.when('/eventSummary/:param', {
-								templateUrl: 'templates/myevents.html',
+							.when('/eventSummary/:eventId', {
+								templateUrl: 'templates/eventsummary.html',
 								controller: 'eventSummaryController'
 							})
 							.otherwise({
