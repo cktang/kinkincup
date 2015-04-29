@@ -52,6 +52,7 @@
 					
 					.run(function($rootScope, $location, $localStorage) {
 						console.log('rootScope::start');
+					    $scope.local = $localStorage;
 
 						$rootScope.goto = function(url) {
 							try {
@@ -70,18 +71,14 @@
 					.controller("LoginController", 
 						function($scope, $firebaseArray, $window) {
 							console.log('login::start');
-
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 						}
 					)
 
 					.controller("MyEventsController", 
 						function($scope, $firebaseArray, $window, $localStorage) {
+							console.log('myEvents::start');
 						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-						    $scope.local = $localStorage;
-
-
-
 						}
 					);
 	</script>
