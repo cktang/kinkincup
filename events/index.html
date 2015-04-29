@@ -65,8 +65,8 @@
 
 					    $rootScope.newChat = function(text) {
 					     	try {
-						     	this.chats.$add({
-						     		user: $scope.local.user.$id,
+						     	chats.$add({
+						     		user: local.user.$id,
 						     		ts: new Date().toString(),
 						     		text: text
 						     	});				     		
