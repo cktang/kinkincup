@@ -51,6 +51,8 @@
 					}])
 					
 					.run(function($rootScope, $location, $localStorage) {
+						console.log('rootScope::start');
+
 						$rootScope.goto = function(url) {
 							try {
 	  							linkEvent(url);
@@ -67,6 +69,8 @@
 
 					.controller("LoginController", 
 						function($scope, $firebaseArray, $window) {
+							console.log('login::start');
+
 						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 						}
 					)
