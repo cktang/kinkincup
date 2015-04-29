@@ -1,0 +1,56 @@
+<style>
+	h5 {
+		margin-top: 20px;
+	}
+
+	.choices > .btn {
+		height: 3em;
+		margin-top: 0px;
+		font-size: 16px;
+		line-height: 2em;
+		text-align: center;
+		position:relative;
+		border-radius: 0px;
+	}
+
+	.choices .glyphicon-ok {
+		color: transparent;
+		position: absolute;
+		right: 5%;
+		top: 30%;
+	}
+
+	.choices .badge {
+		position: absolute;
+		left: 5%;
+		top: 30%;
+	}
+
+	.choices .btn-success .glyphicon-ok {
+		color: white;
+	}
+</style>
+
+<h4 class="full title"> 
+	<small class="link" ng-click="goto('eventsummary.html', events.$getRecord(topic.event).$id)"> {{events.$getRecord(topic.event).name}} </small>
+	> 
+	{{topic.name}}
+</h4>
+
+<h5 class="full" ng-bind="topic.description"></h5>
+
+<h5 class="full subtitle"> Vote </h5>
+<h6 class="choices full">
+	<div ng-repeat="c in topic.choices"
+		class="btn btn-block btn-default"
+		ng-class="{'btn-success': topic.votes[local.user.$id] == c}"
+		ng-click="topic.votes[local.user.$id] = c"> 
+		<span class="badge" ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length"></span>
+		<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
+		<span ng-bind="c"></span>
+	</div> 
+</h6>
+
+<h5 class="full subtitle"> Chat </h5>
+<div class="chatbox" ng-include="'chat.html'"></div>
+

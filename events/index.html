@@ -43,9 +43,13 @@
 							.when('/myEvents', {
 								templateUrl: 'templates/myevents.html'
 							})
-							.when('/eventSummary/:eventId', {
+							.when('/eventSummary/:id', {
 								templateUrl: 'templates/eventsummary.html',
 								controller: 'eventSummaryController'
+							})
+							.when('/eventTopic/:id', {
+								templateUrl: 'templates/eventsummary.html',
+								controller: 'eventTopicController'
 							})
 							.otherwise({
 								redirectTo: '/login' 
@@ -71,13 +75,6 @@
 					    	$localStorage.user = user;
 					    	$location.path("myEvents");
 					    };
-
-  						$rootScope.getParam = function(name) {
-						    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-						    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-						    results = regex.exec($window.location.search);
-						    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-						};
 					})
 
 					.controller("eventSummaryController",
@@ -98,7 +95,7 @@
 									.value();
 							};
 
-						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.eventId));
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 
 						     // For three-way data bindings, bind it to the scope instead
 						     obj.$bindTo($scope, "event"); 
@@ -123,6 +120,38 @@
 						     	$scope.event.chats = $scope.chats;
 						     }, true);
 						    //chat related
+						}
+					)
+
+					.controller("eventTopicController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
+
+						     // For three-way data bindings, bind it to the scope instead
+						     obj.$bindTo($scope, "topic"); 
+
+						    //chat related
+						     obj.$loaded().then(function() {
+						        if (obj.chats) $scope.chats = obj.chats;
+						     });
+
+						     $scope.newChat = function(text) {
+						     	if (!$scope.chats) $scope.chats = [];
+
+						     	$scope.chats.push({
+						     		user: $scope.local.user.$id,
+						     		ts: new Date().toString(),
+						     		text: text
+						     	})
+						     }
+
+						     $scope.$watch('chats', function(newValue, oldValue) {
+						     	if (newValue == null) return;
+						     	if (!$scope.topic) return;
+						     	$scope.topic.chats = $scope.chats;
+						     }, true);
+						    //chat related	
+
 						}
 					);
 	</script>
