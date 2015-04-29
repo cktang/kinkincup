@@ -63,6 +63,16 @@
 					    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
+					    $rootScope.newChat = function(text) {
+					     	try {
+						     	$scope.chats.push({
+						     		user: $scope.local.user.$id,
+						     		ts: new Date().toString(),
+						     		text: text
+						     	});				     		
+					     	} catch (e) { console.error(e); }
+					    };
+
 						$rootScope.goto = function(url) {
 							try {
 	  							linkEvent(url);
@@ -96,62 +106,20 @@
 							};
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
+						    obj.$bindTo($scope, "event"); 
 
-						     // For three-way data bindings, bind it to the scope instead
-						     obj.$bindTo($scope, "event"); 
-
-						    //chat related
-						     obj.$loaded().then(function() {
-						        if (obj.chats) $scope.chats = obj.chats;
-						     });
-
-						     $scope.newChat = function(text) { 
-						     	if (!$scope.chats) $scope.chats = [];
-
-						     	$scope.chats.push({
-						     		user: $scope.local.user.$id,
-						     		ts: new Date().toString(),
-						     		text: text
-						     	});
-						     }
-
-						     $scope.$watch('chats', function(newValue, oldValue) {
-						     	if (newValue == null) return;
-						     	$scope.event.chats = $scope.chats;
-						     }, true);
-						    //chat related
+						    var c = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/chats"));
+						    c.$bindTo($scope, "chats"); 
 						}
 					)
 
 					.controller("eventTopicController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
+						    obj.$bindTo($scope, "topic"); 
 
-						     // For three-way data bindings, bind it to the scope instead
-						     obj.$bindTo($scope, "topic"); 
-
-						    //chat related
-						     obj.$loaded().then(function() {
-						        if (obj.chats) $scope.chats = obj.chats;
-						     });
-
-						     $scope.newChat = function(text) {
-						     	if (!$scope.chats) $scope.chats = [];
-
-						     	$scope.chats.push({
-						     		user: $scope.local.user.$id,
-						     		ts: new Date().toString(),
-						     		text: text
-						     	})
-						     }
-
-						     $scope.$watch('chats', function(newValue, oldValue) {
-						     	if (newValue == null) return;
-						     	if (!$scope.topic) return;
-						     	$scope.topic.chats = $scope.chats;
-						     }, true);
-						    //chat related	
-
+						    var c = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id + "/chats"));
+						    c.$bindTo($scope, "chats"); 
 						}
 					);
 	</script>
