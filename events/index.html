@@ -82,7 +82,7 @@
 
 						    $scope.newChat = function(text) {
 						     	try {
-							     	$scope.chats.$add({
+							     	$scope.chats.push({
 							     		user: $scope.local.user.$id,
 							     		ts: new Date().toString(),
 							     		text: text
