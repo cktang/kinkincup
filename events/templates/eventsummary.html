@@ -37,7 +37,7 @@
 
   <div 	ng-repeat="t in event.topics" 
   		class="col-xs-6 link topic" 
-  		ng-click="goto('eventtopic.html', t)">
+  		ng-click="goto('eventTopic/' + t)">
   	<span class="main"> 
   		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
   		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
