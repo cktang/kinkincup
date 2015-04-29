@@ -36,18 +36,18 @@
 					.module('app', ["ngRoute", "firebase", "ui.bootstrap", "ngStorage", 'angular-underscore'])
 		  			
 		  			.config(['$routeProvider', function($routeProvider) {
-					    $routeProvider.
-							when('/login', {
+					    $routeProvider
+							.when('/login', {
 								templateUrl: 'templates/login.html'
-							}).
-							when('/myEvents', {
+							})
+							.when('/myEvents', {
 								templateUrl: 'templates/myevents.html'
-							}).
-							when('/eventSummary/:eventId', {
+							})
+							.when('/eventSummary/:param', {
 								templateUrl: 'templates/myevents.html',
 								controller: 'eventSummaryController'
-							}).
-							otherwise({
+							})
+							.otherwise({
 								redirectTo: '/login' 
 							});
 					}])
