@@ -39,11 +39,11 @@
 					    $routeProvider.
 							when('/login', {
 								templateUrl: 'templates/login.html',
-								controller: 'LoginController'
+								controller: 'EmptyController'
 							}).
 							when('/myevents', {
 								templateUrl: 'templates/myevents.html',
-								controller: 'MyEventsController'
+								controller: 'EmptyController'
 							}).
 							otherwise({
 								redirectTo: '/login' 
@@ -53,6 +53,9 @@
 					.run(function($rootScope, $location, $localStorage) {
 						console.log('rootScope::start');
 					    $rootScope.local = $localStorage;
+					    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
+					    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 
 						$rootScope.goto = function(url) {
 							try {
@@ -75,25 +78,12 @@
 						};
 					})
 
-					.controller("LoginController", 
-						function($scope, $firebaseArray, $window) {
-							console.log('login::start');
-						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
-						}
-					)
-
-					.controller("MyEventsController", 
-						function($scope, $firebaseArray, $window, $localStorage) {
-							console.log('myEvents::start');
-						    $scope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-						}
+					.controller("EmptyController", 
+						function($scope, $firebaseArray, $window) { }
 					)
 
 					.controller("controller",
 						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
-						    $scope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
-						    $scope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
-						    $scope.local = $localStorage;	
 
 							$scope.getVote = function(topicId, choice) {
 								try {
