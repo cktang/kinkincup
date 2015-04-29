@@ -82,7 +82,8 @@
 
 						    $scope.newChat = function(text) {
 						     	try {
-							     	$scope.chats.push({
+							     	$scope.chats.$value = $scope.chats.$value || [];
+							     	$scope.chats.$value.push({
 							     		user: $scope.local.user.$id,
 							     		ts: new Date().toString(),
 							     		text: text
