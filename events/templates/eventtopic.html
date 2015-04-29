@@ -32,7 +32,7 @@
 </style>
 
 <h4 class="full title"> 
-	<small class="link" ng-click="goto('eventsummary.html', events.$getRecord(topic.event).$id)"> {{events.$getRecord(topic.event).name}} </small>
+	<small class="link" ng-click="goto('eventSummary/' + events.$getRecord(topic.event).$id)"> {{events.$getRecord(topic.event).name}} </small>
 	> 
 	{{topic.name}}
 </h4>
