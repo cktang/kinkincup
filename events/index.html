@@ -124,7 +124,7 @@
 					)
 
 					.controller("eventTopicController",
-						function($scope, $firebaseObject, $firebaseArray, $window, $localStorage) {
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
 
 						     // For three-way data bindings, bind it to the scope instead
