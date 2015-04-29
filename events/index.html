@@ -52,7 +52,7 @@
 					
 					.run(function($rootScope, $location, $localStorage) {
 						console.log('rootScope::start');
-					    $scope.local = $localStorage;
+					    $rootScope.local = $localStorage;
 
 						$rootScope.goto = function(url) {
 							try {
