@@ -44,13 +44,10 @@
 			<span ng-bind="c.text"></span>
 		</div>
 	</div>
+	<div style="height:3em; min-height:3em">&nbsp;</div>
 </div>
 
-<h6 ng-show="!chats || chats.length==0"> No Chat </h6>
- 
-<div style="height:3em; min-height:3em">&nbsp;</div>
-
-<div style="position:fixed; bottom:0px; width:100%; left:0px">
+<div style="position:fixed; bottom:0px; width:100%; left:0px" ng-show="showChats">
 <div class="container-fluid full">	
 	<div class="col-xs-10 link" style="padding:0px !important;">
 		<input style="padding:10px; width:100%" ng-model="newText"/>
