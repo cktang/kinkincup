@@ -26,7 +26,7 @@
 <h5 class="full subtitle">Topics</h5>
 
 <div class="row dashboard">
-  <div class="col-xs-10 topic" >
+  <div class="col-xs-12 topic" >
   	<span class="main"> 
   		<h4 style="margin-bottom:5px"> Participants <br></h4>
   		<div ng-repeat="u in event.users" class="choice">
@@ -36,7 +36,7 @@
   </div>
 
   <div 	ng-repeat="t in event.topics" 
-  		class="col-xs-10 link topic" 
+  		class="col-xs-12 link topic" 
   		ng-click="goto('eventTopic/' + t)">
   	<span class="main"> 
   		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
