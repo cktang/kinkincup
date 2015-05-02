@@ -39,8 +39,8 @@
 	}
 </style>
  
-<div class="full chats nga-default nga-slide-left-add nga-slide-left-remove" ng-show="showChats && chats && chats.length > 0">
-	<span class="glyphicon glyphicon-remove pull-right" style="position:absolute; right:0px; top:0px; padding:10px" aria-hidden="true" ng-click="showChats = false"></span>
+<div class="full chats nga-default nga-stagger nga-slide-left" ng-show="showChats && chats && chats.length > 0">
+	<span class="glyphicon glyphicon-remove pull-right" style="position:absolute; right:0px; top:10px; padding:10px" aria-hidden="true" ng-click="showChats = false"></span>
 
 	<div ng-repeat="c in chats"
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
