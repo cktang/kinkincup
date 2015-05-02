@@ -39,8 +39,10 @@
 	}
 </style>
  
-<div class="full chats nga-default nga-stagger nga-squash-left" ng-show="showChats && chats && chats.length > 0">
+<div class="full chats nga-default nga-stagger nga-squash-left" ng-show="showChats">
 	<span class="glyphicon glyphicon-remove pull-right" style="position:absolute; right:0px; top:10px; padding:10px" aria-hidden="true" ng-click="showChats = false"></span>
+
+	<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
 
 	<div ng-repeat="c in chats"
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
@@ -58,7 +60,7 @@
 </div>
 
 <div style="position:fixed; bottom:0px; width:100%; left:0px">
-<div class="container-fluid full" ng-show="showChats" class="nga-default nga-stagger nga-squash-left	">	
+<div class="container-fluid full" ng-show="showChats" class="nga-default nga-stagger nga-squash-left">	
 	<div class="col-xs-10 link" style="padding:0px !important;">
 		<input style="padding:10px; width:100%" ng-model="newText"/>
 	</div>
