@@ -30,7 +30,7 @@
 		padding: 3px;
 	}
 </style>
-
+ 
 <div class="full chats nga-default nga-slide-right-add nga-slide-right-remove" style="margin-bottom:10px; padding:5px" ng-show="showChats && chats && chats.length > 0">
 	<div ng-repeat="c in chats"
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
