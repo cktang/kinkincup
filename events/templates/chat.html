@@ -47,8 +47,10 @@
 
 	<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
 
+	<div class="btn" ng-if="chat.length > 5"> ... ... </div>
+
 	<div ng-repeat="c in chats"
-		ng-if="$index >= chats.length - 3"
+		ng-if="$index >= chats.length - 5"
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
 		<div class="btn"> 
 			<small ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></small>
