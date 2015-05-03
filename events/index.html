@@ -48,11 +48,11 @@
 								templateUrl: 'templates/main.html'
 							})
 							.when('/myEvents', {
-								templateUrl: 'templates/myevents.html',
-								controller: 'newEventController'
+								templateUrl: 'templates/myevents.html'
 							})
 							.when('/newEvent', {
-								templateUrl: 'templates/newevent.html'
+								templateUrl: 'templates/newevent.html',
+								controller: 'newEventController'
 							})
 							.when('/eventSummary/:id', {
 								templateUrl: 'templates/eventsummary.html',
@@ -136,9 +136,7 @@
 						function($scope, $firebaseArray, $window) {
 							$scope.times = [];
 							$scope.venues = [];
-
 							$scope.newTopics = {};
-
 							var count = 1;
 
 							$scope.addEvent = function() {
