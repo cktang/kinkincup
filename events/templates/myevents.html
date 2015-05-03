@@ -17,7 +17,7 @@
   	ng-click="goto('eventSummary/' + e.$id)" 
 	ng-if="_(e.users).contains(local.user.$id)" 
 	class="list-group-item link" style="background-color:#eee">
-	<small ng-bind="$index"></small>
+	<!-- <small ng-bind="$index"></small> -->
   	<h3 ng-bind="e.name"></h3>
   	<h6 ng-bind="e.description"></h6>
   </li>

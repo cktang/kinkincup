@@ -12,7 +12,8 @@
 
 	.chats .received, .chats .sent {
 		clear:both;
-		padding: 10px 0px; 
+		padding: 0px; 
+		margin: 10px;
 	}
 
 	.chats .received > div {
@@ -51,10 +52,8 @@
 		<div class="btn"> 
 			<small ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></small>
 			<br ng-hide="c.user==local.user.$id" />
-			
 			<small style="margin-bottom:5px" ng-bind="c.ts"></small>
 			<br>
-
 			<span ng-bind="c.text"></span>
 		</div>
 	</div>
