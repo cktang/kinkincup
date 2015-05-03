@@ -47,7 +47,7 @@
 
 	<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
 
-	<div class="btn" ng-if="chat.length > 5"> ... ... </div>
+	<div class="btn" ng-if="chats.length > 5"> ... ... </div>
 
 	<div ng-repeat="c in chats"
 		ng-if="$index >= chats.length - 5"
