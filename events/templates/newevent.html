@@ -20,10 +20,6 @@
 			opacity: 0.3;
 		}
 
-		.dashboard .col-xs-10 {
-			 width:332px
-		}
-
 		.dashboard .main {
 			line-height: 50px;
 		}
@@ -75,14 +71,14 @@
 	</style>
 
 	<div class="row dashboard">
-      	<div class="col-xs-10 btn" modal="form1" 
+      	<div class="col-xs-12 btn" modal="form1" 
       		ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
       		{{newEvent.name || 'Event Name ???'}}
 			<Br>
 			<small>{{newEvent.description || 'Event Description ???'}}</small>
 		</div>
 
-	  <div class="col-xs-10 btn" 
+	  <div class="col-xs-12 btn" 
 	  	ng-class="{good: newTopics['time'], bad: !newTopics['time']}" 
 	  	ng-click="openTopic('time')">
 	  	<span class="icon"><img src="img/calendar.png"/></span>
@@ -93,7 +89,7 @@
 	  		</div>
 	  	</span>
 	  </div>
-	  <div class="col-xs-10 btn" 
+	  <div class="col-xs-12 btn" 
 	  	ng-class="{good: newTopics['venue'], bad: !newTopics['venue']}" 
 	  	ng-click="openTopic('venue')">
 	  	<span class="icon"><img src="img/location.png"/></span>
@@ -104,7 +100,7 @@
 	  		</div>
 	  	</span>
 	  </div>
-	  <div class="col-xs-10 btn" 
+	  <div class="col-xs-12 btn" 
 	  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" 
 	  	ng-click="openParticipants()">
 	  	<span class="icon"><img src="img/running.png"/></span>
@@ -117,7 +113,7 @@
 	  </div>
 
 	  <div 	ng-repeat="t in newTopics" 
-	  		class="good col-xs-10 btn" 
+	  		class="good col-xs-12 btn" 
 	  		ng-hide="{{t.id=='venue' || t.id=='time'}}"
 	  		ng-click="openTopic(t.name)">
 	  	<span ng-bind="t.name" class="topicName"></span>
@@ -128,7 +124,7 @@
 	  	</span>
 	  </div>
 
-	  <div class="col-xs-10 btn new" ng-click="openTopic('newTopic')">
+	  <div class="col-xs-12 btn new" ng-click="openTopic('newTopic')">
 	  	<span class="main"> Gift?? Reminder??? Travel Tips?? </span>
 	  </div>
 	</div>
