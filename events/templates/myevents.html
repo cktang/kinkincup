@@ -12,7 +12,7 @@
 	}
 </style>
 
-	<ul class="list-group">
+<ul class="list-group">
   <li ng-repeat="e in events" 
   	ng-click="goto('eventSummary/' + e.$id)" 
 	ng-show="_(e.users).contains(local.user.$id)" 
