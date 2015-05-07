@@ -1,14 +1,11 @@
 
-<h4 class="full title">{{event.name}} <small>{{event.description}}</small></h4>
+<div class="ui header">
+	{{event.name}} 
+	<div class="ui sub header">{{event.description}}</div>
+	<div class="ui divider"></div>
+</div>
 
 <style>
-	div.choice {
-		line-height: 1.4em;
-		padding: 2px 5px;
-		background-color: #eee;
-		font-weight: normal;
-	}
-
 	div.topic {
 		margin-bottom: 10px;
 	}
@@ -21,39 +18,39 @@
 		font-weight: bold !important;
 		background-color: #ccc;
 	}
+
+	div.choice {
+		padding: 0em !important;
+	}
 </style>
 
-<h5 class="full subtitle">Topics</h5>
+	<div class="ui sticky topic">
+		<h4 class="ui header"> Participants </h4>
+		<div ng-repeat="u in event.users" class="ui choice attached segment">
+			<span class="ui label">&nbsp;</span>
+			<span  ng-bind="users.$getRecord(u).name"></span>
+		</div>
+	</div>
 
-<div class="row dashboard">
-  <div class="col-xs-12 topic" >
-  	<span class="main"> 
-  		<h4 style="margin-bottom:5px"> Participants <br></h4>
-  		<div ng-repeat="u in event.users" class="choice">
-	  		<small ng-bind="users.$getRecord(u).name"></small><Br>
-  		</div>
-  	</span>
-  </div>
-
-  <div 	ng-repeat="t in event.topics" 
+  	<div ng-repeat="t in event.topics" 
   		class="col-xs-12 link topic" 
   		ng-click="goto('eventTopic/' + t)">
-  	<span class="main"> 
+
   		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
   		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
-  				class="choice"
+  				class="ui choice attached segment"
 				ng-class="{ 'chosen': getVote(t, c) ==  maxVotes(t) }">
-			<span class="badge" ng-bind="getVote(t, c)"></span>
-	  		<small ng-bind="c"></small><Br>
+			<span class="ui label" ng-bind="getVote(t, c)"></span>
+	  		<span ng-bind="c"></span>
   		</div>
-  	</span>
+  	</div>
   </div>
 </div>
 
 <div style="clear:both"></div>
 
 <div>
-	<button class="btn btn-block" ng-click="showChats = true">Chat</button>
+	<button class="ui button fluid" ng-click="showChats = true">Chat</button>
 </div>
 
 <div class="chatbox" ng-include="'templates/chat.html'"></div>

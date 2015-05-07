@@ -1,90 +1,27 @@
-.headerplaceholder {
-	position:fixed;
-	background-color: #ddd;
-	height: 50px; 
-	height: 50px; 
-	margin-bottom: 5px;
-	width:100%;
-	z-index: 1000;
-	font-size: 24px;
-	padding: 8px;
-	width: 100% !important;
- 
-	/*display:none;*/
-}
-
-.footerplaceholder {
-	position:fixed;
-	bottom:0px;
-	background-color: transparent;
-	height: 50px; 
-	width:100%;
-	z-index: 1000;
-	width: 100% !important;
-
-	display:none;
-}
-
-* {
-	font-family: 'Oswald'; 
-}
-
 *:not(input):not(textarea) {
   -webkit-user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 }       
 
-html, body, .container {
-	height: 763px !important;
-	width: 360px !important;
-	overflow-x: hidden;
+.container {
+	/*height: 763px !important;*/
+	/*width: 360px !important;*/
+	/*overflow-x: hidden;*/
+	padding: 0 1em;
 }
 
-.link, .btn { transition: all .1s; }
-.link:active, .btn:active { 
+.link, .button { transition: all .1s; }
+.link:active, .button:active { 
 	-webkit-transform-style: preserve-3d;
     -webkit-transform: scale3d(0.98, 0.98, 0.98);
    	opacity:0.7; 
-}
-
-.container {
-	padding-top: 50px;
-
-	/*padding-top: 0px;*/
 }
 
 .container .bottomplaceholder {
 	height: 50px;
 }
 
-h5 {
-	padding: 10px 5px;
-	margin-bottom: 0px;
-	background-color: #f4f4f4;
-}
-
-.full {
-	margin: 0px -15px;
-}
-
-.full.title {
-	margin-bottom: 0px;
-	margin-top: 0px;
-
-	border-top: 1px solid #aab;
-	border-bottom: 1px solid #aab;
-
-	background-color: #dde;
-	padding: 10px;
-}
-
-.full.subtitle {
-	padding-top:20px;
-}
-
 /*** colors ***/
-
-
 div.modal-header {
 	background-color: #eee;
 	border-radius: 5px 5px 0px 0px;
@@ -101,4 +38,8 @@ div.modal-footer {
 
 .bad {
 	background-color: #FCC !important;
+}
+
+.ui.button.fluid {
+	margin-bottom: 0.2em;
 }

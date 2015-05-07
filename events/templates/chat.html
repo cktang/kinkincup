@@ -1,78 +1,47 @@
 
 
 <style>
-	.chats {
-		background-color: #eee;
-		position: absolute;
-		top:40px;
-		padding:10px;
-		width: 90%;
-		border: 2px solid #ddd;
-	}
-
-	.chats .received, .chats .sent {
+	.chats .chat {
 		clear:both;
-		padding: 0px; 
-		margin: 10px;
+		margin: 10px 0px;
 	}
 
-	.chats .received > div {
-		max-width: 70%;
-		background-color: #ddd;
-		color: #333;	
-		text-align: left;
-	}
-
-	.chats .sent > div {
-		max-width: 70%;
-		background-color: lightGreen;
-		color: DarkGreen;	
-		text-align: right;
-		margin-left:100px;
-	}
-
-	.chats .btn small {
-		font-size: 10px;
-		opacity: 0.5;
-	}
-
-	.chats .btn hr {
-		margin: 0px;
-		padding: 3px;
+	.chats .sent {
+		float:right;
 	}
 </style>
- 
-<div class="full chats nga-default nga-stagger nga-squash-left" ng-show="showChats">
-	<span class="glyphicon glyphicon-remove pull-right" style="position:absolute; right:0px; top:10px; padding:10px" aria-hidden="true" ng-click="showChats = false"></span>
 
-	<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
- 
-	<div class="received" ng-if="chats.length > 5"> 
-		<div class="btn">... ...</div>
-	</div>
 
-	<div ng-repeat="c in chats"
-		ng-if="$index >= chats.length - 5"
-		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
-		<div class="btn"> 
-			<small ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></small>
-			<br ng-hide="c.user==local.user.$id" />
-			<small style="margin-bottom:5px" ng-bind="c.ts"></small>
-			<br>
-			<span ng-bind="c.text"></span>
+<div style="position:fixed; bottom:0px; width:100%; left:0px" ng-show="showChats">
+
+	<div class="ui segment inverted chats" style="margin:0px">
+		<i class="ui icon remove pull-right" style="position:absolute; right:10px; padding:10px" ng-click="showChats = false"></i>
+
+		<div style="margin-bottom:10px"> Chats </div>
+	 
+		<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
+	 
+		<div class="received" ng-if="chats.length > 5"> 
+			<div class="ui label pointing left">... ...</div>
 		</div>
+
+		<div ng-repeat="c in chats"
+			ng-if="$index >= chats.length - 5"
+			class="chat"
+			ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
+			<div class="ui label" ng-class="{'pointing left orange':c.user!=local.user.$id, 'pointing right teal':c.user==local.user.$id}">
+				<div ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></div>
+				<!-- <h6 class="ui label green" ng-bind="c.ts"></h6> -->
+				<div class="detail" ng-bind="c.text"></div>
+			</div>
+		</div>
+
+		<div style="clear:both">&nbsp;</div>
 	</div>
 
-	<div style="height:3em; min-height:3em">&nbsp;</div>
-</div>
-
-<div style="position:fixed; bottom:0px; width:100%; left:0px">
-<div class="container-fluid full" ng-show="showChats" class="nga-default nga-stagger nga-squash-left">	
-	<div class="col-xs-10 link" style="padding:0px !important;">
-		<input style="padding:10px; width:100%" ng-model="newText"/>
-	</div>
-
-	<div class="col-xs-2 btn btn-success" style="padding:12px" ng-click="newChat(newText)"> Chat </div>
+	<input placeholder="chat..." class="link" style="padding:10px; width:100%" ng-model="newText"/>
+	
+	<div class="ui fluid button" ng-click="newChat(newText)"> Chat </div>
 </div>
 </div>
 

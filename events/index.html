@@ -4,12 +4,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+<!--
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet">
+-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
 
+<!--
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
+-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
@@ -25,21 +29,31 @@
 
 	<link href="css/nga.all.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+
+    <script src="js/semantic/semantic.js"></script>	
+	<link href="js/semantic/semantic.css" rel="stylesheet">
+
+    <script src="js/semantic/components/modal.js"></script>	
+	<link href="js/semantic/components/modal.css" rel="stylesheet">
+
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
 
 <body ontouchstart="">
 	<!-- <base href="http://cktang.github.io/kinkincup/events/"></base> -->
 
-	<div class="headerplaceholder" ng-include="'header.html'"></div>
+	<div class="ui fixed main menu" ng-include="'header.html'"></div>
+<!-- 	
 	<div class="footerplaceholder" ng-include="'footer.html'"></div>
-	<div class="container ng-view"></div>
+ -->	
+ 	<div class="ng-view container" style="padding-top:40px"></div>
 
 	<script>
 		var app = angular
-					.module('app', ["ngAnimate", "ngRoute", "firebase", "ui.bootstrap", "ngStorage", 'angular-underscore'])
+					.module('app', ["ngAnimate", "ngRoute", "firebase", "ngStorage", 'angular-underscore'])
 		  			
-		  			.config(['$routeProvider', function($routeProvider) {
+					.config(function($routeProvider, $locationProvider) {
+					    $locationProvider.hashPrefix('!');
 					    $routeProvider
 							.when('/login', {
 								templateUrl: 'templates/login.html'
@@ -63,9 +77,9 @@
 								controller: 'eventTopicController'
 							})
 							.otherwise({
-								redirectTo: '/login' 
+								redirectTo: 'login' 
 							});
-					}])
+					})
 					
 					.run(function($rootScope, $location, $localStorage, $firebaseArray) {
 						console.log('rootScope::start');
@@ -85,6 +99,7 @@
 					    };
 
 						$rootScope.goto = function(url) {
+							console.log(url);
 							try {
 	  							linkEvent(url);
 							} catch (e) {
@@ -189,7 +204,7 @@
 								$scope.currentTopic = $scope.newTopics[id];
 								$scope.currentTopic = $scope.currentTopic || { id:id, name:id, decision:"NOT_DECIDED" };
 								$scope.topicId = id;
-								$('#form5').modal();
+								$('#form5').modal('show');
 							};
 
 							$scope.saveTopic = function(id) {
@@ -198,11 +213,11 @@
 							};
 
 							$scope.openParticipants = function() {
-								$('#form4').modal();
+								$('#form4').modal('show');
 							};
 
 							$scope.openEvent = function() {
-								$('#form1').modal();
+								$('#form1').modal('show');
 							};
 						}
 					);

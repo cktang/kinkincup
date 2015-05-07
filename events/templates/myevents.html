@@ -1,24 +1,27 @@
 
-<div class="pull-right" style="padding:2px">
-	<button class="btn" style="margin: 2px"> Sort </button>
-	<button class="btn" style="margin: 2px" > <a href="newevent.html"> New </a> </button>
+	
+<div class="ui header"> 
+	<div class='ui right floated header'>
+		<a class="ui button small" href="#!/newEvent"> New </a>
+	</div>
+	My Events
 </div>
-<h4 class="full title"> My Events </h4>
 
 <style>
-	li {
-		border-radius: 0px !important;
-		margin: 0px -15px;
+	.events .segment:nth-child(odd) {
+		background-color: #fafafa;
 	}
 </style>
 
-<ul class="list-group">
-  <li ng-repeat="e in events" 
-  	ng-click="goto('eventSummary/' + e.$id)" 
-	ng-if="_(e.users).contains(local.user.$id)" 
-	class="list-group-item link" style="background-color:#eee">
-	<!-- <small ng-bind="$index"></small> -->
-  	<h3 ng-bind="e.name"></h3>
-  	<h6 ng-bind="e.description"></h6>
-  </li>
-</ul>
+<div class="events">
+	<div ng-repeat="e in events" 
+		ng-click="goto('eventSummary/' + e.$id)" 
+		ng-if="_(e.users).contains(local.user.$id)" 
+		class="ui attached segment">
+
+		<div class="ui header">
+			<div ng-bind="e.name"></div>
+			<div class="sub header" ng-bind="e.description"></div>
+		</div>
+	</div>
+</div>

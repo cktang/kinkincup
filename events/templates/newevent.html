@@ -1,122 +1,44 @@
-
-	<style>
-		h4.btn, h6.btn {
-			background-color: #eee;
-		}
-
-		.dashboard .btn {
-			font-size: 20px;
-			border: 0px solid silver;
-			border-bottom: 1px solid brown;
-			border-radius: 0px;
-			background-color: #eee;
-			position:relative;
-			margin: 0px;
-		}
-
-		.dashboard .icon {
-			position:absolute;
-			left: 5px;
-			opacity: 0.3;
-		}
-
-		.dashboard .main {
-			line-height: 50px;
-		}
-
-		.dashboard .badge {
-			vertical-align: super;
-		}
-
-		.dashboard .sub {
-			float:right;
-			width:30%;
-			font-size: 12px;
-		}
-
-		.dashboard .sub .badge {
-			font-size: 8px;
-			font-weight: normal;
-		}
-
-		.dashboard .new {
-			border: 5px dotted silver;
-		}
-
-		#form2 .field {
-			width: 40%;
-			margin-right: 10%;
-			float:left;
-		}
-
-		#form2 .choice {
-			border-bottom: 1px solid silver;
-			padding: 5px;
-		}
-
-		#form3 .field {
-			width:80%;
-		}
-
-		.btn .topicName {
-			position:absolute;
-			top:5px;
-			right:5px;
-			font-size:14px;
-		}
-
-		.btn small {
-			line-height: 25px;
-		}
-	</style>
-
-	<div class="row dashboard">
-      	<div class="col-xs-12 btn" modal="form1" 
-      		ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
-      		{{newEvent.name || 'Event Name ???'}}
+	<div class="ui button fluid"
+    	ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
+			<div class="ui header" style="margin-top:0px"> Event Name </div>
+      		{{newEvent.name}}
 			<Br>
-			<small>{{newEvent.description || 'Event Description ???'}}</small>
-		</div>
+			<small>{{newEvent.description}}</small>
+	</div>
 
-	  <div class="col-xs-12 btn" 
+	<div class="ui button fluid"
 	  	ng-class="{good: newTopics['time'], bad: !newTopics['time']}" 
 	  	ng-click="openTopic('time')">
-	  	<span class="icon"><img src="img/calendar.png"/></span>
-	  	<span class="main">
-	  		<span ng-hide="newTopics['time'].choices[0]"> WHEN ?? </span>
-	  		<div ng-repeat="c in newTopics['time'].choices" style="line-height:20px">
+			<div class="ui header"> Time </div>
+      		<div ng-repeat="c in newTopics['time'].choices" style="line-height:20px">
 		  		<small ng-bind="c"></small><Br>
 	  		</div>
-	  	</span>
-	  </div>
-	  <div class="col-xs-12 btn" 
-	  	ng-class="{good: newTopics['venue'], bad: !newTopics['venue']}" 
+	</div>
+
+	<div class="ui button fluid"
+	  	ng-class="{good: newTopics['time'], bad: !newTopics['venue']}" 
 	  	ng-click="openTopic('venue')">
-	  	<span class="icon"><img src="img/location.png"/></span>
-	  	<span class="main">
-	  		<span ng-hide="newTopics['venue'].choices[0]"> WHERE ?? </span>
-	  		<div ng-repeat="c in newTopics['venue'].choices" style="line-height:20px">
+			<div class="ui header"> Place </div>
+      		<div ng-repeat="c in newTopics['venue'].choices" style="line-height:20px">
 		  		<small ng-bind="c"></small><Br>
 	  		</div>
-	  	</span>
-	  </div>
-	  <div class="col-xs-12 btn" 
+	</div>
+
+	<div class="ui button fluid"
 	  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" 
 	  	ng-click="openParticipants()">
-	  	<span class="icon"><img src="img/running.png"/></span>
-	  	<span class="main"> 
-	  		<span ng-hide="_(users).filter({selected:true}).length > 0"> WHO ?? </span>
+			<div class="ui header"> Participants </div>
 	  		<div ng-repeat="c in _(users).filter({selected:true})" style="line-height:20px">
 		  		<small ng-bind="c.name"></small><Br>
 	  		</div>
-	  	</span>
-	  </div>
+	</div>
+
 
 	  <div 	ng-repeat="t in newTopics" 
-	  		class="good col-xs-12 btn" 
+	  		class="ui button fluid" 
 	  		ng-hide="{{t.id=='venue' || t.id=='time'}}"
 	  		ng-click="openTopic(t.name)">
-	  	<span ng-bind="t.name" class="topicName"></span>
+	  	<span ng-bind="t.name" class="ui header"></span>
 	  	<span class="main"> 
 	  		<div ng-repeat="c in t.choices" style="line-height:20px">
 		  		<small ng-bind="c"></small><Br>
@@ -124,41 +46,48 @@
 	  	</span>
 	  </div>
 
-	  <div class="col-xs-12 btn new" ng-click="openTopic('newTopic')">
-	  	<span class="main"> Gift?? Reminder??? Travel Tips?? </span>
+	  <div class="new ui button fluid" ng-click="openTopic('newTopic')">
+	  	<span class="ui header"> Gift?? Reminder??? Travel Tips?? </span>
 	  </div>
 	</div>
 
 	<hr>
-	<button ng-click="addEvent()" class="btn btn-block btn-warning"> Submit </button>
+	<button ng-click="addEvent()" class="ui fluid orange button"> Submit </button>
 
 	<!-- Modal -->
-	<div class="modal fade" id="form1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">New Event</h4>
-	      </div>
-	      <div class="modal-body">
+	<style>
+		.form-group .ui.header {
+			font-size: 14px;
+		}
+
+		.form-group {
+			margin-top: 10px;
+		}
+	</style>
+	<div class="ui modal fade" id="form1">
+	      <div class="ui header"> New Event </div>
+
+	      <div class="content">
 	      	  <div class="form-group">
-			    <label for="name">Name</label>
-			    <input type="text" class="form-control" placeholder="Event Name" ng-model="newEvent.name">
+			    <label for="name" class="ui header">Name</label>
+			    <div class="ui fluid input">
+			    	<input type="text" placeholder="Event Name" ng-model="newEvent.name">
+			    </div>
 			  </div>
 			  <div class="form-group">
-			    <label for="description">Description</label>
-			    <textarea type="description" class="form-control" placeholder="Event Description" ng-model="newEvent.description"></textarea>
+			    <label for="description" class="ui header">Description</label>
+			    <div class="ui fluid input">
+				    <input type="text" placeholder="Event Description" ng-model="newEvent.description">
+			    </div>
 			  </div>		      	
 	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+	      <div class="ui segment">
+	        <button type="button" class="ui small blue floated right close button">Confirm</button>
 	      </div>
-	    </div>
-	  </div>
 	</div> 
 
 	<!-- Modal -->
-	<div class="modal fade" id="form4" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="ui modal fade" id="form4">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -176,14 +105,14 @@
 			  </h5>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+	        <button type="button" class="ui blue button" data-dismiss="modal">OK</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="form5" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="ui modal fade" id="form5">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">

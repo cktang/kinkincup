@@ -1,15 +1,14 @@
 
-<h3><img src="img/election.png" style="margin-top:-8px"/> Event HK </h3>
+<h3><i class="announcement icon"/> Event HK </h3>
 
-<hr/>
-<h4> Signup </h4>
-<button class="btn btn-block btn-primary"> Facebook </button>
-<button class="btn btn-block btn-danger"> Google </button>
+<h4>  Signup </h4>
 
-<hr/>
+<div class="fluid large ui facebook button"> <i class="facebook icon"></i> Facebook </div>
+<div class="fluid large ui google plus button"> <i class="google plus icon"></i> Google </div>
+
+<div class="ui horizontal divider"> Or </div>
+
 <h4> Login </h4>
 
-<button ng-repeat="u in users" class="btn btn-block" ng-bind="u.name" ng-click="login(u)"></button>
-
-<script>
-</script>
+<div ng-repeat="u in users" ng-bind="u.name" ng-click="login(u)" 
+	class="fluid teal large ui button"></div>
