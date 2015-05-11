@@ -4,9 +4,6 @@
 }       
 
 .container {
-	/*height: 763px !important;*/
-	/*width: 360px !important;*/
-	/*overflow-x: hidden;*/
 	padding: 0 1em;
 }
 
@@ -19,17 +16,6 @@
 
 .container .bottomplaceholder {
 	height: 50px;
-}
-
-/*** colors ***/
-div.modal-header {
-	background-color: #eee;
-	border-radius: 5px 5px 0px 0px;
-}
-
-div.modal-footer {
-	background-color: #f7f7f7;
-	border-radius: 0px 0px 5px 5px;
 }
 
 .good {

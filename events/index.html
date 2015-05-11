@@ -40,12 +40,7 @@
 </head>
 
 <body ontouchstart="">
-	<!-- <base href="http://cktang.github.io/kinkincup/events/"></base> -->
-
 	<div class="ui fixed main menu" ng-include="'header.html'"></div>
-<!-- 	
-	<div class="footerplaceholder" ng-include="'footer.html'"></div>
- -->	
  	<div class="ng-view container" style="padding-top:50px"></div>
 
 	<script>
@@ -72,16 +67,28 @@
 								templateUrl: 'templates/eventsummary.html',
 								controller: 'eventSummaryController'
 							})
+							.when('/event/:id', {
+								templateUrl: 'templates/eventsummary.html',
+								controller: 'eventSummaryController'
+							})
 							.when('/eventTopic/:id', {
 								templateUrl: 'templates/eventtopic.html',
 								controller: 'eventTopicController'
 							})
-							.otherwise({
-								redirectTo: 'login' 
-							});
+							.when('/topic/:id', {
+								templateUrl: 'templates/eventtopic.html',
+								controller: 'eventTopicController'
+							})
+							.when('/chat/:id/type/:type', {
+								templateUrl: 'templates/chat.html',
+								controller: 'chatController'
+							})
+							// .otherwise({
+							// 	redirectTo: 'login' 
+							// });
 					})
 					
-					.run(function($rootScope, $location, $localStorage, $firebaseArray) {
+					.run(function($rootScope, $window, $location, $localStorage, $firebaseArray) {
 						console.log('rootScope::start');
 					    $rootScope.local = $localStorage;
 					    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
@@ -111,7 +118,22 @@
 					    	$localStorage.user = user;
 					    	$location.path("myEvents");
 					    };
+
+					    $rootScope.back = function() {
+					    	$window.history.back();
+					    }
 					})
+
+					.controller("chatController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/chats"));
+
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/"+ $routeParams.type + "/" + $routeParams.id));
+						    obj.$bindTo($scope, "event"); 
+
+						    $scope.r = $routeParams;
+						}
+					)
 
 					.controller("eventSummaryController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
@@ -133,8 +155,6 @@
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 						    obj.$bindTo($scope, "event"); 
-
-						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/chats"));
 						}
 					)
 
@@ -142,8 +162,6 @@
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
 						    obj.$bindTo($scope, "topic"); 
-
-						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id + "/chats"));
 						}
 					)
 

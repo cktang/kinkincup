@@ -1,235 +1,235 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest">
+<html ng-app="app">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="js/jquery-2.1.1.min.js"></script>
-	<script src="js/underscore-min.js"></script>
-	<script src="js/backbone-min.js"></script>
-    <script src="js/firebase.js"></script>
-    <script src="js/backbone-firebase.js"></script>
-    <script src="js/handlebars.min.js"></script>
-    <script src="js/json2.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
-	<script src="js/backbonemodel.js"></script>
-	<script src="js/models/calmodels.js"></script>
-	<script src="js/backbone-listeners.js"></script>
-	<script src="js/moment.min.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
-	<script src="pagejs/cal.js"></script>
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
 
-    <!-- Include the compiled Ratchet CSS -->
-    <link href="js/ratchet-v2.0.2/css/ratchet.css" rel="stylesheet">
-    <link href="js/ratchet-v2.0.2/css/ratchet-theme-ios.css" rel="stylesheet">
+	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+	<meta name="viewport" content="width=device-width" /> 
 
-	<meta name="viewport" content="width=device-width,user-scalable=no">
-	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,700,300italic,100italic,300,400italic,500,500italic,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <script src="js/semantic/semantic.js"></script>	
+	<link href="js/semantic/semantic.css" rel="stylesheet">
 
+    <script src="js/semantic/components/modal.js"></script>	
+	<link href="js/semantic/components/modal.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+</head>
+
+<body ontouchstart="" ng-controller="Controller">
+	<div class="ui fixed menu" id="menu">
+		<div class="ui item"> <i class="ui large heart icon"></i> </div>
+		<div class="ui item"> 
+			<h1> {{ d | amDateFormat: 'MMMM YYYY' }} </h1> 
+		</div>
+		
+		<span class="ui floated right item">
+			<h1>
+				<i class="ui angle left icon link" ng-click="lastMonth()"></i>
+				<i class="ui angle right icon link" ng-click="nextMonth()"></i>
+			</h1>
+		</span>
+	</div>
+	
 	<style>
-		* {
-			font-family: 'roboto';
+		#menu *, #dates * {
+			color: hotpink;
 		}
-
-		.box {
-			width:  53px;
-			height: 30px;
-			float:left;
-			text-align: center;
-			overflow: hidden;
-			padding: 3px;
-			border-radius: 0px;
+		
+		.selected, .selected * {
+			background-color: lightpink !important;
+			color: brown !important;
 		}
-
-		#dates .box {		
-			width:  53px;
-			height: 60px;
-			margin-bottom: 10px;
-			border: 0px;
+		
+		#dates .column.today {
+			border: 2px solid deeppink !important;	
 		}
-
-		#dates .box .d {
-			position:absolute;
-			font-size: 2.5em;
+		
+		#dates {
+			margin: 60px 10px;
+		} 
+		
+		.dText {
+			position: absolute;
+			top: 2px;
 			left: 5px;
-			bottom: 5px;
-			opacity: 0.2;
-			color: #777;
+			font-size: 20px;
 		}
-
-		#dates .box .activities {
+		
+		.dIcons {
 			position: absolute;
 			bottom: 0px;
-			left: 0px;
-			padding: 1px 0px;
-			font-size: 1.4em;
+			right: 0px;
+			font-size: 14px;
+			text-align: right;
 		}
-
-		#dates .box .l {
-			float:right;
-			opacity: 0.5;
-			color: black;
-		}
-
-		.header {
-			color: silver;
-		}
-
-		body {
-			color: hotPink ;
-			background-color: white;
-			max-width: 375px !important;
-		}
-
-		.type {
-			background-color: transparent;
-			color: white;
-			padding: 0.2em 0.2em;
-			font-size: 12px;
-		}
-
-		.type.music {
-			color: deepskyblue;
-		}
-
-		.type.food {
-			color: goldenrod;
-		}
-
-		.type.ams {
-			color: green;
-		}
-
-		.type.choir {
-			color: navy;
-		}
-
-		.box.work {
-			background-color: #fef;
-		}
-
-		.box.o {
-			background-color: #fff;
-		}
-
-		.box.today {
-			border: 3px solid pink !important;
-		}
-
-		.link, .btn { transition: all .1s; }
-		.link:active, .btn:active { 
+			
+		.link, .button { transition: all .1s; }
+		.link:active, .button:active { 
 			-webkit-transform-style: preserve-3d;
 		    -webkit-transform: scale3d(0.9, 0.9, 0.9);
 		   	opacity:0.7; 
-		}		
+		}
 
-		*:not(input):not(textarea) {
-		  -webkit-user-select: none; /* disable selection/Copy of UIWebView */
-		  -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
-		}    
-
-	  	#form .t {
-	  		margin-bottom: 5px;
-	  	}  
-
-	  	#duty-choices .control-item {
-	  		min-width: 44px;
-	  	}
+		#modal .button {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
 	</style>
-</head>
-
-<body ontouchstart="">
-	<div class="content-padded" id="cal">
-		<div>
-			<h1> 
-				<span class="pull-right"> 
-					<i class="fa fa-angle-left fa-lg link" id="prevMonth" style="padding-right:10px"></i>
-					<i class="fa fa-angle-right fa-lg link" id="nextMonth" style="padding-right:10px"></i>
-				</span>
-				<span id="monthName"></span> 
-				<small><span id="yearName"></span></small> 
-			</h1>
+	
+	<div id="dates" class="ui seven column grid">
+		<div class="column">Sun</div>
+		<div class="column">Mon</div>
+		<div class="column">Tue</div>
+		<div class="column">Wed</div>
+		<div class="column">Thu</div>
+		<div class="column">Fri</div>
+		<div class="column">Sat</div>
+	
+		<div class="column" ng-repeat="a in emptiness"></div>
+		<div 
+			class="column link"
+			style="padding-bottom: 2em"
+			ng-class="{selected: events.$getRecord(date).d && events.$getRecord(date).d != 'Off', 'today':date==today}"
+			ng-click="modal(date)"
+			ng-repeat="date in dd.dates">
+			<span class="ui dText">{{ date | amDateFormat: 'D' }}</span>
+			<span class="ui header">&nbsp;</span>
+				
+			<div class="ui dIcons">
+				<i class="ui right floated emergency blue icon" ng-show="events.$getRecord(date).ams"></i></i>
+				<i class="ui right floated teal food icon" ng-show="events.$getRecord(date).food"></i></i>
+				<i class="ui right floated orange music icon" ng-show="events.$getRecord(date).choir"></i></i>
+				<i class="ui right floated green slack icon" ng-show="events.$getRecord(date).piano"></i></i>
+			</div>
 		</div>
-    	<div style="margin:-10px; margin-top:20px">
-    		<div id="calDetails">
-    			<div class="header">
-	    			<div class="box" style="display:none">Su</div>
-	    			<div class="box" style="display:none">M</div>
-	    			<div class="box" style="display:none">T</div>
-	    			<div class="box" style="display:none">W</div>
-	    			<div class="box" style="display:none">Th</div>
-	    			<div class="box" style="display:none">F</div>
-	    			<div class="box" style="display:none">Sa</div>
-	    		</div>
-
-	    		<div id="dates"></div>
-    		</div>
-    	</div>
-
-    	<div style="clear:both">&nbsp; </div>
-    </div>
-
-	<div id="form" class="modal">
-	  <header class="bar bar-nav">
-	    <a class="icon icon-close pull-right link" href="#form"></a>
-	    <h1 class="title">
-	    	<i class="fa fa-angle-left fa-lg link" id="prevDate" style="padding:10px 20px"></i>
-			<span id="date"></span>
-			<i class="fa fa-angle-right fa-lg link" id="nextDate" style="padding:10px 20px"></i>
-	    </h1>
-	  </header>
-
-	  <div class="content">
-		<ul class="table-view" style="margin:0px">
-		  <li class="table-view-cell" id="duty-choices">
-		    <div class="t">Duty</div>
-			<div class="segmented-control" >
-			  <a class="control-item link" data-id='d' data-value='C1'>C1</a>
-			  <a class="control-item link" data-id='d' data-value='C2'>C2</a>
-			  <a class="control-item link" data-id='d' data-value='C3'>C3</a>
-			  <a class="control-item link" data-id='d' data-value='W1'>W1</a>
-			  <a class="control-item link" data-id='d' data-value='W2'>W2</a>
-			  <a class="control-item link" data-id='d' data-value='W3'>W3</a>
-			  <a class="control-item link" data-id='d' data-value='C*'>C*</a>
-			  <a class="control-item link" data-id='d' data-value='OFF'>Off</a>
-			</div>
-		  </li>
-		  <li class="table-view-cell">
-		    Piano
-		    <div class="toggle" data-id='piano'>
-		      <div class="toggle-handle"></div>
-		    </div>
-		  </li>
-		  <li class="table-view-cell">
-		    AMS
-		    <div class="toggle" data-id='ams'>
-		      <div class="toggle-handle"></div>
-		    </div>
-		  </li>
-		  <li class="table-view-cell">
-		    Learners Choir
-		    <div class="toggle" data-id='choir'>
-		      <div class="toggle-handle"></div>
-		    </div>
-		  </li>
-
-		  <li class="table-view-cell">
-		    <div class="t">Food Sampling</div>
-			<div class="segmented-control" >
-			  <a class="control-item link" data-id='food' data-value='E'>Egg</a>
-			  <a class="control-item link" data-id='food' data-value='V'>Veggie</a>
-			  <a class="control-item link" data-id='food' data-value='E+V'>Egg + Veggie</a>
-			  <a class="control-item link" data-id='food' data-value='F'>Fruit</a>
-			  <a class="control-item link" data-id='food' data-value='OFF'>Off</a>
-			</div>
-		  </li>		  
-		</ul>	  	
-	  </div>
 	</div>
 
-    <!-- Include the compiled Ratchet JS -->
-    <script src="js/ratchet-v2.0.2/js/ratchet.js"></script>
+	<div id="modal" class="ui modal">
+		<div class="ui header" style="padding:10px !important">
+			<div class="ui right floated close button"> X </div> 
+			<div class="ui right floated button" ng-click="nextDate( selectedDate.id )"> <i class="ui angle right icon"></i> </div>
+			<div class="ui right floated button" ng-click="lastDate( selectedDate.id )"> <i class="ui angle left icon"></i> </div>
+			{{ selectedDate.$id }}			
+		</div>
+		
+		<div class="ui content" style="padding:0px 	1px !important"> 
+			<div class="ui top attached segment">
+				<div class="ui content"> <strong>Duty</strong> </div>
+				<div class="ui divider"></div>
+				<div class="ui eight columned grid">
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C1'}" ng-click="selectedDate.d='C1'">C1</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C2'}" ng-click="selectedDate.d='C2'">C2</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C3'}" ng-click="selectedDate.d='C3'">C3</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='W1'}" ng-click="selectedDate.d='W1'">W1</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='W2'}" ng-click="selectedDate.d='W2'">W2</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='W3'}" ng-click="selectedDate.d='W3'">W3</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C*'}" ng-click="selectedDate.d='C*'">C*</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='Off'}" ng-click="selectedDate.d='Off'">Off</div>
+				</div>
+			</div>
+			
+			<div class="ui attached segment">
+				<div class="ui content"> <strong>Food Sampling</strong>	</div>
+				<div class="ui divider"></div>
+				<div class="ui five columned grid">
+				  <div class="column link" ng-class="{selected: selectedDate.food=='E'}" ng-click="selectedDate.food='E'">Egg</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='V'}" ng-click="selectedDate.food='V'">Veggie</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='E+V'}" ng-click="selectedDate.food='E+V'">E+V</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='F'}" ng-click="selectedDate.food='F'">Fruit</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='Off'}" ng-click="selectedDate.food='Off'">Off</div>
+				</div>
+			</div>
+			
+			<div class="ui attached segment link" ng-click="selectedDate.piano=!selectedDate.piano" ng-class="{selected: selectedDate.piano}"> 
+				<i class="ui checkmark icon" ng-show="selectedDate.piano"></i> Piano 
+			</div>
+			<div class="ui attached segment link" ng-click="selectedDate.ams=!selectedDate.ams" ng-class="{selected: selectedDate.ams}"> <i class="ui checkmark icon" ng-show="selectedDate.ams"></i> AMS </div>
+			<div class="ui bottom attached segment link" ng-click="selectedDate.choir=!selectedDate.choir" ng-class="{selected: selectedDate.choir}"> <i class="ui checkmark icon" ng-show="selectedDate.choir"></i> Choirs </div>
+		</div>
 
-	<link href="css/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-    <link href="css/ionicons.min.css" rel="stylesheet">
+		<div class="ui segment">
+			<span class="ui blue link button" ng-click="saveSelected()"> Save </span>
+		</div>
+	</div>
+
+	<script>
+		var app = angular
+					.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
+		  			.controller("Controller",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+							$scope.d = moment();
+							$scope.today = $scope.d.format('YYYY-MM-DD');
+							$scope.eventRef = new Firebase("https://queencal.firebaseio.com/items");
+							$scope.events = $firebaseArray($scope.eventRef);
+
+							$scope.nextMonth = function() { 
+								$scope.d = $scope.d.add(1, 'M'); 
+								$scope.defineCal(); 								
+							}
+							
+							$scope.lastMonth = function() { 
+								$scope.d = $scope.d.add(-1, 'M'); 						
+								$scope.defineCal(); 
+							}
+							
+							$scope.nextDate = function(date) { 
+								$scope.saveSelected();
+								var d = new moment(date).add(1, 'd').format('YYYY-MM-DD');
+								$scope.setSelected(d);				
+							}
+
+							$scope.lastDate = function(date) { 
+								$scope.saveSelected();
+								var d = new moment(date).add(-1, 'd').format('YYYY-MM-DD');
+								$scope.setSelected(d);				
+							}
+															
+							$scope.setSelected = function(d) {
+								if (!$scope.events.$getRecord(d)) {
+									$scope.eventRef.child(d).set({id: d});
+								}
+								$scope.selectedDate = $scope.events.$getRecord(d);	
+							}
+
+							$scope.saveSelected = function() {
+								$scope.events.$save($scope.selectedDate);
+							}
+
+							$scope.defineCal = function() {
+								var d = new moment($scope.d.toDate()).startOf('month');
+								$scope.dd = $scope.dd || {};
+								$scope.dd.dates = [];
+								$scope.emptiness = _.range(d.weekday());
+								
+								while(true) {
+									$scope.dd.dates.push(d.format('YYYY-MM-DD'));
+									d.add(1, 'd');
+									if (d.format('DD') == 1) break;
+								}
+							}
+							
+							$scope.modal = function(d) {
+								$scope.setSelected(d);				
+								$('#modal').modal('show');
+							}
+							
+							$scope.defineCal();
+						}
+					);
+	</script>
 </body>
 </html>

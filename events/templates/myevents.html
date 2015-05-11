@@ -1,11 +1,6 @@
 
 	
-<div class="ui header"> 
-	<div class='ui right floated header'>
-		<a class="ui button small" href="#!/newEvent"> New </a>
-	</div>
-	My Events
-</div>
+<div class="ui header"> My Events </div>
 
 <style>
 	.events .segment:nth-child(odd) {
@@ -17,7 +12,7 @@
 	<div ng-repeat="e in events" 
 		ng-click="goto('eventSummary/' + e.$id)" 
 		ng-if="_(e.users).contains(local.user.$id)" 
-		class="ui attached segment">
+		class="ui link attached segment">
 
 		<div class="ui header">
 			<div ng-bind="e.name"></div>

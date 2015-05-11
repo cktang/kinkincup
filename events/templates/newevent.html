@@ -88,13 +88,9 @@
 
 	<!-- Modal -->
 	<div class="ui modal fade" id="form4">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Who</h4>
-	      </div>
-	      <div class="modal-body" style="padding-top:0px; padding-bottom:0px">
+	  <div class="ui header"> Participants </div>
+
+	      <div class="content">
 			  <h5 	ng-repeat="u in users" 
 			  		class="full" 
 			  		style="border-bottom:1px solid silver" 
@@ -104,8 +100,8 @@
 			  	<span>{{u.name}}</span>
 			  </h5>
 	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="ui blue button" data-dismiss="modal">OK</button>
+	      <div class="ui segment">
+	        <button type="button" class="ui blue button close">OK</button>
 	      </div>
 	    </div>
 	  </div>
