@@ -110,17 +110,17 @@
 			<span class="ui header">&nbsp;</span>
 				
 			<div class="ui dIcons">
-				<i class="ui right floated emergency blue icon" ng-show="events.$getRecord(date).ams"></i></i>
+				<i class="ui right floated emergency green icon" ng-show="events.$getRecord(date).ams"></i></i>
 				<i class="ui right floated teal food icon" ng-show="events.$getRecord(date).food"></i></i>
 				<i class="ui right floated orange music icon" ng-show="events.$getRecord(date).choir"></i></i>
-				<i class="ui right floated green slack icon" ng-show="events.$getRecord(date).piano"></i></i>
+				<i class="ui right floated blue slack icon" ng-show="events.$getRecord(date).piano"></i></i>
 			</div>
 		</div>
 	</div>
 
 	<div id="modal" class="ui modal">
 		<div class="ui header" style="padding:10px !important">
-			<div class="ui right floated close button"> X </div> 
+			<div class="ui right floated close button" ng-click="saveSelected()"> X </div> 
 			<div class="ui right floated button" ng-click="nextDate( selectedDate.id )"> <i class="ui angle right icon"></i> </div>
 			<div class="ui right floated button" ng-click="lastDate( selectedDate.id )"> <i class="ui angle left icon"></i> </div>
 			{{ selectedDate.$id }}			
@@ -159,10 +159,6 @@
 			</div>
 			<div class="ui attached segment link" ng-click="selectedDate.ams=!selectedDate.ams" ng-class="{selected: selectedDate.ams}"> <i class="ui checkmark icon" ng-show="selectedDate.ams"></i> AMS </div>
 			<div class="ui bottom attached segment link" ng-click="selectedDate.choir=!selectedDate.choir" ng-class="{selected: selectedDate.choir}"> <i class="ui checkmark icon" ng-show="selectedDate.choir"></i> Choirs </div>
-		</div>
-
-		<div class="ui segment">
-			<span class="ui blue link button" ng-click="saveSelected()"> Save </span>
 		</div>
 	</div>
 
