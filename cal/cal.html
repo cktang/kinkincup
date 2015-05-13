@@ -45,12 +45,16 @@
 	</div>
 	
 	<style>
+		body {
+			background-color: #fff5f5;	
+		}
+		
 		#menu *, #dates * {
 			color: hotpink;
 		}
 		
 		.selected, .selected * {
-			background-color: lightpink !important;
+			background-color: #fdd !important;
 			color: brown !important;
 		}
 		
@@ -62,21 +66,34 @@
 			margin: 60px 10px;
 		} 
 		
-		.dText {
+		.ui.dText {
 			position: absolute;
-			top: 2px;
-			left: 5px;
+			top: 1px;
+			left: 1px;
 			font-size: 20px;
+			opacity: 0.5;
 		}
 		
-		.dIcons {
+		.ui.dIcons {
 			position: absolute;
 			bottom: 0px;
 			right: 0px;
 			font-size: 14px;
 			text-align: right;
 		}
+		
+		.ui.duty {
+			position: absolute;
+			right: 1px;
+			top: 0px;
+			padding: 2px 0px;
+			font-size: 12px;
+		}
 			
+		.ui.date {
+			border: 2px solid transparent;	
+		}
+		
 		.link, .button { transition: all .1s; }
 		.link:active, .button:active { 
 			-webkit-transform-style: preserve-3d;
@@ -101,19 +118,23 @@
 	
 		<div class="column" ng-repeat="a in emptiness"></div>
 		<div 
-			class="column link"
-			style="padding-bottom: 2em"
-			ng-class="{selected: events.$getRecord(date).d && events.$getRecord(date).d != 'Off', 'today':date==today}"
+			class="ui column link date"
+			style="padding-bottom: 3em"
+			ng-class="{selected: events.$getRecord(date).d, 'today':date==today}"
 			ng-click="modal(date)"
 			ng-repeat="date in dd.dates">
 			<span class="ui dText">{{ date | amDateFormat: 'D' }}</span>
 			<span class="ui header">&nbsp;</span>
 				
+			<span class="ui duty" ng-bind="events.$getRecord(date).d"></span>
+
 			<div class="ui dIcons">
-				<i class="ui right floated emergency green icon" ng-show="events.$getRecord(date).ams"></i></i>
-				<i class="ui right floated teal food icon" ng-show="events.$getRecord(date).food"></i></i>
-				<i class="ui right floated orange music icon" ng-show="events.$getRecord(date).choir"></i></i>
-				<i class="ui right floated blue slack icon" ng-show="events.$getRecord(date).piano"></i></i>
+				<img src="img/egg.png" style="width:16px" ng-show="events.$getRecord(date).food=='E' || events.$getRecord(date).food=='E+F'"/>
+				<img src="img/fruits.png" style="width:16px" ng-show="events.$getRecord(date).food=='F' || events.$getRecord(date).food=='E+F'"/>
+				<i class="ui right floated emergency green icon" ng-show="events.$getRecord(date).ams"></i>
+				<img src="img/veggie.png" style="width:16px" ng-show="events.$getRecord(date).food=='V'"/>
+				<i class="ui right floated orange music icon" ng-show="events.$getRecord(date).choir"></i>
+				<i class="ui right floated blue slack icon" ng-show="events.$getRecord(date).piano"></i>
 			</div>
 		</div>
 	</div>
@@ -138,7 +159,7 @@
 				  <div class="column link" ng-class="{selected: selectedDate.d=='W2'}" ng-click="selectedDate.d='W2'">W2</div>
 				  <div class="column link" ng-class="{selected: selectedDate.d=='W3'}" ng-click="selectedDate.d='W3'">W3</div>
 				  <div class="column link" ng-class="{selected: selectedDate.d=='C*'}" ng-click="selectedDate.d='C*'">C*</div>
-				  <div class="column link" ng-class="{selected: selectedDate.d=='Off'}" ng-click="selectedDate.d='Off'">Off</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d==''}" ng-click="selectedDate.d=''">Off</div>
 				</div>
 			</div>
 			
@@ -147,10 +168,10 @@
 				<div class="ui divider"></div>
 				<div class="ui five columned grid">
 				  <div class="column link" ng-class="{selected: selectedDate.food=='E'}" ng-click="selectedDate.food='E'">Egg</div>
-				  <div class="column link" ng-class="{selected: selectedDate.food=='E+F'}" ng-click="selectedDate.food='E+V'">Egg+Food</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='E+F'}" ng-click="selectedDate.food='E+F'">Egg+Fruit</div>
 				  <div class="column link" ng-class="{selected: selectedDate.food=='V'}" ng-click="selectedDate.food='V'">Veggie</div>
 				  <div class="column link" ng-class="{selected: selectedDate.food=='F'}" ng-click="selectedDate.food='F'">Fruit</div>
-				  <div class="column link" ng-class="{selected: selectedDate.food=='Off'}" ng-click="selectedDate.food='Off'">Off</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food==''}" ng-click="selectedDate.food=''">Off</div>
 				</div>
 			</div>
 			
