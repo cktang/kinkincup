@@ -27,7 +27,7 @@
 		<div class="ui label" ng-class="{'pointing left orange':c.user!=local.user.$id, 'pointing right teal':c.user==local.user.$id}">
 			<div ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></div>
 			<!-- <h6 class="ui label green" ng-bind="c.ts"></h6> -->
-			<div class="detail" ng-bind="c.text"></div>
+			<div class="detail" ng-bind="c.content"></div>
 		</div>
 	</div>
 

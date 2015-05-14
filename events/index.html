@@ -94,16 +94,7 @@
 					    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 					    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-
-					    $rootScope.newChat = function(text) {
-					     	try {
-						     	this.chats.$add({
-						     		user: this.local.user.$id,
-						     		ts: new Date().toString(),
-						     		text: text
-						     	});				     		
-					     	} catch (e) { console.error(e); }
-					    };
+					    $rootScope.allHistory = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/history"));
 
 						$rootScope.goto = function(url) {
 							console.log(url);
@@ -127,11 +118,29 @@
 					.controller("chatController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/chats"));
+							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/history"));
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/"+ $routeParams.type + "/" + $routeParams.id));
 						    obj.$bindTo($scope, "event"); 
 
 						    $scope.r = $routeParams;
+							
+						    $scope.newChat = function(text) {
+						     	try {
+									var c = {
+							     		user: $scope.local.user.$id,
+							     		ts: new Date().toString(),
+							     		content: text
+							     	};
+							     	$scope.chats.$add(c);				     		
+									$scope.history.$add(_(c).extend({action: 'chat'}));
+									$scope.allHistory.$add(_(c).extend({
+										action: 'chat',
+										event: $routeParams.type=='event'? $scope.event.$id: $scope.event.event,
+										topic: $routeParams.type=='topic'? $scope.event.$id: null
+									}));
+						     	} catch (e) { console.error(e); }
+						    };							
 						}
 					)
 
@@ -155,6 +164,8 @@
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 						    obj.$bindTo($scope, "event"); 
+							
+							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
 						}
 					)
 
@@ -162,6 +173,25 @@
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
 						    obj.$bindTo($scope, "topic"); 
+							obj.$loaded().then(function() {
+								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event + "/history"));
+							});
+							
+							$scope.log = function(value) {
+								console.log('vote changed: ' + value);
+								
+								var log = {
+						     		user: $scope.local.user.$id,
+						     		ts: new Date().toString(),
+						     		action: 'vote',
+									topic: $scope.topic.$id,
+									event: $scope.topic.event,
+									content: value
+								};
+								
+								$scope.history.$add(log);
+								$scope.allHistory.$add(log);
+							};
 						}
 					)
 
@@ -180,7 +210,6 @@
 
 								//add users
 								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).pluck('$id').value();
-								// $scope.newEvent.topics = $scope._($scope.newTopics).chain().filter({ selected: true }).pluck('$id').value();
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
 									$scope.newEvent = $scope.events.$getRecord(ref.key());

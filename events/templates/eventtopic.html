@@ -1,5 +1,5 @@
 <div class="ui breadcrumb">
-  <a href="#" ng-click="goto('eventSummary/' + events.$getRecord(topic.event).$id)" class="section">{{events.$getRecord(topic.event).name}} </a>
+  <a href="#" ng-click="goto('eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
   <div class="divider"> / </div>
   <div class="active section">{{topic.name}}</div>
 </div>
@@ -10,7 +10,7 @@
 	<div ng-repeat="c in topic.choices"
 		class="ui attached segment"
 		ng-class="{'teal inverted': topic.votes[local.user.$id] == c}"
-		ng-click="topic.votes[local.user.$id] = c"> 
+		ng-click="topic.votes[local.user.$id] = c; log(c)"> 
 		<span class="ui label" ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length || 0"></span>
 		<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
 		<span ng-bind="c"></span>
@@ -18,8 +18,5 @@
 </div>
 
 <div style="margin-top:10px">
-	<button class="ui button fluid	" ng-click="showChats = true">Chat</button>
+	<button class="ui button fluid" ng-click="goto('chat/' + topic.$id + '/type/topic')">Chat</button>
 </div>
-
-<div class="chatbox" ng-include="'templates/chat.html'"></div>
-
