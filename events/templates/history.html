@@ -15,11 +15,11 @@
 			<div class="ui header">
 				<div class="ui right floated sub header" style="font-size:8px" ng-bind="h.ts"></div>
 				<div>
-					<span ng-bind="users.$getRecord(h.user).name"></span>: 
-					<span ng-bind="h.action"></span>
+					<span class="ui small label" ng-bind="users.$getRecord(h.user).name"></span>
+					<span class="ui small blue label" ng-bind="h.action"></span>
+					<span class="ui small orange label" ng-bind="topics.$getRecord(h.topic).name"></span>
 				</div>
-				<div class="sub header">
-					<span ng-bind="topics.$getRecord(h.topic).name"></span>: 
+				<div class="sub header" style="padding:5px 8px">
 					<span ng-bind="h.content"></span> 					
 				</div>
 			</div>
