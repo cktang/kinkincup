@@ -1,22 +1,24 @@
 
 	
-<div class="ui header"> My Events </div>
-
+<h1 class="ui header"> My Events </h1>
+	
 <style>
 	.events .segment:nth-child(odd) {
 		background-color: #fafafa;
 	}
 </style>
 
-<div class="events">
-	<div ng-repeat="e in events" 
-		ng-click="goto('eventSummary/' + e.$id)" 
-		ng-if="_(e.users).where({ id: local.user.$id }).length > 0" 
-		class="ui link attached segment">
-
-		<div class="ui header">
-			<div ng-bind="e.name"></div>
-			<div class="sub header" ng-bind="e.description"></div>
+<div class="events" style="margin-top: 20px">
+	<div class="ui one column grid">
+		<div ng-repeat="e in events" 
+			ng-click="goto('eventSummary/' + e.$id)" 
+			ng-if="_(e.users).where({ id: local.user.$id }).length > 0" 
+			class="ui link attached column">
+	
+			<div class="ui header">
+				<div ng-bind="e.name"></div>
+				<div class="sub header" ng-bind="e.description"></div>
+			</div>
 		</div>
 	</div>
 </div>
