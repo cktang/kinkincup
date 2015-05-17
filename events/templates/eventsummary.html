@@ -46,12 +46,13 @@
 						'help': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
 						'remove': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
 					}"></i> 
+					{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
 				</span>
 			</span>
 			Participants 
 		</h4>
 		
-		<div class="ui three column grid">
+		<div class="ui three column grid" style="clear:both">
 			<div class="ui column">Going</div>
 			<div class="ui column">Maybe</div>
 			<div class="ui column">Invited</div>	
@@ -99,8 +100,8 @@
 		</h4>
   		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
   				class="ui choice attached segment"
-				ng-class="{ 'chosen': getVote(t, c) ==  maxVotes(t) }">
-			<span class="ui label" ng-bind="getVote(t, c)"></span>
+				ng-class="{ 'green inverted': getVote(t, c) ==  maxVotes(t) }">
+			<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
 	  		<span ng-bind="c"></span>
   		</div>
   	</div>

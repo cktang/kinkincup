@@ -5,14 +5,21 @@
 </div>
 <h5 class="ui sub header" ng-bind="topic.description"></h5>
 
+
 <h5 class="ui header"> Vote </h5>
-<div class="choices">
+<div class="topic">
 	<div ng-repeat="c in topic.choices"
 		class="ui attached segment"
-		ng-class="{'teal inverted': topic.votes[local.user.$id] == c}"
+		ng-class="{'green inverted': topic.votes[local.user.$id] == c}"
 		ng-click="topic.votes[local.user.$id] = c; log(c)"> 
-		<span class="ui label" ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length || 0"></span>
-		<span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
+		
+		<span class="ui"
+				ng-if=" topic.votes[local.user.$id] == c">
+			<i class="ui checkmark icon"></i>
+		</span>
+		<span class="ui horizontal circular label" 
+			ng-class="{green: topic.votes[local.user.$id] == c, white: topic.votes[local.user.$id] != c}"
+			ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length || 0"></span>
 		<span ng-bind="c"></span>
 	</div> 
 </div>
