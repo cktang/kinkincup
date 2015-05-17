@@ -11,7 +11,7 @@
 <div class="events">
 	<div ng-repeat="e in events" 
 		ng-click="goto('eventSummary/' + e.$id)" 
-		ng-if="_(e.users).contains(local.user.$id)" 
+		ng-if="_(e.users).where({ id: local.user.$id }).length > 0" 
 		class="ui link attached segment">
 
 		<div class="ui header">
