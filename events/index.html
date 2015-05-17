@@ -72,6 +72,10 @@
 								templateUrl: 'templates/eventtopic.html',
 								controller: 'eventTopicController'
 							})
+							.when('/history/:id', {
+								templateUrl: 'templates/history.html',
+								controller: 'historyController'
+							})
 							.when('/chat/:id/type/:type', {
 								templateUrl: 'templates/chat.html',
 								controller: 'chatController'
@@ -140,6 +144,16 @@
 						}
 					)
 
+					.controller("historyController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
+
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
+						    obj.$bindTo($scope, "event"); 
+ 						    $scope.r = $routeParams;
+						}
+					)
+					
 					.controller("eventSummaryController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 

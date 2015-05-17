@@ -34,3 +34,7 @@
 	background-color: transparent;
 	border: 0px !important;
 }
+
+.events .segment:nth-child(odd) {
+	background-color: #fafafa;
+}

@@ -1,0 +1,28 @@
+
+	
+	
+<div class="ui breadcrumb">
+  <a href="#" ng-click="goto('eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
+  <div class="divider"> / </div>
+  <div class="active section">History</div>
+</div>
+
+<div class="events" style="margin-top: 20px">
+	<div class="ui one column grid">
+		<div ng-repeat="h in history" 
+			class="ui link attached column">
+	
+			<div class="ui header">
+				<div class="ui right floated sub header" style="font-size:8px" ng-bind="h.ts"></div>
+				<div>
+					<span ng-bind="users.$getRecord(h.user).name"></span>: 
+					<span ng-bind="h.action"></span>
+				</div>
+				<div class="sub header">
+					<span ng-bind="topics.$getRecord(h.topic).name"></span>: 
+					<span ng-bind="h.content"></span> 					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
