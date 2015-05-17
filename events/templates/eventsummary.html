@@ -33,7 +33,31 @@
 	}
 </style>
 
-	<div class="ui sticky topic link" id="participants">
+	<!-- Modal -->
+	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']">
+	  <div class="ui header"> Participants </div>
+
+		<div ng-repeat="d in decisions">
+		  <div class="ui attached segment" style="border:0px" 
+		  		ng-class="{
+				  'inverted green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes' && d == 'yes',
+				  'inverted yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe' && d == 'maybe',
+				  'inverted red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no' && d == 'no'
+				}"
+		  		ng-click="_(event.users).findWhere({ id: local.user.$id }).decision = d"> 
+			  <span ng-show="_(event.users).findWhere({ id: local.user.$id }).decision == d"><i class="ui checkmark icon"></i></span>
+			  {{ d }} 
+		  </div>
+		</div>
+
+	      <div class="ui segment">
+	        <button type="button" class="ui blue button close">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="ui sticky topic link" id="participants" ng-click="decision()">
 		<h4 class="ui header">
 			<span class="ui right floated sub header"> 
 				<span class="ui label"  ng-class="{
@@ -104,9 +128,7 @@
 			<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
 	  		<span ng-bind="c"></span>
   		</div>
-  	</div>
-  </div>
-</div>
+	</div>
 
 <div style="clear:both"></div>
 

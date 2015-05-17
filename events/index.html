@@ -157,6 +157,10 @@
 									.max()
 									.value();
 							};
+							
+							$scope.decision = function() {
+								$('#modal').modal('show');
+							};
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 						    obj.$bindTo($scope, "event"); 

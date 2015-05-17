@@ -90,13 +90,12 @@
 	<div class="ui modal fade" id="form4">
 	  <div class="ui header"> Participants </div>
 
-	      <div class="content">
+	      <div class="ui segments" style="margin:0px">
 			  <h5 	ng-repeat="u in users" 
-			  		class="full" 
-			  		style="border-bottom:1px solid silver" 
+			  		class="ui attached segment"  
 			  		ng-click="u.selected = !u.selected" 
-			  		ng-class="{'label-success': u.selected}">
-			  	<span ng-show="u.selected"><i class="pull-right glyphicon glyphicon-ok"></i></span> 
+			  		ng-class="{'inverted green': u.selected}">
+				<span ng-show="u.selected"><i class="ui checkmark icon"></i></span> 
 			  	<span>{{u.name}}</span>
 			  </h5>
 	      </div>
@@ -109,33 +108,45 @@
 
 	<!-- Modal -->
 	<div class="ui modal fade" id="form5">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Topic</h4>
+	      <div class="ui header">
+	        <h4 id="myModalLabel">New Topic</h4>
 	      </div>
-	      <div class="modal-body">
+		  
+	      <div class="content">
 	      	  <div class="form-group">
 			    <label for="name">Name</label>
-			    <input type="text" class="form-control" placeholder="Topic Name" ng-model="currentTopic.name">
+			    <div class="ui fluid input">
+				    <input type="text" class="form-control" placeholder="Topic Name" ng-model="currentTopic.name">
+				</div>
 			  </div>
 			  <div class="form-group">
 			    <label for="description">Description</label>
-			    <textarea type="description" class="form-control" placeholder="Event Description" ng-model="currentTopic.description"></textarea>
+			    <div class="ui fluid input">
+				    <input type="description" class="form-control" placeholder="Event Description" ng-model="currentTopic.description"></input>
+				</div>
 			  </div>		      	
 			  <div class="form-group">
 			    <label for="choices">Choices</label>
-			    <input type="text" class="form-control" placeholder="Choice 1" ng-model="currentTopic.choices[0]"/>
-			    <input type="text" class="form-control" placeholder="Choice 2" ng-model="currentTopic.choices[1]"/>
-			    <input type="text" class="form-control" placeholder="Choice 3" ng-model="currentTopic.choices[2]"/>
-			    <input type="text" class="form-control" placeholder="Choice 4" ng-model="currentTopic.choices[3]"/>
-			    <input type="text" class="form-control" placeholder="Choice 5" ng-model="currentTopic.choices[4]"/>
+				<div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="currentTopic.choices[0]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="currentTopic.choices[1]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="currentTopic.choices[2]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="currentTopic.choices[3]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="currentTopic.choices[4]"/>
+				</div>
 			  </div>	
 	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	        <button type="button" class="btn btn-primary" ng-click="saveTopic()">Confirm</button>
+	      <div class="ui segment">
+	        <button type="button" class="ui close button">Cancel</button>
+	        <button type="button" class="ui blue button" ng-click="saveTopic()">Confirm</button>
 	      </div>
 	    </div>
 	  </div>
