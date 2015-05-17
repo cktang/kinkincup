@@ -4,16 +4,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
-<!--
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet">
--->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>	
 
-<!--
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.js"></script>
--->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
@@ -25,7 +18,7 @@
 	<Script src="js/angular-underscore.js"></script>
 
 	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
-	<meta name="viewport" content="width=device-width" /> 
+	<meta name="viewport" content="width=device-width, user-scalable=no" /> 
 
 	<link href="css/nga.all.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
@@ -83,9 +76,9 @@
 								templateUrl: 'templates/chat.html',
 								controller: 'chatController'
 							})
-							// .otherwise({
-							// 	redirectTo: 'login' 
-							// });
+							.otherwise({
+							 	redirectTo: 'login' 
+							});
 					})
 					
 					.run(function($rootScope, $window, $location, $localStorage, $firebaseArray) {
@@ -96,8 +89,11 @@
 					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
 					    $rootScope.allHistory = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/history"));
 
+						$rootScope.$on('$routeChangeStart', function(next, current) { 
+						   console.log(current.$$route.originalPath);
+						});
+
 						$rootScope.goto = function(url) {
-							console.log(url);
 							try {
 	  							linkEvent(url);
 							} catch (e) {
@@ -209,7 +205,12 @@
 								}
 
 								//add users
-								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).pluck('$id').value();
+								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).map(function(e) {
+									return {
+										id: e.$id,
+										decision: 'no'
+									};
+								});
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
 									$scope.newEvent = $scope.events.$getRecord(ref.key());

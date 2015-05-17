@@ -7,19 +7,19 @@
 	</div>
 
 	<div class="ui button fluid"
-	  	ng-class="{good: newTopics['time'], bad: !newTopics['time']}" 
-	  	ng-click="openTopic('time')">
+	  	ng-class="{good: newTopics['Time'], bad: !newTopics['Time']}" 
+	  	ng-click="openTopic('Time')">
 			<div class="ui header"> Time </div>
-      		<div ng-repeat="c in newTopics['time'].choices" style="line-height:20px">
+      		<div ng-repeat="c in newTopics['Time'].choices" style="line-height:20px">
 		  		<small ng-bind="c"></small><Br>
 	  		</div>
 	</div>
 
 	<div class="ui button fluid"
-	  	ng-class="{good: newTopics['time'], bad: !newTopics['venue']}" 
-	  	ng-click="openTopic('venue')">
+	  	ng-class="{good: newTopics['Venue'], bad: !newTopics['Venue']}" 
+	  	ng-click="openTopic('Venue')">
 			<div class="ui header"> Place </div>
-      		<div ng-repeat="c in newTopics['venue'].choices" style="line-height:20px">
+      		<div ng-repeat="c in newTopics['Venue'].choices" style="line-height:20px">
 		  		<small ng-bind="c"></small><Br>
 	  		</div>
 	</div>
@@ -36,7 +36,7 @@
 
 	  <div 	ng-repeat="t in newTopics" 
 	  		class="ui button fluid" 
-	  		ng-hide="{{t.id=='venue' || t.id=='time'}}"
+	  		ng-hide="{{t.id=='Venue' || t.id=='Time'}}"
 	  		ng-click="openTopic(t.name)">
 	  	<span ng-bind="t.name" class="ui header"></span>
 	  	<span class="main"> 

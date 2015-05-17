@@ -18,14 +18,11 @@
 	height: 50px;
 }
 
-.good {
-	background-color: #CEC !important;
-}
-
-.bad {
-	background-color: #FCC !important;
-}
-
 .ui.button.fluid {
 	margin-bottom: 0.2em;
+}
+
+.ui.topic > .ui.header {
+	margin-top: 1.2em !important;
+	margin-bottom: 0.4em !important;
 }

@@ -23,21 +23,80 @@
 	div.choice {
 		padding: 0em !important;
 	}
+	
+	#participants .ui.grid {
+		margin: inherit;
+	}
+	
+	#participants .ui.column {
+		background-color: white;
+	}
 </style>
 
-	<div class="ui sticky topic">
-		<h4 class="ui header"> Participants </h4>
-		<div ng-repeat="u in event.users" class="ui choice attached segment">
-			<span class="ui label">&nbsp;</span>
-			<span  ng-bind="users.$getRecord(u).name"></span>
+	<div class="ui sticky topic link" id="participants">
+		<h4 class="ui header">
+			<span class="ui right floated sub header"> 
+				<span class="ui label"  ng-class="{
+					'green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
+					'yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
+					'red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
+				}">
+					<i class="ui icon" ng-class="{
+						'checkmark': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
+						'help': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
+						'remove': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
+					}"></i> 
+				</span>
+			</span>
+			Participants 
+		</h4>
+		
+		<div class="ui three column grid">
+			<div class="ui column">Going</div>
+			<div class="ui column">Maybe</div>
+			<div class="ui column">Invited</div>	
+				
+			<div class="ui column">
+				<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
+					<span  ng-bind="users.$getRecord(u.id).name"></span>
+				</div>
+				<div ng-if="_(event.users).filter({ decision: 'yes' }).length == 0"> / </div>
+			</div>
+			<div class="ui column">
+				<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
+					<span  ng-bind="users.$getRecord(u.id).name"></span>
+				</div>
+				<div ng-if="_(event.users).filter({ decision: 'maybe' }).length == 0"> / </div>
+			</div>
+			<div class="ui column">
+				<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
+					<span  ng-bind="users.$getRecord(u.id).name"></span>
+				</div>
+				<div ng-if="_(event.users).filter({ decision: 'no' }).length == 0"> / </div>
+			</div>
 		</div>
 	</div>
 
   	<div ng-repeat="t in event.topics" 
-  		class="col-xs-12 link topic" 
+  		class="ui link topic" 
   		ng-click="goto('eventTopic/' + t)">
 
-  		<h4 style="margin-bottom:5px"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small></h4>
+  		<h4 class="ui header"> 
+			<span class="ui right floated sub header">
+				<span class="ui label" ng-class="{
+						'green': topics.$getRecord(t).votes[local.user.$id],
+						'yellow': !topics.$getRecord(t).votes[local.user.$id]
+					}">
+					<i class="ui icon" ng-class="{
+						'checkmark': topics.$getRecord(t).votes[local.user.$id],
+						'help': !topics.$getRecord(t).votes[local.user.$id]
+					}"></i>
+					{{topics.$getRecord(t).votes[local.user.$id]}}
+				</span> 
+			</span>
+			
+			{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
+		</h4>
   		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
   				class="ui choice attached segment"
 				ng-class="{ 'chosen': getVote(t, c) ==  maxVotes(t) }">
