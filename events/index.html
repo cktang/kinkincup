@@ -29,12 +29,15 @@
     <script src="js/semantic/components/modal.js"></script>	
 	<link href="js/semantic/components/modal.css" rel="stylesheet">
 
+    <script src="js/moment.js"></script>	
+    <script src="js/angular-moment.min.js"></script>	
+
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
 
 <body ontouchstart="">
 	<div class="ui fixed main menu" ng-include="'header.html'"></div>
- 	<div class="ng-view container" style="padding-top:50px"></div>
+ 	<div class="ng-view ng-cloak container" style="padding-top:50px"></div>
 
 	<script>
 		var app = angular
@@ -94,7 +97,11 @@
 					    $rootScope.allHistory = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/history"));
 
 						$rootScope.$on('$routeChangeStart', function(next, current) { 
-//						   console.log(current.$$route.originalPath);
+						   try {
+							   console.log(current.$$route.originalPath);
+						   }catch (e) {
+							   console.error(e);
+						   }
 						});
 
 						$rootScope.goto = function(url) {
@@ -113,6 +120,14 @@
 					    $rootScope.back = function() {
 					    	$window.history.back();
 					    }
+						
+						$rootScope.addHistory = function() {
+							try {
+								
+							}catch(e) {
+								
+							}
+						}
 					})
 
 					.controller("chatController",
@@ -129,7 +144,7 @@
 						     	try {
 									var c = {
 							     		user: $scope.local.user.$id,
-							     		ts: new Date().toString(),
+							     		ts: moment().format('LLL'),
 							     		content: text
 							     	};
 							     	$scope.chats.$add(c);				     		
@@ -180,6 +195,25 @@
 						    obj.$bindTo($scope, "event"); 
 							
 							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
+							
+							$scope.logParticipate = function(value) {
+								console.log('status changed: ' + value);
+								
+								$scope.history.$add({
+						     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'participate',
+									event: $scope.event.$id,
+									content: value
+								});
+								$scope.allHistory.$add({
+						     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'participate',
+									event: $scope.event.$id,
+									content: value
+								});
+							};
 						}
 					)
 
@@ -194,17 +228,22 @@
 							$scope.log = function(value) {
 								console.log('vote changed: ' + value);
 								
-								var log = {
-						     		user: $scope.local.user.$id,
-						     		ts: new Date().toString(),
+								$scope.history.$add({
+				 		     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
 						     		action: 'vote',
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
 									content: value
-								};
-								
-								$scope.history.$add(log);
-								$scope.allHistory.$add(log);
+								});
+								$scope.allHistory.$add({
+						     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'vote',
+									topic: $scope.topic.$id,
+									event: $scope.topic.event,
+									content: value
+								});
 							};
 						}
 					)
@@ -222,13 +261,18 @@
 									return;
 								}
 
-								//add users
+								//add users 
 								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).map(function(e) {
 									return {
 										id: e.$id,
 										decision: 'no'
 									};
 								});
+								
+								$scope.newEvent.history = {
+									user: $scope.local.user.$id,
+									action: 'create'
+								}
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
 									$scope.newEvent = $scope.events.$getRecord(ref.key());

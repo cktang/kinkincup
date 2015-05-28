@@ -45,7 +45,7 @@
 				  'inverted yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe' && d == 'maybe',
 				  'inverted red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no' && d == 'no'
 				}"
-		  		ng-click="_(event.users).findWhere({ id: local.user.$id }).decision = d"> 
+		  		ng-click=" logParticipate(d); _(event.users).findWhere({ id: local.user.$id }).decision = d;"> 
 			  <span ng-show="_(event.users).findWhere({ id: local.user.$id }).decision == d"><i class="ui checkmark icon"></i></span>
 			  {{ d }} 
 		  </div>
