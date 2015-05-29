@@ -1,0 +1,84 @@
+		.column.today {
+			background: pink !important;
+			color: brown !important;	
+		}
+				
+		.ui.column {			
+			background-color: white;
+		}
+		
+		.column.weekend, .column.header {
+			background-color: lightblue;
+			color: navy;
+		}
+		
+		.ui.duty1 {
+			background-color: #fee;
+		}
+		.ui.duty2 {
+			background-color: #fdd;
+		}
+		.ui.duty3 {
+			background-color: #fcc;
+		}
+		.ui.dutyO {
+			background-color: lightyellow;
+		}
+		.ui.dutyL {
+			background-color: #cfc;
+		}
+				
+		.ui.manual.duty1 {
+			background-color: #999;
+			color: white;
+		}
+		.ui.manual.duty2 {
+			background-color: #777;
+			color: white;
+		}
+		.ui.manual.duty3 {
+			background-color: #555;
+			color: white;
+		}
+		.ui.manual.dutyO {
+			background-color: black;
+			color: white;
+		}
+		.ui.manual.dutyL {
+			background-color: #333;
+			color: white;
+		}
+		
+		#dates {
+			margin-top: 100px;
+		} 
+		
+		.ui.column.grid {
+			margin-left: 10px;
+		}
+		
+		.ui.column.grid .column {
+			width: 2.6% !important;
+			text-align: center;
+			padding: 0.3em !important;
+		}
+
+		.link, .button { transition: all .1s; }
+		.link:active, .button:active { 
+			-webkit-transform-style: preserve-3d;
+		    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+		   	opacity:0.7; 
+		}
+		
+		.subtotal {
+			opacity: 0.3;
+		}
+		
+		.subtotal .negative {
+			color: red;
+			font-weight: bold;
+		}
+		.subtotal .positive {
+			color: green;
+			font-weight: bold;
+		}
