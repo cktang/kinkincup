@@ -57,6 +57,9 @@
 		.ui.dutyO {
 			background-color: lightyellow;
 		}
+		.ui.dutyL {
+			background-color: #cfc;
+		}
 				
 		.ui.manual.duty1 {
 			background-color: #999;
@@ -72,6 +75,10 @@
 		}
 		.ui.manual.dutyO {
 			background-color: black;
+			color: white;
+		}
+		.ui.manual.dutyL {
+			background-color: #333;
 			color: white;
 		}
 		
@@ -117,15 +124,29 @@
 		</div>
 		
 		<div class="ui item">
-			<h4>Locks</h4>
+			<h4>Preference</h4>
 			<div class="ui buttons">
 			  	<div ng-repeat="d in duty" 
 			      class="ui button duty{{d}}" 
 				  ng-class="{big: choice==d}" 
 				  ng-click="setChoice(d)" 
 				  ng-bind="d">
-				</div>
+				</div> 
 			  	<div class="ui button" ng-class="{big: choice==null}" ng-click="setChoice(null)" > Clear </div>
+			</div>
+		</div>
+		
+		<div class="ui item">
+			<h4>Lock</h4>
+			<div class="ui buttons">
+			  	<div class="ui button" ng-class="{big: choice==null}" ng-click="setLock(null)" > Current </div>
+			  	<div ng-repeat="d in duty" 
+			      class="ui button duty{{d}}" 
+				  ng-class="{big: lock==d}" 
+				  ng-click="setLock(d)" 
+				  ng-bind="d">
+				</div>
+			  	<div class="ui button" ng-class="{big: choice==null}" ng-click="setLock(null)" > Clear </div>
 			</div>
 		</div>
 		
@@ -137,10 +158,12 @@
 			<br></br>
 			<span class="ui positive button" ng-click="findSolution()">Auto Assign</span>
 		</div>
-
-		<div class="ui item"> 
-			<h4>Loop</h4>
-			<h1 ng-bind="tries"></h1> 
+		
+		<div class="ui item">
+			<h4>Memory</h4>
+			<span class="ui negative button" ng-click="save()">Save</span>
+			<br></br>
+			<span class="ui positive button" ng-click="load()">Load</span>
 		</div>
 				
 		<span class="ui floated right item">
@@ -188,12 +211,21 @@
 		</div>	
 	</div>
 
+	<div class="ui message">
+		<div> Rules </div>
+		
+		<div>1. Each day min 2, max 4 ppl for duty 1,2,3</div>
+		<div>2. Each ppl can have exactly 8 days of O</div>
+		<div>3. Each ppl cannot work consecutively more than 6 days</div>
+		<div>4. After duty 2, cannot be duty 1</div>
+		<div>5. After duty 3, cannot be duty 1 or 2</div>
+		<div>6. Ppl want to have preference like duty 1 or O</div>
 	<script>
 		var app = angular
 					.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
 		  			.controller("Controller", 
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
-							$scope.duty = ['1', '2', '3', 'O'];
+							$scope.duty = ['1', '2', '3', 'O', 'L'];
 							$scope.choice = "1";
 
 							$scope.personRules = [
@@ -222,12 +254,12 @@
 							];
 							
 							$scope.person = [
-								{ name: 'P1' }, 	{ name: 'P2' }, 
-								{ name: 'P3' }, 	{ name: 'P4' }, 
-								{ name: 'P5' }, 	{ name: 'P6' }, 
-								{ name: 'P7' }, 	{ name: 'P8' },
-								{ name: 'P9' },		{ name: 'P10' },
-								{ name: 'P11' },	{ name: 'P12' },
+								{ name: 'LAW' }, 	{ name: 'LEE' }, 
+								{ name: 'HO' }, 	{ name: 'KUEN' }, 
+								{ name: 'YIP' }, 	{ name: 'POON' }, 
+								{ name: 'WONG' }, 	{ name: 'KIT' },
+								{ name: 'CHEUNG' },		{ name: 'LAU' },
+								{ name: 'YEUNG' },	{ name: 'LIZ' },
 							];
 
 							$scope.d = moment();
