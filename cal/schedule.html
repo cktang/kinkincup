@@ -113,7 +113,7 @@
 		<div 
 			class="ui column link {{ 'duty' + date.duty }}"
 			ng-class="{manual: date.method=='manual'}"
-			ng-click="toggleLock(date, choice)"
+			ng-click="toggleLock($parent.$index, date, choice)"
 			ng-repeat="date in p.dates">
 			<span class="ui dText"> {{ date.duty || "/" }} </span>
 		</div>
@@ -158,7 +158,7 @@
 								var condition2 = true;
 								var duties = _(row.dates).pluck('duty').join("");
 								condition2 = condition2 
-												&& duties.indexOf("21") < 0
+//												&& duties.indexOf("21") < 0
 //												&& duties.indexOf("31") < 0
 //												&& duties.indexOf("32") < 0
 								if (!condition2) return condition2;
@@ -180,11 +180,14 @@
 								var lockedList = angular.copy($scope.lockedList[date]);
 								
 								_(result).each(function(r) {
-									if (lockedList && lockedList.length > 0 && r == lockedList[0]) lockedList.shift();
-									else result2.push(r);
+									if (lockedList && lockedList.length > 0 && r == lockedList[0]) 
+										lockedList.shift();
+									else 
+										result2.push(r);
 								});
-									
+										
 								$scope.dateDutyList[date] = _(result2).shuffle();
+								console.log(date + ":: " + $scope.dateDutyList[date]);
 							};
 							
 							$scope.person = [
@@ -211,13 +214,13 @@
 							};
 							
 							$scope.findSolution = function() {
+								console.log('find solution');
+								
 								$scope.tries++;								
 								var maxTestReached = false;
 								
-								_($scope.person).each(function(p) {
-									_(p.dates).each(function(d) { 
-										$scope.createDateDutyList(d.date);
-									});
+								_($scope.person[0].dates).each(function(d) { 
+									$scope.createDateDutyList(d.date);
 								});
 									
 								_($scope.person).each(function(p, i) {
@@ -225,17 +228,26 @@
 									
 									//clear original assigmnet if its not manually asssigned
 									_(p.dates).each(function(d) { 
-										if (d.method == 'manual') return;	
+										if (d.method == 'manual') {
+											return;	
+										}
 										d.duty = null; 
 									});
 									
 									var maxTest = 100;
-									while (!$scope.rowCheck(p) && maxTest-- > 0) {
+									var allocated = 0;
+									while ((!$scope.rowCheck(p) && maxTest-- > 0) || allocated == 0) {
+										allocated++;
 										_(p.dates).each(function(d) {		
 											//skip assignment if its manually assigned
-											if (d.method == 'manual') return;	
+											if (d.method == 'manual') {
+												return;
+											}	
 																						
-											//randomly assign a duty to this field
+											//randomly assign a duty to this field			
+											
+											console.log(d.date + ": " + $scope.dateDutyList[d.date]);								
+			
 											d.duty =  $scope.dateDutyList[d.date].pop();
 										});
 									}
@@ -307,18 +319,37 @@
 								$scope.choice = d;
 							};
 							
-							$scope.toggleLock = function(date, choice) {
-								date.duty = choice; 
-								date.method = choice? 'manual': null; 
+							$scope.toggleLock = function(index, date, choice) {
+								var record = _($scope.person[index].dates).findWhere({date: date.date});
+								record.duty = choice; 
+								record.method = choice? 'manual': null; 
 								
 								if (choice) {
-									if (!$scope.lockedList[date.date]) $scope.lockedList[date.date] = [];
-									$scope.lockedList[date.date].push(choice);
+									if (!$scope.lockedList[record.date]) $scope.lockedList[record.date] = [];
+									$scope.lockedList[record.date].push(choice);
 								} else {
 									//remove lock case
 								}
+								
+								$scope.solution = angular.copy($scope.person);
+							};
+							
+							$scope.save = function() {
+								$scope.clearBoard();
+								localStorage["manualSchedule"] = angular.toJson($scope.solution);
+								localStorage["lockedlist"] = angular.toJson($scope.lockedList);
+								console.log('saved');
+							};
+	
+							$scope.load = function() {
+								$scope.clearBoard();
+								$scope.solution = angular.fromJson(localStorage["manualSchedule"]);
+								$scope.person = angular.fromJson(localStorage["manualSchedule"]);
+								$scope.lockedList = angular.fromJson(localStorage["lockedlist"]);
+								console.log('loaded');
 							};
 						});
+						
 	</script>
 </body>
 </html>
