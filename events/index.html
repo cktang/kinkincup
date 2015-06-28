@@ -218,25 +218,39 @@
 									event: topic.$id,
 									content: value
 								});
+								
+								topic.votes[$scope.local.user.$id] = value; 
+								$scope.topics.$save(topic);
 							};
 							
 							$scope.logParticipate = function(value) {
 								console.log('status changed: ' + value);
 								
-								$scope.history.$add({
+								var logItem = {
 						     		user: $scope.local.user.$id,
 						     		ts: moment().format('LLL'),
 						     		action: 'participate',
 									event: $scope.event.$id,
 									content: value
+								};
+								
+								$scope.allHistory.$add(angular.copy(logItem));
+								$scope.history.$add(angular.copy(logItem));
+								
+								_($scope.event.users).findWhere({ id: $scope.local.user.$id }).decision = value; 
+							};
+							
+							$scope.saveNewTopic = function(newTopic) {
+								var event = $scope.event;
+								var events = $scope.events;
+								$scope.topics.$add(angular.copy(newTopic)).then(function(ref) {
+									event.topics.push(ref.key());	
+									events.$save(event);							
 								});
-								$scope.allHistory.$add({
-						     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
-						     		action: 'participate',
-									event: $scope.event.$id,
-									content: value
-								});
+							};
+							
+							$scope.openNewTopicModal = function() {
+								$('#newTopicModal').modal('show');
 							};
 						}
 					)
@@ -269,6 +283,32 @@
 									content: value
 								});
 							};
+							
+							$scope.saveNewChoice = function(newChoice) {
+								$scope.topic.choices.push(newChoice);
+								$scope.topic.votes = [];
+								
+								$scope.history.$add({
+				 		     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'add choice',
+									topic: $scope.topic.$id,
+									event: $scope.topic.event,
+									content: newChoice
+								});
+								$scope.allHistory.$add({
+						     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'vote',
+									topic: $scope.topic.$id,
+									event: $scope.topic.event,
+									content: newChoice
+								});
+							};
+							
+							$scope.openNewChoiceModal = function() {
+								$('#newChoiceModal').modal('show');								
+							}
 						}
 					)
 

@@ -45,7 +45,7 @@
 				  'inverted yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe' && d == 'maybe',
 				  'inverted red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no' && d == 'no'
 				}"
-		  		ng-click=" logParticipate(d); _(event.users).findWhere({ id: local.user.$id }).decision = d;"> 
+		  		ng-click="_(event.users).findWhere({ id: local.user.$id }).decision = d; logParticipate(d);"> 
 			  <span ng-show="_(event.users).findWhere({ id: local.user.$id }).decision == d"><i class="ui checkmark icon"></i></span>
 			  {{ d }} 
 		  </div>
@@ -65,7 +65,7 @@
 		<div ng-repeat="c in topicModal.choices">
 		  <div class="ui attached segment" style="border:0px" 
 		  		ng-class="{ 'inverted green': topicModal.votes[local.user.$id] == c }"
-		  		ng-click=" logTopicDecision(topicModal, c); topicModal.votes[local.user.$id] = c;"> 
+		  		ng-click=" logTopicDecision(topicModal, c)"> 
 			  <span ng-show="topicModal.votes[local.user.$id] == c"><i class="ui checkmark icon"></i></span>
 			  {{ c }} 
 		  </div>
@@ -146,10 +146,63 @@
   		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
   				class="ui choice attached segment"
 				ng-class="{ 'green inverted': getVote(t, c) ==  maxVotes(t) }">
+
+			<span class="ui" ng-if="topics.$getRecord(t).votes[local.user.$id] == c">
+				<i class="ui checkmark icon"></i>
+			</span>
+
 			<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
 	  		<span ng-bind="c"></span>
   		</div>
 	</div>
+	
+	<!-- newTopicModal -->
+	<div class="ui modal fade" id="newTopicModal">
+	      <div class="ui header">
+	        <h4 id="myModalLabel">New Topic</h4>
+	      </div>
+		  
+	      <div class="content">
+	      	  <div class="form-group">
+			    <label for="name">Name</label>
+			    <div class="ui fluid input">
+				    <input type="text" class="form-control" placeholder="Topic Name" ng-model="newTopic.name">
+				</div>
+			  </div>
+			  <div class="form-group">
+			    <label for="description">Description</label>
+			    <div class="ui fluid input">
+				    <input type="description" class="form-control" placeholder="Event Description" ng-model="newTopic.description"></input>
+				</div>
+			  </div>		      	
+			  <div class="form-group">
+			    <label for="choices">Choices</label>
+				<div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="newTopic.choices[0]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="newTopic.choices[1]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="newTopic.choices[2]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="newTopic.choices[3]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="newTopic.choices[4]"/>
+				</div>
+			  </div>	
+	      </div>
+	      <div class="ui segment">
+	        <button type="button" class="ui close button">Cancel</button>
+	        <button type="button" class="ui blue close button" ng-click="saveNewTopic(newTopic)">Confirm</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div ng-click="openNewTopicModal()" class="ui tiny  button"> <i class="ui add square icon"></i> New Topic </div>
 
 <div style="clear:both"></div>
 

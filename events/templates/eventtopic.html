@@ -21,9 +21,40 @@
 			ng-class="{green: topic.votes[local.user.$id] == c, white: topic.votes[local.user.$id] != c}"
 			ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length || 0"></span>
 		<span ng-bind="c"></span>
+
+		<span style="float:right" 
+			class="ui right floated mini button"> 
+			<i class="ui icon lock"></i> Finalize 
+		</span>
 	</div> 
 </div>
 
 <div style="margin-top:10px">
 	<button class="ui button fluid" ng-click="goto('chat/' + topic.$id + '/type/topic')">Chat</button>
+</div>
+
+<div style="margin-top:10px">
+	<button class="ui teal button fluid" ng-click="openNewChoiceModal()">Add New Choices (Reset all votes)</button>
+</div>
+
+
+<!-- newChoiceModal -->
+<div class="ui modal fade" id="newChoiceModal">
+      <div class="ui header">
+        <h4 id="myModalLabel">New Choice</h4>
+      </div>
+	  
+      <div class="content">
+      	  <div class="form-group">
+		    <div class="ui fluid input">
+			    <input type="text" class="form-control" placeholder="New Choice" ng-model="newChoice">
+			</div>
+		  </div>
+      </div>
+      <div class="ui segment">
+        <button type="button" class="ui close button">Cancel</button>
+        <button type="button" class="ui blue close button" ng-click="saveNewChoice(newChoice)">Confirm</button>
+      </div>
+    </div>
+  </div>
 </div>
