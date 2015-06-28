@@ -34,7 +34,7 @@
 	}
 </style>
 
-	<!-- Modal -->
+	<!-- Participants Modal -->
 	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']">
 	  <div class="ui header"> Participants </div>
 
@@ -57,8 +57,28 @@
 	    </div>
 	  </div>
 	</div>
+	
+	<!-- Topic Modal -->
+	<div class="ui modal fade" id="topicModal">
+	  <div class="ui header" ng-bind="topicModal.name"></div>
 
-	<div class="ui sticky topic link" id="participants" ng-click="decision()">
+		<div ng-repeat="c in topicModal.choices">
+		  <div class="ui attached segment" style="border:0px" 
+		  		ng-class="{ 'inverted green': topicModal.votes[local.user.$id] == c }"
+		  		ng-click=" logTopicDecision(topicModal, c); topicModal.votes[local.user.$id] = c;"> 
+			  <span ng-show="topicModal.votes[local.user.$id] == c"><i class="ui checkmark icon"></i></span>
+			  {{ c }} 
+		  </div>
+		</div>
+
+	      <div class="ui segment">
+	        <button type="button" class="ui blue button close" style="float:right" ng-click="goto('topic/' + topicModal.$id)">Details</button>
+	        <button type="button" class="ui blue button close">OK</button>
+	      </div>
+	  </div>
+	</div>
+
+	<div class="ui sticky topic link" id="participants" ng-click="decision('participants')">
 		<h4 class="ui header">
 			<span class="ui right floated sub header"> 
 				<span class="ui label"  ng-class="{
@@ -105,7 +125,7 @@
 
   	<div ng-repeat="t in event.topics" 
   		class="ui link topic" 
-  		ng-click="goto('eventTopic/' + t)">
+  		ng-click="decision(topics.$getRecord(t))">
 
   		<h4 class="ui header"> 
 			<span class="ui right floated sub header">

@@ -187,14 +187,38 @@
 									.value();
 							};
 							
-							$scope.decision = function() {
-								$('#modal').modal('show');
+							$scope.decision = function(topic) {
+								if (topic == 'participants') {
+									$('#modal').modal('show');								
+								} else {
+									$scope.topicModal = topic;
+									$('#topicModal').modal('show');
+								}
 							};
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 						    obj.$bindTo($scope, "event"); 
 							
 							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
+							
+							$scope.logTopicDecision = function(topic, value) {
+								console.log('status changed: ' + topic.$id + " " + value);
+								
+								$scope.history.$add({
+						     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'vote',
+									event: topic.$id,
+									content: value
+								});
+								$scope.allHistory.$add({
+						     		user: $scope.local.user.$id,
+						     		ts: moment().format('LLL'),
+						     		action: 'vote',
+									event: topic.$id,
+									content: value
+								});
+							};
 							
 							$scope.logParticipate = function(value) {
 								console.log('status changed: ' + value);
