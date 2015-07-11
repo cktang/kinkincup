@@ -187,7 +187,7 @@
 		var app = angular
 					.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
 		  			.controller("Controller",
-						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
 							$scope.d = moment();
 							$scope.today = $scope.d.format('YYYY-MM-DD');
 							$scope.eventRef = new Firebase("https://queencal.firebaseio.com/items");
@@ -204,6 +204,7 @@
 							}
 							
 							$scope.nextDate = function(date) { 
+								console.log("nextDate: " + date);
 								$scope.saveSelected();
 								var d = new moment(date).add(1, 'd').format('YYYY-MM-DD');
 								$scope.setSelected(d);				
@@ -219,11 +220,16 @@
 								if (!$scope.events.$getRecord(d)) {
 									$scope.eventRef.child(d).set({id: d});
 								}
-								$scope.selectedDate = $scope.events.$getRecord(d);	
+
+								$timeout( function() {
+									$scope.selectedDate = $scope.events.$getRecord(d);	
+								}, 500);
 							}
 
 							$scope.saveSelected = function() {
-								$scope.events.$save($scope.selectedDate);
+								try {
+									$scope.events.$save($scope.selectedDate);
+								}catch(e) { console.log(e); }
 							}
 
 							$scope.defineCal = function() {
