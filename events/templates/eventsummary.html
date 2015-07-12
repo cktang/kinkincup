@@ -4,12 +4,16 @@
 	<div ng-click="goto('chat/' + event.$id + '/type/event')" class="ui right floated tiny button"> <i class="ui icon wechat"></i> Chat </div>
 	{{event.name}} 
 	<div class="ui sub header">{{event.description}}</div>
-	<div class="ui divider"></div>
 </div>
 
 <style>
 	div.topic {
-		margin-bottom: 10px;
+		margin: 0px -20px;
+		padding: 15px 20px;
+	}
+
+	div.topic:nth-child(even) {
+		background-color: #ddd;
 	}
 
 	div.choice .badge {
@@ -28,14 +32,10 @@
 	#participants .ui.grid {
 		margin: inherit;
 	}
-	
-	#participants .ui.column {
-		background-color: white;
-	}
 </style>
 
 	<!-- Participants Modal -->
-	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']">
+	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']" ng-cloak>
 	  <div class="ui header"> Participants </div>
 
 		<div ng-repeat="d in decisions">
@@ -51,34 +51,12 @@
 		  </div>
 		</div>
 
-	      <div class="ui segment">
-	        <button type="button" class="ui blue button close">OK</button>
-	      </div>
-	    </div>
-	  </div>
+		<div class="ui segment">
+			<button type="button" class="ui blue button close">OK</button>
+		</div>
 	</div>
 	
-	<!-- Topic Modal -->
-	<div class="ui modal fade" id="topicModal">
-	  <div class="ui header" ng-bind="topicModal.name"></div>
-
-		<div ng-repeat="c in topicModal.choices">
-		  <div class="ui attached segment" style="border:0px" 
-		  		ng-class="{ 'inverted green': topicModal.votes[local.user.$id] == c }"
-		  		ng-click=" logTopicDecision(topicModal, c)"> 
-			  <span ng-show="topicModal.votes[local.user.$id] == c"><i class="ui checkmark icon"></i></span>
-			  {{ c }} 
-		  </div>
-		</div>
-
-	      <div class="ui segment">
-	        <button type="button" class="ui blue button close" style="float:right" ng-click="goto('topic/' + topicModal.$id)">Details</button>
-	        <button type="button" class="ui blue button close">OK</button>
-	      </div>
-	  </div>
-	</div>
-
-	<div class="ui sticky topic link" id="participants" ng-click="decision('participants')">
+	<div class="ui sticky topic link" id="participants" ng-click="decision('participants')" ng-cloak>
 		<h4 class="ui header">
 			<span class="ui right floated sub header"> 
 				<span class="ui label"  ng-class="{
@@ -97,7 +75,7 @@
 			Participants 
 		</h4>
 		
-		<div class="ui three column grid" style="clear:both">
+		<div class="ui three column grid" style="clear:both; padding:5px">
 			<div class="ui column">Going</div>
 			<div class="ui column">Maybe</div>
 			<div class="ui column">Invited</div>	
@@ -125,7 +103,7 @@
 
   	<div ng-repeat="t in event.topics" 
   		class="ui link topic" 
-  		ng-click="decision(topics.$getRecord(t))">
+  		ng-click="goto('/eventTopic/' + t)">
 
   		<h4 class="ui header"> 
 			<span class="ui right floated sub header">
@@ -133,27 +111,22 @@
 						'green': topics.$getRecord(t).votes[local.user.$id],
 						'yellow': !topics.$getRecord(t).votes[local.user.$id]
 					}">
-					<i class="ui icon" ng-class="{
-						'checkmark': topics.$getRecord(t).votes[local.user.$id],
-						'help': !topics.$getRecord(t).votes[local.user.$id]
-					}"></i>
-					{{topics.$getRecord(t).votes[local.user.$id]}}
+					You: <span style="margin-left:10px">{{topics.$getRecord(t).votes[local.user.$id] || "?"}}</span>
 				</span> 
 			</span>
 			
 			{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
 		</h4>
-  		<div 	ng-repeat="c in topics.$getRecord(t).choices" 
-  				class="ui choice attached segment"
-				ng-class="{ 'green inverted': getVote(t, c) ==  maxVotes(t) }">
-
-			<span class="ui" ng-if="topics.$getRecord(t).votes[local.user.$id] == c">
-				<i class="ui checkmark icon"></i>
-			</span>
+  		<div ng-repeat="c in topChoices(t)" 
+  				class="ui choice attached segment">
 
 			<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
 	  		<span ng-bind="c"></span>
   		</div>
+
+  		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
+
+  		<div style="margin-top:10px" class="ui tiny floated right button"> more </div>
 	</div>
 	
 	<!-- newTopicModal -->

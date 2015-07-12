@@ -83,9 +83,9 @@
 								templateUrl: 'templates/chat.html',
 								controller: 'chatController'
 							})
-							.otherwise({
-							 	redirectTo: 'login' 
-							});
+							// .otherwise({
+							//  	redirectTo: 'login' 
+							// });
 					})
 					
 					.run(function($rootScope, $window, $location, $localStorage, $firebaseArray) {
@@ -196,6 +196,17 @@
 								}
 							};
 
+							$scope.topChoices = function(topicId) {
+								console.log("topChoices: " + topicId);
+
+								return _($scope.topics.$getRecord(topicId).votes)
+											.chain().compact()
+											.groupBy(function(v, k) { return v; })
+											.sortBy(function(v, k) { return v.length})
+											.reverse().values()
+											.map(function(e) { return e[0]; }).values().value();
+							}
+
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 						    obj.$bindTo($scope, "event"); 
 							
@@ -286,7 +297,7 @@
 							
 							$scope.saveNewChoice = function(newChoice) {
 								$scope.topic.choices.push(newChoice);
-								$scope.topic.votes = [];
+								// $scope.topic.votes = [];
 								
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,

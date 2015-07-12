@@ -37,7 +37,13 @@
 			}
 
 			div.topic {
+				margin: -20px;
+				padding: 20px;
 				margin-bottom: 10px;
+			}
+
+			div.topic:nth-child(even) {
+				background-color: #ddd;
 			}
 
 			div.choice .badge {
@@ -81,7 +87,6 @@
 
 		<h5 class="full subtitle">Chat</h5>
 		<div class="chatbox" ng-include="'chat.html'"></div>
-
 
 		<div class="bottomplaceholder"></div>
 	</div>

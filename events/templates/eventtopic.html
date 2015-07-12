@@ -1,5 +1,5 @@
 <div class="ui breadcrumb">
-  <a href="#" ng-click="goto('eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
+  <a href="#" ng-click="goto('/eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
   <div class="divider"> / </div>
   <div class="active section">{{topic.name}}</div>
 </div>
@@ -14,8 +14,7 @@
 		ng-click="topic.votes[local.user.$id] = c; log(c)"> 
 		
 		<span class="ui"
-				ng-if=" topic.votes[local.user.$id] == c">
-			<i class="ui checkmark icon"></i>
+				ng-if="topic.votes[local.user.$id] == c">
 		</span>
 		<span class="ui horizontal circular label" 
 			ng-class="{green: topic.votes[local.user.$id] == c, white: topic.votes[local.user.$id] != c}"
@@ -26,6 +25,11 @@
 			class="ui right floated mini button"> 
 			<i class="ui icon lock"></i> Finalize 
 		</span>
+
+		<div style="height:10px" ng-if="_(topic.votes).chain().values().contains(c).value()"></div>
+		<div ng-repeat="userId in _(topic.votes).keys()">
+			<div ng-if="topic.votes[userId]==c" ng-bind="users.$getRecord(userId).name"></div>
+		</div>
 	</div> 
 </div>
 
@@ -34,7 +38,7 @@
 </div>
 
 <div style="margin-top:10px">
-	<button class="ui teal button fluid" ng-click="openNewChoiceModal()">Add New Choices (Reset all votes)</button>
+	<button class="ui teal button fluid" ng-click="openNewChoiceModal()">Add New Choices</button>
 </div>
 
 
