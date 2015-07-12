@@ -9,19 +9,11 @@
 
 <div class="events" style="margin-top: 20px">
 	<div class="ui one column grid">
-		<div ng-repeat="h in history" 
-			class="ui link attached column">
-	
-			<div class="ui header">
-				<div>
-					<span class="ui small label" ng-bind="users.$getRecord(h.user).name"></span>
-					<span class="ui small orange label" ng-bind="topics.$getRecord(h.topic).name"></span>
-				</div>
-				<div class="sub header" style="padding:5px 8px">
-					<span class="ui" ng-bind="h.action"></span>: <span ng-bind="h.content"></span> 					
-					<div class="ui sub header" style="font-size:8px" ng-bind="h.ts"></div>
-				</div>
-			</div>
+		<div ng-repeat="h in history">
+			<span class="ui small black label" ng-bind="users.$getRecord(h.user).name"></span>
+			<span class="ui small orange label" ng-bind="topics.$getRecord(h.topic).name"></span>
+			<span class="ui small teal label"> {{ h.action }}</span> 					
+			<span class="ui small red label"> {{ h.content }}</span> 					
 		</div>
 	</div>
 </div>

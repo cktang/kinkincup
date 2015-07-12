@@ -27,9 +27,10 @@
 		</span>
 
 		<div style="height:10px" ng-if="_(topic.votes).chain().values().contains(c).value()"></div>
-		<div ng-repeat="userId in _(topic.votes).keys()">
-			<div ng-if="topic.votes[userId]==c" ng-bind="users.$getRecord(userId).name"></div>
-		</div>
+		<span ng-repeat="userId in _(topic.votes).keys()" ng-if="topic.votes[userId]==c" class="ui small orange label"  > 
+			<i class="ui checkmark icon"></i>
+			<span ng-bind="users.$getRecord(userId).name" ></span>
+		</span>
 	</div> 
 </div>
 
