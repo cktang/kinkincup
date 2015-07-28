@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
@@ -15,12 +15,12 @@
 	<Script src="js/angular-underscore.js"></script>
 
 	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
-	<meta name="viewport" content="width=device-width" /> 
+	<meta name="viewport" content="width=device-width" />
 
-    <script src="js/semantic/semantic.js"></script>	
+    <script src="js/semantic/semantic.js"></script>
 	<link href="js/semantic/semantic.css" rel="stylesheet">
 
-    <script src="js/semantic/components/modal.js"></script>	
+    <script src="js/semantic/components/modal.js"></script>
 	<link href="js/semantic/components/modal.css" rel="stylesheet">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
@@ -32,10 +32,10 @@
 <body ontouchstart="" ng-controller="Controller">
 	<div class="ui fixed menu" id="menu">
 		<div class="ui item"> <i class="ui large heart icon"></i> </div>
-		<div class="ui item"> 
-			<h1> {{ d | amDateFormat: 'MMMM YYYY' }} </h1> 
+		<div class="ui item">
+			<h1> {{ d | amDateFormat: 'MMMM YYYY' }} </h1>
 		</div>
-		
+
 		<span class="ui floated right item">
 			<h1>
 				<i class="ui angle left icon link" ng-click="lastMonth()"></i>
@@ -43,29 +43,29 @@
 			</h1>
 		</span>
 	</div>
-	
+
 	<style>
 		body {
-			background-color: #fff5f5;	
+			background-color: #fff7ff;
 		}
-		
+
 		#menu *, #dates * {
 			color: hotpink;
 		}
-		
+
 		.selected, .selected * {
-			background-color: #fdd !important;
-			color: brown !important;
+			background-color: #F651B6 !important;
+			color: white !important;
 		}
-		
+
 		#dates .column.today {
-			border: 2px solid deeppink !important;	
+			border: 2px solid deeppink !important;
 		}
-		
+
 		#dates {
 			margin: 60px 10px;
-		} 
-		
+		}
+
 		.ui.dText {
 			position: absolute;
 			top: 1px;
@@ -73,7 +73,7 @@
 			font-size: 20px;
 			opacity: 0.5;
 		}
-		
+
 		.ui.dIcons {
 			position: absolute;
 			bottom: 0px;
@@ -81,7 +81,7 @@
 			font-size: 14px;
 			text-align: right;
 		}
-		
+
 		.ui.duty {
 			position: absolute;
 			right: 1px;
@@ -89,16 +89,16 @@
 			padding: 2px 0px;
 			font-size: 12px;
 		}
-			
+
 		.ui.date {
-			border: 2px solid transparent;	
+			border: 2px solid transparent;
 		}
-		
+
 		.link, .button { transition: all .1s; }
-		.link:active, .button:active { 
+		.link:active, .button:active {
 			-webkit-transform-style: preserve-3d;
 		    -webkit-transform: scale3d(0.9, 0.9, 0.9);
-		   	opacity:0.7; 
+		   	opacity:0.7;
 		}
 
 		#modal .button {
@@ -106,7 +106,7 @@
 			padding-right: 10px;
 		}
 	</style>
-	
+
 	<div id="dates" class="ui seven column grid">
 		<div class="column">Sun</div>
 		<div class="column">Mon</div>
@@ -115,9 +115,9 @@
 		<div class="column">Thu</div>
 		<div class="column">Fri</div>
 		<div class="column">Sat</div>
-	
+
 		<div class="column" ng-repeat="a in emptiness"></div>
-		<div 
+		<div
 			class="ui column link date"
 			style="padding-bottom: 3em"
 			ng-class="{selected: events.$getRecord(date).d, 'today':date==today}"
@@ -125,7 +125,7 @@
 			ng-repeat="date in dd.dates">
 			<span class="ui dText">{{ date | amDateFormat: 'D' }}</span>
 			<span class="ui header">&nbsp;</span>
-				
+
 			<span class="ui duty" ng-bind="events.$getRecord(date).d"></span>
 
 			<div class="ui dIcons">
@@ -141,13 +141,13 @@
 
 	<div id="modal" class="ui modal">
 		<div class="ui header" style="padding:10px !important">
-			<div class="ui right floated close button" ng-click="saveSelected()"> X </div> 
+			<div class="ui right floated close button" ng-click="saveSelected()"> X </div>
 			<div class="ui right floated button" ng-click="nextDate( selectedDate.id )"> <i class="ui angle right icon"></i> </div>
 			<div class="ui right floated button" ng-click="lastDate( selectedDate.id )"> <i class="ui angle left icon"></i> </div>
-			{{ selectedDate.$id }}			
+			{{ selectedDate.$id }}
 		</div>
-		
-		<div class="ui content" style="padding:0px 	1px !important"> 
+
+		<div class="ui content" style="padding:0px 	1px !important">
 			<div class="ui top attached segment">
 				<div class="ui content"> <strong>Duty</strong> </div>
 				<div class="ui divider"></div>
@@ -162,7 +162,7 @@
 				  <div class="column link" ng-class="{selected: selectedDate.d==''}" ng-click="selectedDate.d=''">Off</div>
 				</div>
 			</div>
-			
+
 			<div class="ui attached segment">
 				<div class="ui content"> <strong>Food Sampling</strong>	</div>
 				<div class="ui divider"></div>
@@ -174,9 +174,9 @@
 				  <div class="column link" ng-class="{selected: selectedDate.food==''}" ng-click="selectedDate.food=''">Off</div>
 				</div>
 			</div>
-			
-			<div class="ui attached segment link" ng-click="selectedDate.piano=!selectedDate.piano" ng-class="{selected: selectedDate.piano}"> 
-				<i class="ui checkmark icon" ng-show="selectedDate.piano"></i> Piano 
+
+			<div class="ui attached segment link" ng-click="selectedDate.piano=!selectedDate.piano" ng-class="{selected: selectedDate.piano}">
+				<i class="ui checkmark icon" ng-show="selectedDate.piano"></i> Piano
 			</div>
 			<div class="ui attached segment link" ng-click="selectedDate.ams=!selectedDate.ams" ng-class="{selected: selectedDate.ams}"> <i class="ui checkmark icon" ng-show="selectedDate.ams"></i> AMS </div>
 			<div class="ui bottom attached segment link" ng-click="selectedDate.choir=!selectedDate.choir" ng-class="{selected: selectedDate.choir}"> <i class="ui checkmark icon" ng-show="selectedDate.choir"></i> Choirs </div>
@@ -193,36 +193,36 @@
 							$scope.eventRef = new Firebase("https://queencal.firebaseio.com/items");
 							$scope.events = $firebaseArray($scope.eventRef);
 
-							$scope.nextMonth = function() { 
-								$scope.d = $scope.d.add(1, 'M'); 
-								$scope.defineCal(); 								
+							$scope.nextMonth = function() {
+								$scope.d = $scope.d.add(1, 'M');
+								$scope.defineCal();
 							}
-							
-							$scope.lastMonth = function() { 
-								$scope.d = $scope.d.add(-1, 'M'); 						
-								$scope.defineCal(); 
+
+							$scope.lastMonth = function() {
+								$scope.d = $scope.d.add(-1, 'M');
+								$scope.defineCal();
 							}
-							
-							$scope.nextDate = function(date) { 
+
+							$scope.nextDate = function(date) {
 								console.log("nextDate: " + date);
 								$scope.saveSelected();
 								var d = new moment(date).add(1, 'd').format('YYYY-MM-DD');
-								$scope.setSelected(d);				
+								$scope.setSelected(d);
 							}
 
-							$scope.lastDate = function(date) { 
+							$scope.lastDate = function(date) {
 								$scope.saveSelected();
 								var d = new moment(date).add(-1, 'd').format('YYYY-MM-DD');
-								$scope.setSelected(d);				
+								$scope.setSelected(d);
 							}
-															
+
 							$scope.setSelected = function(d) {
 								if (!$scope.events.$getRecord(d)) {
 									$scope.eventRef.child(d).set({id: d});
 								}
 
 								$timeout( function() {
-									$scope.selectedDate = $scope.events.$getRecord(d);	
+									$scope.selectedDate = $scope.events.$getRecord(d);
 								}, 500);
 							}
 
@@ -237,19 +237,19 @@
 								$scope.dd = $scope.dd || {};
 								$scope.dd.dates = [];
 								$scope.emptiness = _.range(d.weekday());
-								
+
 								while(true) {
 									$scope.dd.dates.push(d.format('YYYY-MM-DD'));
 									d.add(1, 'd');
 									if (d.format('DD') == 1) break;
 								}
 							}
-							
+
 							$scope.modal = function(d) {
-								$scope.setSelected(d);				
+								$scope.setSelected(d);
 								$('#modal').modal('show');
 							}
-							
+
 							$scope.defineCal();
 						}
 					);
