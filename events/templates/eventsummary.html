@@ -142,10 +142,12 @@
 						</tr>
 					</table>
 
-					<div ng-if="topics.$getRecord(t).finalize != topics.$getRecord(t).votes[local.user.$id]">
-						<div class="ui pointing yellow basic large fluid label" style="line-height:2em">
+					<div ng-if="topics.$getRecord(t).finalize != topics.$getRecord(t).votes[local.user.$id] &&
+											!topics.$getRecord(t).decisionMade[local.user.$id]">
+						<div class="ui pointing red basic large fluid label" style="line-height:2em">
 							 Your choice is different from the finalized decision <br>
-							 <div class="ui green button"> Accept </div> or <div class="ui red button" style="margin-left:5px"> Decline Event </div>
+							 <div class="ui green button" ng-click="acceptDecision($event, topics.$getRecord(t))"> Accept </div> or
+							 <div class="ui orange button" style="margin-left:5px" ng-click="declineDecision($event, topics.$getRecord(t))"> Decline Event </div>
 						</div>
 					</div>
 

@@ -37,7 +37,7 @@
 
 <body ontouchstart="">
 	<div class="ui fixed main menu" ng-include="'header.html'"></div>
- 	<div class="ng-view ng-cloak container" style="padding-top:50px"></div>
+ 	<div class="ng-view ng-cloak container" style="padding-top:10px"></div>
 
 	<script>
 		var app = angular
@@ -175,6 +175,20 @@
 							try{
 								webkit.messageHandlers.callbackHandler.postMessage("test");
 							} catch(e) {}
+
+							$scope.acceptDecision = function($event, topic) {
+								topic.decisionMade = topic.decisionMade || {};
+								topic.decisionMade[$scope.local.user.$id] = true;
+
+								$event.stopPropagation();
+							}
+
+							$scope.declineDecision = function($event, topic) {
+								topic.decisionMade = topic.decisionMade || {};
+								topic.decisionMade[$scope.local.user.$id] = true;
+
+								$event.stopPropagation();
+							}
 
 							$scope.getVote = function(topicId, choice) {
 								try {
