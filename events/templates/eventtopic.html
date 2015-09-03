@@ -1,3 +1,7 @@
+<div style="float: right">
+    <div class="ui small button" ng-show="topic.finalize" ng-click="topic.finalize = null">Un-Finalize</div>
+</div>
+
 <div class="ui breadcrumb">
   <a href="#" ng-click="goto('/eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
   <div class="divider"> / </div>
@@ -5,33 +9,49 @@
 </div>
 <h5 class="ui sub header" ng-bind="topic.description"></h5>
 
+<style>
+  .dim {
+    color: silver;
+  }
+
+  .finalized {
+    font-weight: bolder;
+  }
+</style>
 
 <h5 class="ui header"> Vote </h5>
-<div class="topic">
+<div class="topic" ng-class="{ 'dim': topic.finalize }">
 	<div ng-repeat="c in topic.choices"
 		class="ui attached segment"
-		ng-class="{'green inverted': topic.votes[local.user.$id] == c}"
-		ng-click="topic.votes[local.user.$id] = c; log(c)"> 
-		
+		ng-class="{
+      'green inverted': topic.votes[local.user.$id] == c && !topic.finalize,
+      'finalized red inverted': topic.finalize == c
+    }"
+		ng-click="vote(topic, c)">
+
 		<span class="ui"
 				ng-if="topic.votes[local.user.$id] == c">
 		</span>
-		<span class="ui horizontal circular label" 
-			ng-class="{green: topic.votes[local.user.$id] == c, white: topic.votes[local.user.$id] != c}"
+		<span class="ui horizontal circular label"
+			ng-class="{
+                  green: topic.votes[local.user.$id] == c && !topic.finalize,
+                  white: topic.votes[local.user.$id] != c,
+                  red: topic.finalize == c
+                }"
 			ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length || 0"></span>
 		<span ng-bind="c"></span>
 
-		<span style="float:right" 
-			class="ui right floated mini button"> 
-			<i class="ui icon lock"></i> Finalize 
+		<span style="float:right" class="ui right floated mini button"
+        ng-click="finalize(topic, c, $event)" ng-show="!topic.finalize">
+			<i class="ui icon lock"></i> Finalize
 		</span>
 
 		<div style="height:10px" ng-if="_(topic.votes).chain().values().contains(c).value()"></div>
-		<span ng-repeat="userId in _(topic.votes).keys()" ng-if="topic.votes[userId]==c" class="ui small orange label"  > 
+		<span ng-repeat="userId in _(topic.votes).keys()" ng-if="topic.votes[userId]==c" class="ui small orange label"  >
 			<i class="ui checkmark icon"></i>
 			<span ng-bind="users.$getRecord(userId).name" ></span>
 		</span>
-	</div> 
+	</div>
 </div>
 
 <div style="margin-top:10px">
@@ -48,7 +68,7 @@
       <div class="ui header">
         <h4 id="myModalLabel">New Choice</h4>
       </div>
-	  
+
       <div class="content">
       	  <div class="form-group">
 		    <div class="ui fluid input">
