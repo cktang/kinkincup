@@ -32,6 +32,8 @@
     <script src="js/moment.js"></script>
     <script src="js/angular-moment.min.js"></script>
 
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css" rel="stylesheet"></link>
+
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
 
@@ -176,16 +178,19 @@
 								webkit.messageHandlers.callbackHandler.postMessage("test");
 							} catch(e) {}
 
-							$scope.acceptDecision = function($event, topic) {
+							$scope.acceptFinalize = function($event, topic, accept) {
+								if (!accept) {
+									_($scope.event.users).findWhere({ id: $scope.local.user.$id }).decision = "no";
+									$scope.logParticipate("no");
+								}
+
+								if (accept) {
+										topic.votes[$scope.local.user.$id] = topic.finalize;
+								}
+
 								topic.decisionMade = topic.decisionMade || {};
 								topic.decisionMade[$scope.local.user.$id] = true;
-
-								$event.stopPropagation();
-							}
-
-							$scope.declineDecision = function($event, topic) {
-								topic.decisionMade = topic.decisionMade || {};
-								topic.decisionMade[$scope.local.user.$id] = true;
+								$scope.topics.$save(topic);
 
 								$event.stopPropagation();
 							}
@@ -342,6 +347,7 @@
 							$scope.finalize = function(topic, choice, $event) {
 								if (confirm('finalize choice' + choice + '?')) {
 									topic.finalize = choice;
+									topic.decisionMade = [];
 								}
 								$event.stopPropagation();
 							};

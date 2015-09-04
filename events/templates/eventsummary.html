@@ -50,10 +50,6 @@
 			  {{ d }}
 		  </div>
 		</div>
-
-		<div class="ui segment">
-			<button type="button" class="ui blue button close">OK</button>
-		</div>
 	</div>
 
 	<div class="ui sticky topic link" id="participants" ng-click="decision('participants')" ng-cloak>
@@ -127,14 +123,18 @@
 	  			<span ng-bind="c"></span>
   		</div>
 
-			<div ng-if="topics.$getRecord(t).finalize" style="margin-top:5px">
+			<div ng-if="topics.$getRecord(t).finalize && topics.$getRecord(t).finalize == topics.$getRecord(t).votes[local.user.$id]" style="margin-top:5px">
+				<div class="ui green small fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
+			</div>
+
+			<div ng-if="topics.$getRecord(t).finalize && topics.$getRecord(t).finalize != topics.$getRecord(t).votes[local.user.$id]" style="margin-top:5px">
 					<style>
 						td { text-align:center; padding:5px; }
 					</style>
 					<table style="width:100%">
 						<tr>
 							<td>Finalized</td>
-							<td>You</td>
+							<td>Your Choice</td>
 						</tr>
 						<Tr>
 							<Td><div class="ui black small fluid button">{{topics.$getRecord(t).finalize}}</div>
@@ -142,12 +142,13 @@
 						</tr>
 					</table>
 
-					<div ng-if="topics.$getRecord(t).finalize != topics.$getRecord(t).votes[local.user.$id] &&
-											!topics.$getRecord(t).decisionMade[local.user.$id]">
+					<div ng-if="!topics.$getRecord(t).decisionMade[local.user.$id] && _(event.users).findWhere({ id: local.user.$id }).decision == 'yes'"
+							 class="fadeIn"
+							 ng-click="$event.stopPropagation()">
 						<div class="ui pointing red basic large fluid label" style="line-height:2em">
 							 Your choice is different from the finalized decision <br>
-							 <div class="ui green button" ng-click="acceptDecision($event, topics.$getRecord(t))"> Accept </div> or
-							 <div class="ui orange button" style="margin-left:5px" ng-click="declineDecision($event, topics.$getRecord(t))"> Decline Event </div>
+							 <div class="ui green button" ng-click="acceptFinalize($event, topics.$getRecord(t), true)"> Accept </div> or
+							 <div class="ui orange button" style="margin-left:5px" ng-click="acceptFinalize($event, topics.$getRecord(t), false)"> Decline Event </div>
 						</div>
 					</div>
 
@@ -164,37 +165,44 @@
 	        <h4 id="myModalLabel">New Topic</h4>
 	      </div>
 
+				<style>
+					.content .form-group {
+						margin-bottom: 10px;
+					}
+				</style>
 	      <div class="content">
 	      	  <div class="form-group">
-			    <label for="name">Name</label>
-			    <div class="ui fluid input">
-				    <input type="text" class="form-control" placeholder="Topic Name" ng-model="newTopic.name">
-				</div>
-			  </div>
-			  <div class="form-group">
-			    <label for="description">Description</label>
-			    <div class="ui fluid input">
-				    <input type="description" class="form-control" placeholder="Event Description" ng-model="newTopic.description"></input>
-				</div>
-			  </div>
-			  <div class="form-group">
-			    <label for="choices">Choices</label>
-				<div class=" ui fluid input">
-			    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="newTopic.choices[0]"/>
-				</div>
-			    <div class=" ui fluid input">
-			    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="newTopic.choices[1]"/>
-				</div>
-			    <div class=" ui fluid input">
-			    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="newTopic.choices[2]"/>
-				</div>
-			    <div class=" ui fluid input">
-			    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="newTopic.choices[3]"/>
-				</div>
-			    <div class=" ui fluid input">
-			    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="newTopic.choices[4]"/>
-				</div>
-			  </div>
+						    <label for="name">Name</label>
+						    <div class="ui fluid input">
+						    	<input type="text" class="form-control" placeholder="Topic Name" ng-model="newTopic.name">
+								</div>
+			  		</div>
+
+					  <div class="form-group">
+					    <label for="description">Description</label>
+					    <div class="ui fluid input">
+							    <input type="description" class="form-control" placeholder="Event Description" ng-model="newTopic.description"></input>
+							</div>
+					  </div>
+
+					  <div class="form-group">
+					    <label for="choices">Choices</label>
+							<div class=" ui fluid input">
+						    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="newTopic.choices[0]"/>
+							</div>
+					    <div class=" ui fluid input">
+					    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="newTopic.choices[1]"/>
+							</div>
+					    <div class=" ui fluid input">
+					    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="newTopic.choices[2]"/>
+							</div>
+					    <div class=" ui fluid input">
+					    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="newTopic.choices[3]"/>
+							</div>
+					    <div class=" ui fluid input">
+					    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="newTopic.choices[4]"/>
+							</div>
+						</div>
 	      </div>
 	      <div class="ui segment">
 	        <button type="button" class="ui close button">Cancel</button>
