@@ -39,7 +39,7 @@
 
 <body ontouchstart="">
 	<!-- <div class="ui fixed main menu" ng-include="'header.html'"></div> -->
- 	<div class="ng-view ng-cloak container" style="padding-top:10px"></div>
+ 	<div class="ng-view ng-cloak container" style="padding-top:15px"></div>
 
 	<script>
 		var app = angular
@@ -197,7 +197,7 @@
 
 							$scope.getVote = function(topicId, choice) {
 								try {
-									return _($scope.topics.$getRecord(topicId).votes).groupBy()[choice].length;
+									return _($scope.topics.$getRecord(topicId).votes).chain().flatten().groupBy().value()[choice].length;
 								} catch(e) { return 0;  }
 							};
 
@@ -223,7 +223,9 @@
 								// console.log("topChoices: " + topicId);
 
 								return _($scope.topics.$getRecord(topicId).votes)
-											.chain().compact()
+											.chain()
+											.flatten()
+											.compact()
 											.groupBy(function(v, k) { return v; })
 											.sortBy(function(v, k) { return v.length})
 											.reverse().values()
@@ -297,8 +299,9 @@
 								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event + "/history"));
 							});
 
-							$scope.log = function(value) {
+							$scope.log = function(value, type) {
 								console.log('vote changed: ' + value);
+								type = type || 'vote';
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
@@ -354,10 +357,25 @@
 
 							$scope.vote = function(topic, choice) {
 								if (!topic.finalize) {
-									topic.votes[$scope.local.user.$id] = choice;
-									$scope.log(choice);
+									topic.votes = topic.votes || [];
+									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || [];
+
+									if (_(topic.votes[$scope.local.user.$id]).contains(choice)) {
+										topic.votes[$scope.local.user.$id] = _.without(topic.votes[$scope.local.user.$id], choice);
+									} else {
+										topic.votes[$scope.local.user.$id] = _.union(topic.votes[$scope.local.user.$id], [choice]);
+									}
+									$scope.log(choice, 'unvote');
 								}
+							};
+
+							$scope.voted = function(options) {
+								options.userId = options.userId || $scope.local.user.$id;
+								return options.topic &&
+												options.topic.votes &&
+												_(options.topic.votes[options.userId]).contains(options.choice);
 							}
+
 						}
 					)
 

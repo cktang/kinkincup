@@ -7,14 +7,14 @@
 </div>
 
 <style>
-	div.topic {
-		margin: 0px -20px;
-		padding: 15px 20px;
+	.ui.segment {
+		border: 1px solid silver;
+		background-color: #f8f8f8 !important;
 	}
 
-	div.topic:nth-child(even) {
-		background-color: #ddd;
-	}
+	/*div.topic:nth-child(even) {
+		background-color: #eee;
+	}*/
 
 	div.choice .badge {
 		font-weight: normal !important;
@@ -27,6 +27,7 @@
 
 	div.choice {
 		padding: 0em !important;
+		border: 0px !important;
 	}
 
 	#participants .ui.grid {
@@ -52,7 +53,7 @@
 		</div>
 	</div>
 
-	<div class="ui sticky topic link" id="participants" ng-click="decision('participants')" ng-cloak>
+	<div class="ui sticky segment link" id="participants" ng-click="decision('participants')" ng-cloak>
 		<h4 class="ui header">
 			<span class="ui right floated sub header">
 				<span class="ui label"  ng-class="{
@@ -98,22 +99,21 @@
 	</div>
 
   	<div ng-repeat="t in event.topics"
-  		class="ui link topic"
+  		class="ui link segment"
   		ng-click="goto('/eventTopic/' + t)">
 
-  		<h4 class="ui header">
-			<span class="ui right floated sub header">
-				<span class="ui label" ng-class="{
-						'green': topics.$getRecord(t).votes[local.user.$id],
-						'yellow': !topics.$getRecord(t).votes[local.user.$id]
-					}"
+			<span class="ui ribbon label"
+						ng-class="{
+							'green': topics.$getRecord(t).votes[local.user.$id],
+							'yellow': !topics.$getRecord(t).votes[local.user.$id]
+						}"
 					 ng-show="!topics.$getRecord(t).finalize">
 					You: <span style="margin-left:10px">{{topics.$getRecord(t).votes[local.user.$id] || "?"}}</span>
-				</span>
 			</span>
 
+			<div class="ui header">
 				{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
-			</h4>
+			</div>
 
   		<div ng-repeat="c in topChoices(t)"
   				ng-hide="topics.$getRecord(t).finalize"
@@ -122,6 +122,9 @@
 					<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
 	  			<span ng-bind="c"></span>
   		</div>
+
+
+
 
 			<div ng-if="topics.$getRecord(t).finalize && topics.$getRecord(t).finalize == topics.$getRecord(t).votes[local.user.$id]" style="margin-top:5px">
 				<div class="ui green small fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
@@ -155,8 +158,6 @@
 			</div>
 
   		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
-
-  		<div style="margin-top:10px" ng-show="!topics.$getRecord(t).finalize" class="ui tiny floated right label"> more ... </div>
 	</div>
 
 	<!-- newTopicModal -->

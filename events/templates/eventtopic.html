@@ -17,6 +17,14 @@
   .finalized {
     font-weight: bolder;
   }
+
+  .ui.attached.segment {
+     line-height:2.5em;
+  }
+
+  .ui.inverted.green.segment {
+    border-bottom: 1px solid darkgreen !important;
+  }
 </style>
 
 <h5 class="ui header"> Vote </h5>
@@ -24,32 +32,26 @@
 	<div ng-repeat="c in topic.choices"
 		class="ui attached segment"
 		ng-class="{
-      'green inverted': topic.votes[local.user.$id] == c && !topic.finalize,
+      'green inverted': voted({topic:topic, choice:c}) && !topic.finalize,
       'finalized red inverted': topic.finalize == c
     }"
 		ng-click="vote(topic, c)">
 
-		<span class="ui"
-				ng-if="topic.votes[local.user.$id] == c">
-		</span>
-		<span class="ui horizontal circular label"
-			ng-class="{
-                  green: topic.votes[local.user.$id] == c && !topic.finalize,
-                  white: topic.votes[local.user.$id] != c,
-                  red: topic.finalize == c
-                }"
-			ng-bind="_(topic.votes).chain().values().groupBy().value()[c].length || 0"></span>
+    <i class="ui checkmark icon" ng-class="{inverted: !voted({topic:topic, choice:c})}"/>
 		<span ng-bind="c"></span>
 
-		<span style="float:right" class="ui right floated mini button"
-        ng-click="finalize(topic, c, $event)" ng-show="!topic.finalize">
+		<div class="ui right floated mini button"
+        ng-click="finalize(topic, c, $event)"
+        ng-show="!topic.finalize">
 			<i class="ui icon lock"></i> Finalize
-		</span>
+		</div>
 
-		<div style="height:10px" ng-if="_(topic.votes).chain().values().contains(c).value()"></div>
-		<span ng-repeat="userId in _(topic.votes).keys()" ng-if="topic.votes[userId]==c" class="ui small orange label"  >
-			<i class="ui checkmark icon"></i>
-			<span ng-bind="users.$getRecord(userId).name" ></span>
+    <div style="clear:both"></div>
+
+		<span ng-repeat="userId in _(topic.votes).keys()"
+          ng-if="voted({topic:topic, choice:c, userId:userId})"
+          class="ui small label"
+			    ng-bind="users.$getRecord(userId).name">
 		</span>
 	</div>
 </div>
@@ -59,7 +61,7 @@
 </div>
 
 <div style="margin-top:10px">
-	<button class="ui teal button fluid" ng-click="openNewChoiceModal()">Add New Choices</button>
+	<button class="ui teal button fluid" ng-click="newChoice='New Choice'; openNewChoiceModal()">Add New Choices</button>
 </div>
 
 
@@ -76,8 +78,8 @@
 			</div>
 		  </div>
       </div>
-      <div class="ui segment">
-        <button type="button" class="ui close button">Cancel</button>
+      <div class="ui segment actions">
+        <button type="button" class="ui deny button">Cancel</button>
         <button type="button" class="ui blue close button" ng-click="saveNewChoice(newChoice)">Confirm</button>
       </div>
     </div>
