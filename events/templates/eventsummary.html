@@ -54,9 +54,7 @@
 	</div>
 
 	<div class="ui sticky segment link" id="participants" ng-click="decision('participants')" ng-cloak>
-		<h4 class="ui header">
-			<span class="ui right floated sub header">
-				<span class="ui label"  ng-class="{
+			<span class="ui ribbon label" ng-class="{
 					'green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
 					'yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
 					'red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
@@ -67,8 +65,9 @@
 						'remove': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
 					}"></i>
 					{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
-				</span>
 			</span>
+
+		<h4 class="ui header">
 			Participants
 		</h4>
 
@@ -108,7 +107,13 @@
 							'yellow': !topics.$getRecord(t).votes[local.user.$id]
 						}"
 					 ng-show="!topics.$getRecord(t).finalize">
-					You: <span style="margin-left:10px">{{topics.$getRecord(t).votes[local.user.$id] || "?"}}</span>
+					 <span style="margin-right:10px"
+					 			class="ui mini inverted basic button"
+					 			ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]"
+								ng-bind="c">
+					 </span>
+
+					 <span ng-if="!topics.$getRecord(t).votes[local.user.$id]"> ? </span>
 			</span>
 
 			<div class="ui header">
