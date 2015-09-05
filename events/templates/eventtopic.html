@@ -1,5 +1,5 @@
 <div style="float: right">
-    <div class="ui small button" ng-show="topic.finalize" ng-click="topic.finalize = null">Un-Finalize</div>
+    <div class="ui small button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
 </div>
 
 <div class="ui breadcrumb">
@@ -25,34 +25,39 @@
   .ui.inverted.green.segment {
     border-bottom: 1px solid darkgreen !important;
   }
+
+  .ui.attached.segment {
+    border-bottom: 1px solid #eee !important;
+  }
 </style>
 
 <h5 class="ui header"> Vote </h5>
 <div class="topic" ng-class="{ 'dim': topic.finalize }">
 	<div ng-repeat="c in topic.choices"
 		class="ui attached segment"
-		ng-class="{
-      'green inverted': voted({topic:topic, choice:c}) && !topic.finalize,
-      'finalized red inverted': topic.finalize == c
-    }"
+		ng-class="{ 'finalized red inverted': topic.finalize == c }"
 		ng-click="vote(topic, c)">
 
-    <i class="ui checkmark icon" ng-class="{inverted: !voted({topic:topic, choice:c})}"/>
+    <button class="circular ui mini icon button" ng-class="{'inverted': !voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
+      <i class="icon checkmark"></i>
+    </button>
 		<span ng-bind="c"></span>
 
-		<div class="ui right floated mini button"
+		<div class="ui right floated medium icon button"
         ng-click="finalize(topic, c, $event)"
         ng-show="!topic.finalize">
-			<i class="ui icon lock"></i> Finalize
+			<i class="ui icon lock"></i>
 		</div>
 
     <div style="clear:both"></div>
 
-		<span ng-repeat="userId in _(topic.votes).keys()"
-          ng-if="voted({topic:topic, choice:c, userId:userId})"
-          class="ui small label"
-			    ng-bind="users.$getRecord(userId).name">
-		</span>
+    <div style="margin-left:30px">
+  		<span ng-repeat="userId in _(topic.votes).keys()"
+            ng-if="voted({topic:topic, choice:c, userId:userId})"
+            class="ui small label"
+  			    ng-bind="users.$getRecord(userId).name">
+  		</span>
+    </div>
 	</div>
 </div>
 

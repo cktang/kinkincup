@@ -1,19 +1,18 @@
 *:not(input):not(textarea) {
-  -webkit-user-select: none; /* disable selection/Copy of UIWebView */
-  -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
-}       
+  -webkit-user-select: none; //disable selection/Copy of UIWebView
+  -webkit-touch-callout: none; //disable the IOS popup when long-press on a link
+}
 
 .container {
 	padding: 0 1em;
 }
 
 .link, .button { transition: all .1s; }
-.link:active, .button:active { 
-	-webkit-transform-style: preserve-3d;
-    -webkit-transform: scale3d(0.98, 0.98, 0.98);
-   	opacity:0.7; 
-	background-color: silver;
-/*	padding: 10px;*/
+.link:active, .button:active {
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: scale3d(0.98, 0.98, 0.98);
+  opacity:0.7;
+  background-color: silver;
 }
 
 .container .bottomplaceholder {
@@ -24,17 +23,23 @@
 	margin-bottom: 0.2em;
 }
 
-.ui.topic > .ui.header {
-	margin-top: 0.4em !important;
-	margin-bottom: 0.4em !important;
-}
-
 .topic .ui.segment {
 	padding: 0.4em !important;
 	background-color: transparent;
 	border: 0px !important;
 }
 
-.events .segment:nth-child(odd) {
-	background-color: #fafafa;
+.ui.segment.yes {
+  border-top: 1px solid green;
+  background-color: #efe;
+}
+
+.ui.segment.maybe {
+  border-top: 1px solid olive;
+  background-color: #ffe;
+}
+
+.ui.segment.no {
+  border-top: 1px solid red;
+  background-color: #fee;
 }

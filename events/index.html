@@ -32,8 +32,6 @@
     <script src="js/moment.js"></script>
     <script src="js/angular-moment.min.js"></script>
 
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css" rel="stylesheet"></link>
-
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
 
@@ -85,9 +83,9 @@
 								templateUrl: 'templates/chat.html',
 								controller: 'chatController'
 							})
-							// .otherwise({
-							//  	redirectTo: 'login'
-							// });
+							.otherwise({
+							 	redirectTo: 'login'
+							});
 					})
 
 					.run(function($rootScope, $window, $location, $localStorage, $firebaseArray) {
@@ -111,17 +109,17 @@
 	  							linkEvent(url);
 							} catch (e) {
 	  							$location.path(url);
-  							}
   						}
+  					}
 
-					    $rootScope.login = function(user) {
-					    	$localStorage.user = user;
-					    	$location.path("myEvents");
-					    };
+				    $rootScope.login = function(user) {
+				    	$localStorage.user = user;
+				    	$location.path("myEvents");
+				    };
 
-					    $rootScope.back = function() {
-					    	$window.history.back();
-					    }
+				    $rootScope.back = function() {
+				    	$window.history.back();
+				    }
 
 						$rootScope.addHistory = function() {
 							try {
@@ -129,6 +127,14 @@
 							}catch(e) {
 
 							}
+						};
+
+						$rootScope.voted = function(options) {
+							options.userId = options.userId || $rootScope.local.user.$id;
+							options.choice = options.choice || options.topic.finalize;
+							return options.topic &&
+											options.topic.votes &&
+											_(options.topic.votes[options.userId]).contains(options.choice);
 						}
 					})
 
@@ -185,7 +191,7 @@
 								}
 
 								if (accept) {
-										topic.votes[$scope.local.user.$id] = topic.finalize;
+										topic.votes[$scope.local.user.$id] = [topic.finalize];
 								}
 
 								topic.decisionMade = topic.decisionMade || {};
@@ -336,7 +342,7 @@
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
 						     		ts: moment().format('LLL'),
-						     		action: 'vote',
+						     		action: 'add choice',
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
 									content: newChoice
@@ -347,11 +353,49 @@
 								$('#newChoiceModal').modal('show');
 							};
 
+							$scope.unfinalize = function(topic) {
+								$scope.history.$add({
+									user: $scope.local.user.$id,
+									ts: moment().format('LLL'),
+									action: 'un-finalize',
+									topic: topic.$id,
+									event: topic.event,
+									content: topic.finalize
+								});
+								$scope.allHistory.$add({
+									user: $scope.local.user.$id,
+									ts: moment().format('LLL'),
+									action: 'un-finalize',
+									topic: topic.$id,
+									event: topic.event,
+									content: topic.finalize
+								});
+								topic.finalize = null;
+							}
+
 							$scope.finalize = function(topic, choice, $event) {
 								if (confirm('finalize choice' + choice + '?')) {
 									topic.finalize = choice;
 									topic.decisionMade = [];
+
+									$scope.history.$add({
+								   	user: $scope.local.user.$id,
+								 		ts: moment().format('LLL'),
+								 		action: 'finalize',
+										topic: topic.$id,
+										event: topic.event,
+										content: choice
+									});
+									$scope.allHistory.$add({
+								 		user: $scope.local.user.$id,
+								 		ts: moment().format('LLL'),
+								 		action: 'finalize',
+										topic: topic.$id,
+										event: topic.event,
+										content: choice
+									});
 								}
+
 								$event.stopPropagation();
 							};
 
@@ -369,14 +413,6 @@
 									}
 								}
 							};
-
-							$scope.voted = function(options) {
-								options.userId = options.userId || $scope.local.user.$id;
-								return options.topic &&
-												options.topic.votes &&
-												_(options.topic.votes[options.userId]).contains(options.choice);
-							}
-
 						}
 					)
 
@@ -444,7 +480,7 @@
 								}
 
 								$scope.currentTopic = $scope.newTopics[id];
-								$scope.currentTopic = $scope.currentTopic || { id:id, name:id, decision:"NOT_DECIDED" };
+								$scope.currentTopic = $scope.currentTopic || { id:id, name:id };
 								$scope.topicId = id;
 								$('#form5').modal('show');
 							};

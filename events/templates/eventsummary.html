@@ -9,12 +9,8 @@
 <style>
 	.ui.segment {
 		border: 1px solid silver;
-		background-color: #f8f8f8 !important;
+		background-color: #f8f8f8;
 	}
-
-	/*div.topic:nth-child(even) {
-		background-color: #eee;
-	}*/
 
 	div.choice .badge {
 		font-weight: normal !important;
@@ -53,7 +49,10 @@
 		</div>
 	</div>
 
-	<div class="ui sticky segment link" id="participants" ng-click="decision('participants')" ng-cloak>
+	<div class="ui segment link" id="participants"
+			ng-click="decision('participants')"
+			ng-class="_(event.users).findWhere({ id: local.user.$id }).decision" ng-cloak>
+
 			<span class="ui ribbon label" ng-class="{
 					'green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
 					'yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
@@ -67,38 +66,43 @@
 					{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
 			</span>
 
-		<h4 class="ui header">
-			Participants
-		</h4>
+		<h4 class="ui header"> Participants </h4>
 
-		<div class="ui three column grid" style="clear:both; padding:5px">
-			<div class="ui column">Going</div>
-			<div class="ui column">Maybe</div>
-			<div class="ui column">Invited</div>
+		<style>
+			#attendence .ui.column {
+				padding: 0px;
+				margin: 0px;
+			}
 
+			#attendence .ui.button {
+				padding: 5px 10px;
+			}
+		</style>
+		<div class="ui three column grid" id="attendence" style="clear:both">
 			<div class="ui column">
 				<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
-					<span  ng-bind="users.$getRecord(u.id).name"></span>
+					<span class="ui tiny green button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 				</div>
-				<div ng-if="_(event.users).filter({ decision: 'yes' }).length == 0"> / </div>
 			</div>
 			<div class="ui column">
 				<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
-					<span  ng-bind="users.$getRecord(u.id).name"></span>
+					<span class="ui tiny yellow button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 				</div>
-				<div ng-if="_(event.users).filter({ decision: 'maybe' }).length == 0"> / </div>
 			</div>
 			<div class="ui column">
 				<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
-					<span  ng-bind="users.$getRecord(u.id).name"></span>
+					<span class="ui tiny red button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 				</div>
-				<div ng-if="_(event.users).filter({ decision: 'no' }).length == 0"> / </div>
 			</div>
 		</div>
 	</div>
 
   	<div ng-repeat="t in event.topics"
   		class="ui link segment"
+			ng-class="{
+				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
+				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
+			}"
   		ng-click="goto('/eventTopic/' + t)">
 
 			<span class="ui ribbon label"
@@ -106,7 +110,7 @@
 							'green': topics.$getRecord(t).votes[local.user.$id],
 							'yellow': !topics.$getRecord(t).votes[local.user.$id]
 						}"
-					 ng-show="!topics.$getRecord(t).finalize">
+					 ng-if="!topics.$getRecord(t).finalize">
 					 <span style="margin-right:10px"
 					 			class="ui tiny inverted basic button"
 					 			ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]"
@@ -129,13 +133,11 @@
   		</div>
 
 
-
-
-			<div ng-if="topics.$getRecord(t).finalize && topics.$getRecord(t).finalize == topics.$getRecord(t).votes[local.user.$id]" style="margin-top:5px">
-				<div class="ui green small fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
+			<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
+				<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
 			</div>
 
-			<div ng-if="topics.$getRecord(t).finalize && topics.$getRecord(t).finalize != topics.$getRecord(t).votes[local.user.$id]" style="margin-top:5px">
+			<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
 					<style>
 						td { text-align:center; padding:5px; }
 					</style>
@@ -146,7 +148,7 @@
 						</tr>
 						<Tr>
 							<Td><div class="ui black small fluid button">{{topics.$getRecord(t).finalize}}</div>
-							<Td><div class="ui red small fluid button">{{topics.$getRecord(t).votes[local.user.$id] || "?"}}</div>
+							<Td><div ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]" ng-bind="c" class="ui red small fluid button"></div>
 						</tr>
 					</table>
 
