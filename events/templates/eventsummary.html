@@ -139,7 +139,7 @@
 
 			<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
 					<style>
-						td { text-align:center; padding:5px; }
+						td { text-align:center; padding:5px; width:50%; }
 					</style>
 					<table style="width:100%">
 						<tr>
@@ -212,7 +212,7 @@
 							</div>
 						</div>
 	      </div>
-	      <div class="ui segment">
+	      <div class="ui segment actions">
 	        <button type="button" class="ui close button">Cancel</button>
 	        <button type="button" class="ui blue close button" ng-click="saveNewTopic(newTopic)">Confirm</button>
 	      </div>
