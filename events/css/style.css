@@ -12,7 +12,7 @@
   -webkit-transform-style: preserve-3d;
   -webkit-transform: scale3d(0.98, 0.98, 0.98);
   opacity:0.7;
-  background-color: silver;
+  /*background-color: silver;*/
 }
 
 .container .bottomplaceholder {
