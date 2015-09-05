@@ -306,7 +306,7 @@
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
 						     		ts: moment().format('LLL'),
-						     		action: 'vote',
+						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
 									content: value
@@ -314,7 +314,7 @@
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
 						     		ts: moment().format('LLL'),
-						     		action: 'vote',
+						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
 									content: value
@@ -362,10 +362,11 @@
 
 									if (_(topic.votes[$scope.local.user.$id]).contains(choice)) {
 										topic.votes[$scope.local.user.$id] = _.without(topic.votes[$scope.local.user.$id], choice);
+										$scope.log(choice, 'unvote');
 									} else {
 										topic.votes[$scope.local.user.$id] = _.union(topic.votes[$scope.local.user.$id], [choice]);
+										$scope.log(choice, 'vote');
 									}
-									$scope.log(choice, 'unvote');
 								}
 							};
 
