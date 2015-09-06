@@ -1,5 +1,5 @@
 	<div class="ui button fluid"
-    	ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()"> 
+    	ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()">
 			<div class="ui header" style="margin-top:0px"> Event Name </div>
       		{{newEvent.name}}
 			<Br>
@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="ui button fluid"
-	  	ng-class="{good: newTopics['Time'], bad: !newTopics['Time']}" 
+	  	ng-class="{good: newTopics['Time'], bad: !newTopics['Time']}"
 	  	ng-click="openTopic('Time')">
 			<div class="ui header"> Time </div>
       		<div ng-repeat="c in newTopics['Time'].choices" style="line-height:20px">
@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="ui button fluid"
-	  	ng-class="{good: newTopics['Venue'], bad: !newTopics['Venue']}" 
+	  	ng-class="{good: newTopics['Venue'], bad: !newTopics['Venue']}"
 	  	ng-click="openTopic('Venue')">
 			<div class="ui header"> Place </div>
       		<div ng-repeat="c in newTopics['Venue'].choices" style="line-height:20px">
@@ -25,7 +25,7 @@
 	</div>
 
 	<div class="ui button fluid"
-	  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}" 
+	  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}"
 	  	ng-click="openParticipants()">
 			<div class="ui header"> Participants </div>
 	  		<div ng-repeat="c in _(users).filter({selected:true})" style="line-height:20px">
@@ -34,19 +34,19 @@
 	</div>
 
 
-	  <div 	ng-repeat="t in newTopics" 
-	  		class="ui button fluid" 
+	  <div 	ng-repeat="t in newTopics"
+	  		class="ui button fluid"
 	  		ng-hide="{{t.id=='Venue' || t.id=='Time'}}"
 	  		ng-click="openTopic(t.name)">
 	  	<span ng-bind="t.name" class="ui header"></span>
-	  	<span class="main"> 
+	  	<span class="main">
 	  		<div ng-repeat="c in t.choices" style="line-height:20px">
 		  		<small ng-bind="c"></small><Br>
 	  		</div>
 	  	</span>
 	  </div>
 
-	  <div class="new ui button fluid" ng-click="openTopic('newTopic')">
+	  <div class="new ui basic orange button fluid" style="margin-top:20px" ng-click="openTopic('newTopic')">
 	  	<span class="ui header"> Gift?? Reminder??? Travel Tips?? </span>
 	  </div>
 	</div>
@@ -68,39 +68,41 @@
 	      <div class="ui header"> New Event </div>
 
 	      <div class="content">
-	      	  <div class="form-group">
-			    <label for="name" class="ui header">Name</label>
-			    <div class="ui fluid input">
-			    	<input type="text" placeholder="Event Name" ng-model="newEvent.name">
-			    </div>
-			  </div>
-			  <div class="form-group">
-			    <label for="description" class="ui header">Description</label>
-			    <div class="ui fluid input">
-				    <input type="text" placeholder="Event Description" ng-model="newEvent.description">
-			    </div>
-			  </div>		      	
+		      <div class="form-group">
+				    <label for="name" class="ui header">Name</label>
+				    <div class="ui fluid input">
+				    	<input type="text" placeholder="Event Name" ng-model="newEvent.name">
+				    </div>
+				  </div>
+
+				  <div class="form-group">
+				    <label for="description" class="ui header">Description</label>
+				    <div class="ui fluid input">
+					    <input type="text" placeholder="Event Description" ng-model="newEvent.description">
+				    </div>
+				  </div>
 	      </div>
-	      <div class="ui segment">
-	        <button type="button" class="ui small blue floated right close button">Confirm</button>
+
+	      <div class="ui segment actions">
+	        <button type="button" class="ui small blue floated right deny button">Confirm</button>
 	      </div>
-	</div> 
+	</div>
 
 	<!-- Modal -->
 	<div class="ui modal fade" id="form4">
 	  <div class="ui header"> Participants </div>
 
 	      <div class="ui segments" style="margin:0px">
-			  <h5 	ng-repeat="u in users" 
-			  		class="ui attached segment"  
-			  		ng-click="u.selected = !u.selected" 
+			  <h5 	ng-repeat="u in users"
+			  		class="ui attached segment"
+			  		ng-click="u.selected = !u.selected"
 			  		ng-class="{'inverted green': u.selected}">
-				<span ng-show="u.selected"><i class="ui checkmark icon"></i></span> 
+				<span ng-show="u.selected"><i class="ui checkmark icon"></i></span>
 			  	<span>{{u.name}}</span>
 			  </h5>
 	      </div>
-	      <div class="ui segment">
-	        <button type="button" class="ui blue button close">OK</button>
+	      <div class="ui segment actions">
+	        <button type="button" class="ui blue button deny">OK</button>
 	      </div>
 	    </div>
 	  </div>
@@ -111,7 +113,7 @@
 	      <div class="ui header">
 	        <h4 id="myModalLabel">New Topic</h4>
 	      </div>
-		  
+
 	      <div class="content">
 	      	  <div class="form-group">
 			    <label for="name">Name</label>
@@ -124,7 +126,7 @@
 			    <div class="ui fluid input">
 				    <input type="description" class="form-control" placeholder="Event Description" ng-model="currentTopic.description"></input>
 				</div>
-			  </div>		      	
+			  </div>
 			  <div class="form-group">
 			    <label for="choices">Choices</label>
 				<div class=" ui fluid input">
@@ -142,13 +144,12 @@
 			    <div class=" ui fluid input">
 			    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="currentTopic.choices[4]"/>
 				</div>
-			  </div>	
+			  </div>
 	      </div>
-	      <div class="ui segment">
+	      <div class="ui segment actions">
 	        <button type="button" class="ui close button">Cancel</button>
-	        <button type="button" class="ui blue button" ng-click="saveTopic()">Confirm</button>
+	        <button type="button" class="ui blue close button" ng-click="saveTopic()">Confirm</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
-

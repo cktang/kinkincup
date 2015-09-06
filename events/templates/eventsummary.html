@@ -33,7 +33,7 @@
 
 	<!-- Participants Modal -->
 	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']" ng-cloak>
-	  <div class="ui header"> Participants </div>
+	  <div class="ui header"> Are you going? </div>
 
 		<div ng-repeat="d in decisions">
 		  <div class="ui attached segment" style="border:0px"
@@ -66,7 +66,7 @@
 					{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
 			</span>
 
-		<h4 class="ui header"> Participants </h4>
+		<h4 class="ui header"> Who is going </h4>
 
 		<style>
 			#attendence .ui.column {
@@ -76,6 +76,7 @@
 
 			#attendence .ui.button {
 				padding: 5px 10px;
+				border-radius: 0px;
 			}
 		</style>
 		<div class="ui three column grid" id="attendence" style="clear:both">
@@ -97,7 +98,7 @@
 		</div>
 	</div>
 
-  	<div ng-repeat="t in event.topics"
+	<div ng-repeat="t in event.topics"
   		class="ui link segment"
 			ng-class="{
 				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
@@ -220,6 +221,6 @@
 	  </div>
 	</div>
 
-	<div ng-click="openNewTopicModal()" class="ui tiny  button"> <i class="ui add square icon"></i> New Topic </div>
+	<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
 
 <div style="clear:both"></div>

@@ -1,14 +1,19 @@
+<div class="ui blurring link dimmable"
+		ng-class="{dimmed: users.length == 0}">
 
-<h3><i class="announcement icon"/> Event HK </h3>
+	<div class="ui inverted dimmer"></div>
 
-<h4>  Signup </h4>
+	<h3><i class="announcement icon"/> Event HK </h3>
 
-<div class="fluid large ui facebook button"> <i class="facebook icon"></i> Facebook </div>
-<div class="fluid large ui google plus button"> <i class="google plus icon"></i> Google </div>
+	<h4>  Signup </h4>
 
-<div class="ui horizontal divider"> Or </div>
+	<div class="fluid large ui facebook button"> <i class="facebook icon"></i> Facebook </div>
+	<div class="fluid large ui google plus button"> <i class="google plus icon"></i> Google </div>
 
-<h4> Login </h4>
+	<div class="ui horizontal divider"> Or </div>
 
-<div ng-repeat="u in users" ng-bind="u.name" ng-click="login(u)" 
-	class="fluid teal large ui button"></div>
+	<h4> Login </h4>
+
+	<div ng-repeat="u in users" ng-bind="u.name" ng-click="login(u)"
+		class="fluid teal large ui button link"></div>
+</div>

@@ -1,7 +1,3 @@
-
-
-<h1 class="ui header"> My Events </h1>
-
 <div class="events" style="margin-top: 20px">
 		<div ng-repeat="e in events"
 			ng-click="goto('eventSummary/' + e.$id)"
@@ -15,3 +11,9 @@
 			</div>
 		</div>
 </div>
+
+<div ng-show="events.length == 0">
+
+</div>
+
+<div class="ui small fluid button" style="margin-top:20px"><i class="ui plus icon"/> New Event </div>
