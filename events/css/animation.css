@@ -28,10 +28,13 @@
 
 .pageTransition.ng-enter {
   -webkit-animation: slideInRight 1s;
+  position:absolute;
+  width: 100%;
 }
 .pageTransition.ng-leave {
   -webkit-animation: slideOutLeft 1s;
-  position:fixed;
+  position:absolute;
+  width: 100%;
 }
 
 .link.ng-move,
