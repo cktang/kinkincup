@@ -1,233 +1,242 @@
-<div>
+<div style="margin-top: 20px">
   <div class="ui inverted dimmer" ng-class="{active: !eventLoaded}">
     <div class="ui text loader">Loading</div>
   </div>
 
-	<div class="ui header">
-		<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
-		<div ng-click="goto('chat/' + event.$id + '/type/event')" class="ui right floated tiny button"> <i class="ui icon wechat"></i> Chat </div> -->
-		<span id="eventName">{{event.name}}</span>
-		<div class="ui sub header">{{event.description}}</div>
-	</div>
+  <div ng-show="eventLoaded && !event.name">
+    <div class="ui small fluid teal button" ng-click="$window.history.back()"> Go Back </div>
+  </div>
 
-	<style>
-		.ui.segment {
-			border: 1px solid silver;
-			background-color: #f8f8f8;
-		}
+	<div ng-show="!eventLoaded || (eventLoaded && event.name)">
+		<div class="ui header">
+			<div style="float: right">
+        <div class="ui small button" ng-click="deleteEvent(event)"><i class="ui delete icon"/> Delete Event</div>
+      </div>
 
-		div.choice .badge {
-			font-weight: normal !important;
-		}
-
-		div.choice.chosen {
-			font-weight: bold !important;
-			background-color: #ccc;
-		}
-
-		div.choice {
-			padding: 0em !important;
-			border: 0px !important;
-		}
-
-		#participants .ui.grid {
-			margin: inherit;
-		}
-	</style>
-
-	<!-- Participants Modal -->
-	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']" ng-cloak>
-	  <div class="ui header"> Are you going? </div>
-
-		<div ng-repeat="d in decisions">
-		  <div class="ui attached segment" style="border:0px"
-		  		ng-class="{
-				  'inverted green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes' && d == 'yes',
-				  'inverted yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe' && d == 'maybe',
-				  'inverted red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no' && d == 'no'
-				}"
-		  		ng-click="logParticipate(d);">
-			  <span ng-show="_(event.users).findWhere({ id: local.user.$id }).decision == d"><i class="ui checkmark icon"></i></span>
-			  {{ d }}
-		  </div>
+			<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
+			<div ng-click="goto('chat/' + event.$id + '/type/event')" class="ui right floated tiny button"> <i class="ui icon wechat"></i> Chat </div> -->
+			<span id="eventName">{{event.name}}</span>
+			<div class="ui sub header">{{event.description}}</div>
 		</div>
-
-		<div class="ui segment actions">
-			<button type="button" class="ui close button">Cancel</button>
-			<button type="button" class="ui blue close button">Confirm</button>
-		</div>
-	</div>
-
-	<div class="ui segment link" id="participants"
-			ng-click="decision('participants')"
-			ng-class="_(event.users).findWhere({ id: local.user.$id }).decision" ng-cloak>
-
-			<span class="ui ribbon label" ng-class="{
-					'green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
-					'yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
-					'red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
-				}">
-					<i class="ui icon" ng-class="{
-						'checkmark': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
-						'help': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
-						'remove': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
-					}"></i>
-					{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
-			</span>
-
-		<h4 class="ui header"> Who is going </h4>
 
 		<style>
-			#attendence .ui.column {
-				padding: 0px;
-				margin: 0px;
+			.ui.segment {
+				border: 1px solid silver;
+				background-color: #f8f8f8;
 			}
 
-			#attendence .ui.button {
-				padding: 5px 10px;
-				border-radius: 0px;
+			div.choice .badge {
+				font-weight: normal !important;
+			}
+
+			div.choice.chosen {
+				font-weight: bold !important;
+				background-color: #ccc;
+			}
+
+			div.choice {
+				padding: 0em !important;
+				border: 0px !important;
+			}
+
+			#participants .ui.grid {
+				margin: inherit;
 			}
 		</style>
-		<div class="ui three column grid" id="attendence" style="clear:both">
-			<div class="ui column">
-				<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
-					<span class="ui tiny green button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
-				</div>
+
+		<!-- Participants Modal -->
+		<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']" ng-cloak>
+		  <div class="ui header"> Are you going? </div>
+
+			<div ng-repeat="d in decisions">
+			  <div class="ui attached segment" style="border:0px"
+			  		ng-class="{
+					  'inverted green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes' && d == 'yes',
+					  'inverted yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe' && d == 'maybe',
+					  'inverted red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no' && d == 'no'
+					}"
+			  		ng-click="logParticipate(d);">
+				  <span ng-show="_(event.users).findWhere({ id: local.user.$id }).decision == d"><i class="ui checkmark icon"></i></span>
+				  {{ d }}
+			  </div>
 			</div>
-			<div class="ui column">
-				<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
-					<span class="ui tiny yellow button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
-				</div>
+
+			<div class="ui segment actions">
+				<button type="button" class="ui close button">Cancel</button>
+				<button type="button" class="ui blue close button">Confirm</button>
 			</div>
-			<div class="ui column">
-				<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
-					<span class="ui tiny red button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
+		</div>
+
+		<div class="ui segment link" id="participants"
+				ng-click="decision('participants')"
+				ng-class="_(event.users).findWhere({ id: local.user.$id }).decision" ng-cloak>
+
+				<span class="ui ribbon label" ng-class="{
+						'green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
+						'yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
+						'red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
+					}">
+						<i class="ui icon" ng-class="{
+							'checkmark': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
+							'help': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
+							'remove': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
+						}"></i>
+						{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
+				</span>
+
+			<h4 class="ui header"> Who is going </h4>
+
+			<style>
+				#attendence .ui.column {
+					padding: 0px;
+					margin: 0px;
+				}
+
+				#attendence .ui.button {
+					padding: 5px 10px;
+					border-radius: 0px;
+				}
+			</style>
+			<div class="ui three column grid" id="attendence" style="clear:both">
+				<div class="ui column">
+					<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
+						<span class="ui tiny green button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
+					</div>
+				</div>
+				<div class="ui column">
+					<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
+						<span class="ui tiny yellow button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
+					</div>
+				</div>
+				<div class="ui column">
+					<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
+						<span class="ui tiny red button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div ng-repeat="t in event.topics"
-  		class="ui link segment"
-			ng-class="{
-				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
-				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
-			}"
-  		ng-click="goto('/eventTopic/' + t)">
+		<div ng-repeat="t in event.topics"
+	  		class="ui link segment"
+				ng-class="{
+					no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
+					yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
+				}"
+	  		ng-click="goto('/eventTopic/' + t)">
 
-			<span class="ui ribbon label"
-						ng-class="{
-							'green': topics.$getRecord(t).votes[local.user.$id],
-							'yellow': !topics.$getRecord(t).votes[local.user.$id]
-						}"
-					 ng-if="!topics.$getRecord(t).finalize">
-					 <span style="margin-right:10px"
-					 			class="ui tiny inverted basic button"
-					 			ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]"
-								ng-bind="c">
-					 </span>
+				<span class="ui ribbon label"
+							ng-class="{
+								'green': topics.$getRecord(t).votes[local.user.$id],
+								'yellow': !topics.$getRecord(t).votes[local.user.$id]
+							}"
+						 ng-if="!topics.$getRecord(t).finalize">
+						 <span style="margin-right:10px"
+						 			class="ui tiny inverted basic button"
+						 			ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]"
+									ng-bind="c">
+						 </span>
 
-					 <span ng-if="!topics.$getRecord(t).votes[local.user.$id]"> ? </span>
-			</span>
+						 <span ng-if="!topics.$getRecord(t).votes[local.user.$id]"> ? </span>
+				</span>
 
-			<div class="ui header">
-				{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
-			</div>
+				<div class="ui header">
+					{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
+				</div>
 
-  		<div ng-repeat="c in topChoices(t)"
-  				ng-hide="topics.$getRecord(t).finalize"
-					class="ui choice attached segment">
+	  		<div ng-repeat="c in topChoices(t)"
+	  				ng-hide="topics.$getRecord(t).finalize"
+						class="ui choice attached segment">
 
-					<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
-	  			<span ng-bind="c"></span>
-  		</div>
+						<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
+		  			<span ng-bind="c"></span>
+	  		</div>
 
 
-			<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
-				<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
-			</div>
+				<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
+					<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
+				</div>
 
-			<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
-					<style>
-						td { text-align:center; padding:5px; width:50%; }
-					</style>
-					<table style="width:100%">
-						<tr>
-							<td>Finalized</td>
-							<td>Your Choice</td>
-						</tr>
-						<Tr>
-							<Td><div class="ui black small fluid button">{{topics.$getRecord(t).finalize}}</div>
-							<Td><div ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]" ng-bind="c" class="ui red small fluid button"></div>
-						</tr>
-					</table>
+				<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
+						<style>
+							td { text-align:center; padding:5px; width:50%; }
+						</style>
+						<table style="width:100%">
+							<tr>
+								<td>Finalized</td>
+								<td>Your Choice</td>
+							</tr>
+							<Tr>
+								<Td><div class="ui black small fluid button">{{topics.$getRecord(t).finalize}}</div>
+								<Td><div ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]" ng-bind="c" class="ui red small fluid button"></div>
+							</tr>
+						</table>
 
-					<div ng-if="!topics.$getRecord(t).decisionMade[local.user.$id] && _(event.users).findWhere({ id: local.user.$id }).decision == 'yes'"
-							 class="bounce"
-							 ng-click="$event.stopPropagation()">
-						<div class="ui pointing red basic large fluid label" style="line-height:2em">
-							 Your choice is different from the finalized decision <br>
-							 <div class="ui green button" ng-click="acceptFinalize($event, topics.$getRecord(t), true)"> Accept </div> or
-							 <div class="ui orange button" style="margin-left:5px" ng-click="acceptFinalize($event, topics.$getRecord(t), false)"> Decline Event </div>
+						<div ng-if="!topics.$getRecord(t).decisionMade[local.user.$id] && _(event.users).findWhere({ id: local.user.$id }).decision == 'yes'"
+								 class="bounce"
+								 ng-click="$event.stopPropagation()">
+							<div class="ui pointing red basic large fluid label" style="line-height:2em">
+								 Your choice is different from the finalized decision <br>
+								 <div class="ui green button" ng-click="acceptFinalize($event, topics.$getRecord(t), true)"> Accept </div> or
+								 <div class="ui orange button" style="margin-left:5px" ng-click="acceptFinalize($event, topics.$getRecord(t), false)"> Decline Event </div>
+							</div>
+						</div>
+				</div>
+
+	  		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
+		</div>
+
+		<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
+
+		<!-- newTopicModal -->
+		<div class="ui modal fade" id="newTopicModal">
+	    <div class="ui header">
+	      <h4 id="myModalLabel">New Topic</h4>
+	    </div>
+
+			<style>
+				.content .form-group {
+					margin-bottom: 10px;
+				}
+			</style>
+	    <div class="content">
+	    	  <div class="form-group">
+					    <label for="name">Name</label>
+					    <div class="ui fluid input">
+					    	<input type="text" class="form-control" placeholder="Topic Name" ng-model="newTopic.name">
+							</div>
+		  		</div>
+
+				  <div class="form-group">
+				    <label for="description">Description</label>
+				    <div class="ui fluid input">
+						    <input type="description" class="form-control" placeholder="Event Description" ng-model="newTopic.description"></input>
+						</div>
+				  </div>
+
+				  <div class="form-group">
+				    <label for="choices">Choices</label>
+						<div class=" ui fluid input">
+					    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="newTopic.choices[0]"/>
+						</div>
+				    <div class=" ui fluid input">
+				    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="newTopic.choices[1]"/>
+						</div>
+				    <div class=" ui fluid input">
+				    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="newTopic.choices[2]"/>
+						</div>
+				    <div class=" ui fluid input">
+				    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="newTopic.choices[3]"/>
+						</div>
+				    <div class=" ui fluid input">
+				    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="newTopic.choices[4]"/>
 						</div>
 					</div>
-			</div>
-
-  		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
-	</div>
-
-	<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
-
-	<!-- newTopicModal -->
-	<div class="ui modal fade" id="newTopicModal">
-	      <div class="ui header">
-	        <h4 id="myModalLabel">New Topic</h4>
-	      </div>
-
-				<style>
-					.content .form-group {
-						margin-bottom: 10px;
-					}
-				</style>
-	      <div class="content">
-	      	  <div class="form-group">
-						    <label for="name">Name</label>
-						    <div class="ui fluid input">
-						    	<input type="text" class="form-control" placeholder="Topic Name" ng-model="newTopic.name">
-								</div>
-			  		</div>
-
-					  <div class="form-group">
-					    <label for="description">Description</label>
-					    <div class="ui fluid input">
-							    <input type="description" class="form-control" placeholder="Event Description" ng-model="newTopic.description"></input>
-							</div>
-					  </div>
-
-					  <div class="form-group">
-					    <label for="choices">Choices</label>
-							<div class=" ui fluid input">
-						    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="newTopic.choices[0]"/>
-							</div>
-					    <div class=" ui fluid input">
-					    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="newTopic.choices[1]"/>
-							</div>
-					    <div class=" ui fluid input">
-					    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="newTopic.choices[2]"/>
-							</div>
-					    <div class=" ui fluid input">
-					    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="newTopic.choices[3]"/>
-							</div>
-					    <div class=" ui fluid input">
-					    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="newTopic.choices[4]"/>
-							</div>
-						</div>
-	      </div>
-	      <div class="ui segment actions">
-	        <button type="button" class="ui deny button">Cancel</button>
-	        <button type="button" class="ui blue deny button" ng-click="saveNewTopic(newTopic)">Confirm</button>
-	      </div>
 	    </div>
-	  </div>
+
+	    <div class="ui segment actions">
+	      <button type="button" class="ui deny button">Cancel</button>
+	      <button type="button" class="ui blue deny button" ng-click="saveNewTopic(newTopic)">Confirm</button>
+	    </div>
+		</div>
 	</div>
 </div>

@@ -306,6 +306,30 @@
 							$scope.openNewTopicModal = function() {
 								$('#newTopicModal').modal('show');
 							};
+
+
+							$scope.deleteEvent = function(event) {
+								event = event || $scope.event;
+								if (!confirm('Remove Event ' + event.name)) return;
+
+								_($scope.event.topics).each(function(t) {
+									$scope.topics.$remove($scope.topics.$getRecord(t));
+								})
+								$scope.events.$remove($scope.events.$getRecord(event.$id));
+
+								$scope.history.$add({
+							   	user: $scope.local.user.$id,
+							 		ts: moment().format('LLL'),
+							 		action: 'event removed',
+									event: event.$id
+								});
+								$scope.allHistory.$add({
+							 		user: $scope.local.user.$id,
+							 		ts: moment().format('LLL'),
+							 		action: 'event removed',
+									event: event.$id
+								});
+							}
 						}
 					)
 

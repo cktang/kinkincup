@@ -3,11 +3,11 @@
     <div class="ui text loader">Loading</div>
   </div>
 
-  <div ng-show="!topic.name">
+  <div ng-show="topicLoaded && !topic.name">
     <div class="ui small fluid teal button" ng-click="$window.history.back()"> Go Back </div>
   </div>
 
-  <div ng-show="topic.name">
+  <div ng-show="!topicLoaded || (topicLoaded && topic.name)">
     <h4 class="ui header">
       <div style="float: right">
         <div class="ui small button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
