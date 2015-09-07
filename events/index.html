@@ -239,15 +239,16 @@
 
 							$scope.topChoices = function(topicId) {
 								// console.log("topChoices: " + topicId);
-
-								return _($scope.topics.$getRecord(topicId).votes)
-											.chain()
-											.flatten()
-											.compact()
-											.groupBy(function(v, k) { return v; })
-											.sortBy(function(v, k) { return v.length})
-											.reverse().values()
-											.map(function(e) { return e[0]; }).values().value();
+								try {
+									return _($scope.topics.$getRecord(topicId).votes)
+												.chain()
+												.flatten()
+												.compact()
+												.groupBy(function(v, k) { return v; })
+												.sortBy(function(v, k) { return v.length})
+												.reverse().values()
+												.map(function(e) { return e[0]; }).values().value();
+								} catch (e) { return []; }
 							}
 
 							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
@@ -294,6 +295,8 @@
 							$scope.saveNewTopic = function(newTopic) {
 								var event = $scope.event;
 								var events = $scope.events;
+
+								newTopic.event = event.$id;
 								$scope.topics.$add(angular.copy(newTopic)).then(function(ref) {
 									event.topics.push(ref.key());
 									events.$save(event);
@@ -310,11 +313,15 @@
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 					    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
 					    obj.$bindTo($scope, "topic");
-
 							obj.$loaded().then(function() {
 								$scope.topicLoaded = true;
 								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event + "/history"));
+
+								var eobj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event));
+								eobj.$bindTo($scope, "event");
+								eobj.$loaded(function() { $scope.eventLoaded = true; });
 							});
+
 
 							$scope.log = function(value, type) {
 								console.log('vote changed: ' + value);
@@ -424,6 +431,28 @@
 									}
 								}
 							};
+
+							$scope.deleteTopic = function(topic) {
+								if (!confirm('Remove Topic ' + topic.name)) return;
+
+								$scope.event.topics = _($scope.event.topics).without(topic.$id);
+								$scope.topics.$remove($scope.topics.$getRecord(topic.$id));
+
+								$scope.history.$add({
+							   	user: $scope.local.user.$id,
+							 		ts: moment().format('LLL'),
+							 		action: 'topic removed',
+									topic: topic.$id,
+									event: topic.event
+								});
+								$scope.allHistory.$add({
+							 		user: $scope.local.user.$id,
+							 		ts: moment().format('LLL'),
+							 		action: 'topic removed',
+									topic: topic.$id,
+									event: topic.event
+								});
+							}
 						}
 					)
 

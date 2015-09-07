@@ -43,6 +43,13 @@
   width: 100%;
 }
 
+.bounce {
+  -webkit-animation: flash 5s;
+  -moz-animation: flash 3s;
+  -ms-animation: flash 3s;
+  animation: flash 3s;
+}
+
 .link.ng-move,
 .link.ng-enter,
 .link.ng-leave {

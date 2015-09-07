@@ -51,6 +51,11 @@
 			  {{ d }}
 		  </div>
 		</div>
+
+		<div class="ui segment actions">
+			<button type="button" class="ui close button">Cancel</button>
+			<button type="button" class="ui blue close button">Confirm</button>
+		</div>
 	</div>
 
 	<div class="ui segment link" id="participants"
@@ -158,7 +163,7 @@
 					</table>
 
 					<div ng-if="!topics.$getRecord(t).decisionMade[local.user.$id] && _(event.users).findWhere({ id: local.user.$id }).decision == 'yes'"
-							 class="fadeIn"
+							 class="bounce"
 							 ng-click="$event.stopPropagation()">
 						<div class="ui pointing red basic large fluid label" style="line-height:2em">
 							 Your choice is different from the finalized decision <br>
@@ -219,8 +224,8 @@
 						</div>
 	      </div>
 	      <div class="ui segment actions">
-	        <button type="button" class="ui close button">Cancel</button>
-	        <button type="button" class="ui blue close button" ng-click="saveNewTopic(newTopic)">Confirm</button>
+	        <button type="button" class="ui deny button">Cancel</button>
+	        <button type="button" class="ui blue deny button" ng-click="saveNewTopic(newTopic)">Confirm</button>
 	      </div>
 	    </div>
 	  </div>
