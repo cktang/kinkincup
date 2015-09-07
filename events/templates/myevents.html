@@ -1,19 +1,21 @@
-<div class="events" style="margin-top: 20px">
-		<div ng-repeat="e in events"
-			ng-click="goto('eventSummary/' + e.$id)"
-			ng-if="_(e.users).where({ id: local.user.$id }).length > 0"
-			ng-class="_(e.users).findWhere({ id: local.user.$id }).decision"
-			class="ui link segment nga-default nga-stagger-slow nga-fade-all nga-fade-add">
+<h3>
+  <div class="ui inverted dimmer" ng-class="{active: !eventsLoaded}">
+    <div class="ui text loader">Loading</div>
+  </div>
 
-			<div class="ui header">
-				<div ng-bind="e.name"></div>
-				<div class="sub header" ng-bind="e.description"></div>
+	<div class="events" style="margin-top: 20px">
+			<div ng-repeat="e in events"
+				ng-click="goto('eventSummary/' + e.$id)"
+				ng-if="_(e.users).where({ id: local.user.$id }).length > 0"
+				ng-class="_(e.users).findWhere({ id: local.user.$id }).decision"
+				class="ui link segment nga-default nga-stagger-slow nga-fade-all nga-fade-add">
+
+				<div class="ui header">
+					<div ng-bind="e.name"></div>
+					<div class="sub header" ng-bind="e.description"></div>
+				</div>
 			</div>
-		</div>
-</div>
+	</div>
 
-<div ng-show="events.length == 0">
-
-</div>
-
-<div class="ui small fluid button" style="margin-top:20px"><i class="ui plus icon"/> New Event </div>
+	<div class="ui small fluid button" style="margin-top:20px"><i class="ui plus icon"/> New Event </div>
+</h3>

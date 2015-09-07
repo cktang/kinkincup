@@ -37,7 +37,7 @@
 
 <body ontouchstart="">
 	<!-- <div class="ui fixed main menu" ng-include="'header.html'"></div> -->
- 	<div class="ng-view ng-cloak container" style="padding-top:15px"></div>
+ 	<div class="ng-view ng-cloak container"></div>
 
 	<script>
 		var app = angular
@@ -90,11 +90,17 @@
 
 					.run(function($rootScope, $window, $location, $localStorage, $firebaseArray) {
 						console.log('rootScope::start');
-					    $rootScope.local = $localStorage;
-					    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
-					    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
-					    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-					    $rootScope.allHistory = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/history"));
+				    $rootScope.local = $localStorage;
+
+				    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
+				    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+				    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+				    $rootScope.allHistory = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/history"));
+
+						$rootScope.topics.$loaded(function() { $rootScope.topicsLoaded = true; })
+						$rootScope.users.$loaded(function() { $rootScope.usersLoaded = true; })
+						$rootScope.events.$loaded(function() { $rootScope.eventsLoaded = true; })
+						$rootScope.allHistory.$loaded(function() { $rootScope.allHistorysLoaded = true; })
 
 						$rootScope.$on('$routeChangeStart', function(next, current) {
 						   try {
@@ -141,7 +147,7 @@
 					.controller("chatController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/chats"));
-							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/history"));
+								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/history"));
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/"+ $routeParams.type + "/" + $routeParams.id));
 						    obj.$bindTo($scope, "event");
@@ -180,9 +186,13 @@
 					.controller("eventSummaryController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 
-							try{
-								webkit.messageHandlers.callbackHandler.postMessage("test");
-							} catch(e) {}
+							var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
+							obj.$bindTo($scope, "event");
+							obj.$loaded(function() { $scope.eventLoaded = true; });
+
+							// try{
+							// 	webkit.messageHandlers.callbackHandler.postMessage("test");
+							// } catch(e) {}
 
 							$scope.acceptFinalize = function($event, topic, accept) {
 								if (!accept) {
@@ -237,9 +247,6 @@
 											.reverse().values()
 											.map(function(e) { return e[0]; }).values().value();
 							}
-
-						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
-						    obj.$bindTo($scope, "event");
 
 							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
 
@@ -299,9 +306,11 @@
 
 					.controller("eventTopicController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
-						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
-						    obj.$bindTo($scope, "topic");
+					    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
+					    obj.$bindTo($scope, "topic");
+
 							obj.$loaded().then(function() {
+								$scope.topicLoaded = true;
 								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event + "/history"));
 							});
 

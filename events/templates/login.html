@@ -1,5 +1,7 @@
-<div class="ui blurring link dimmable"
-		ng-class="{dimmed: users.length == 0}">
+<div>
+  <div class="ui inverted dimmer" ng-class="{active: !usersLoaded}">
+    <div class="ui text loader">Loading</div>
+  </div>
 
 	<div class="ui inverted dimmer"></div>
 

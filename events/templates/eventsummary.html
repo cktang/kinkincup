@@ -1,35 +1,39 @@
+<div>
+  <div class="ui inverted dimmer" ng-class="{active: !eventLoaded}">
+    <div class="ui text loader">Loading</div>
+  </div>
 
-<div class="ui header">
-	<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
-	<div ng-click="goto('chat/' + event.$id + '/type/event')" class="ui right floated tiny button"> <i class="ui icon wechat"></i> Chat </div> -->
-	<span id="eventName">{{event.name}}</span>
-	<div class="ui sub header">{{event.description}}</div>
-</div>
+	<div class="ui header">
+		<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
+		<div ng-click="goto('chat/' + event.$id + '/type/event')" class="ui right floated tiny button"> <i class="ui icon wechat"></i> Chat </div> -->
+		<span id="eventName">{{event.name}}</span>
+		<div class="ui sub header">{{event.description}}</div>
+	</div>
 
-<style>
-	.ui.segment {
-		border: 1px solid silver;
-		background-color: #f8f8f8;
-	}
+	<style>
+		.ui.segment {
+			border: 1px solid silver;
+			background-color: #f8f8f8;
+		}
 
-	div.choice .badge {
-		font-weight: normal !important;
-	}
+		div.choice .badge {
+			font-weight: normal !important;
+		}
 
-	div.choice.chosen {
-		font-weight: bold !important;
-		background-color: #ccc;
-	}
+		div.choice.chosen {
+			font-weight: bold !important;
+			background-color: #ccc;
+		}
 
-	div.choice {
-		padding: 0em !important;
-		border: 0px !important;
-	}
+		div.choice {
+			padding: 0em !important;
+			border: 0px !important;
+		}
 
-	#participants .ui.grid {
-		margin: inherit;
-	}
-</style>
+		#participants .ui.grid {
+			margin: inherit;
+		}
+	</style>
 
 	<!-- Participants Modal -->
 	<div class="ui modal fade" id="modal" ng-init="decisions = ['yes', 'maybe', 'no']" ng-cloak>
@@ -222,5 +226,4 @@
 	</div>
 
 	<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
-
-<div style="clear:both"></div>
+</div>

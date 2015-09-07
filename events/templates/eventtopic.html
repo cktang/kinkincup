@@ -1,92 +1,97 @@
-<div style="float: right">
-    <div class="ui small button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
-</div>
+<div>
+  <div class="ui inverted dimmer" ng-class="{active: !topicLoaded}">
+    <div class="ui text loader">Loading</div>
+  </div>
 
-<div class="ui breadcrumb">
-  <a href="#" ng-click="goto('/eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
-  <div class="divider"> / </div>
-  <div class="active section">{{topic.name}}</div>
-</div>
-<h5 class="ui sub header" ng-bind="topic.description"></h5>
-
-<style>
-  .dim {
-    color: silver;
-  }
-
-  .finalized {
-    font-weight: bolder;
-  }
-
-  .ui.attached.segment {
-     line-height:2.5em;
-  }
-
-  .ui.inverted.green.segment {
-    border-bottom: 1px solid darkgreen !important;
-  }
-
-  .ui.attached.segment {
-    border-bottom: 1px solid #eee !important;
-  }
-</style>
-
-<h5 class="ui header"> Vote </h5>
-<div class="topic" ng-class="{ 'dim': topic.finalize }">
-	<div ng-repeat="c in topic.choices"
-		class="ui attached segment"
-		ng-class="{ 'finalized red inverted': topic.finalize == c }"
-		ng-click="vote(topic, c)">
-
-    <button class="circular ui mini icon button" ng-class="{'inverted': !voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
-      <i class="icon checkmark"></i>
-    </button>
-		<span ng-bind="c"></span>
-
-		<div class="ui right floated medium icon button"
-        ng-click="finalize(topic, c, $event)"
-        ng-show="!topic.finalize">
-			<i class="ui icon lock"></i>
-		</div>
-
-    <div style="clear:both"></div>
-
-    <div style="margin-left:30px">
-  		<span ng-repeat="userId in _(topic.votes).keys()"
-            ng-if="voted({topic:topic, choice:c, userId:userId})"
-            class="ui small label"
-  			    ng-bind="users.$getRecord(userId).name">
-  		</span>
+  <h3>
+    <div style="float: right">
+        <div class="ui small button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
     </div>
-	</div>
-</div>
 
-<div style="margin-top:10px">
-	<button class="ui button fluid" ng-click="goto('chat/' + topic.$id + '/type/topic')">Chat</button>
-</div>
+    <div class="ui breadcrumb">
+      <a href="#" ng-click="goto('/eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
+      <div class="divider"> / </div>
+      <div class="active section">{{topic.name}}</div>
+    </div>
+    <h5 class="ui sub header" ng-bind="topic.description"></h5>
+  </h3>
+  
+  <style>
+    .dim {
+      color: silver;
+    }
 
-<div style="margin-top:10px">
-	<button class="ui teal button fluid" ng-click="newChoice='New Choice'; openNewChoiceModal()">Add New Choices</button>
-</div>
+    .finalized {
+      font-weight: bolder;
+    }
 
+    .ui.attached.segment {
+       line-height:2.5em;
+    }
 
-<!-- newChoiceModal -->
-<div class="ui modal fade" id="newChoiceModal">
-      <div class="ui header">
-        <h4 id="myModalLabel">New Choice</h4>
+    .ui.inverted.green.segment {
+      border-bottom: 1px solid darkgreen !important;
+    }
+
+    .ui.attached.segment {
+      border-bottom: 1px solid #eee !important;
+    }
+  </style>
+
+  <h5 class="ui header"> Vote </h5>
+  <div class="topic" ng-class="{ 'dim': topic.finalize }">
+  	<div ng-repeat="c in topic.choices"
+  		class="ui attached segment"
+  		ng-class="{ 'finalized red inverted': topic.finalize == c }"
+  		ng-click="vote(topic, c)">
+
+      <button class="circular ui mini icon button" ng-class="{'inverted': !voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
+        <i class="icon checkmark"></i>
+      </button>
+  		<span ng-bind="c"></span>
+
+  		<div class="ui right floated medium icon button"
+          ng-click="finalize(topic, c, $event)"
+          ng-show="!topic.finalize">
+  			<i class="ui icon lock"></i>
+  		</div>
+
+      <div style="clear:both"></div>
+
+      <div style="margin-left:30px">
+    		<span ng-repeat="userId in _(topic.votes).keys()"
+              ng-if="voted({topic:topic, choice:c, userId:userId})"
+              class="ui small label"
+    			    ng-bind="users.$getRecord(userId).name">
+    		</span>
       </div>
+  	</div>
+  </div>
 
-      <div class="content">
-      	  <div class="form-group">
-		    <div class="ui fluid input">
-			    <input type="text" class="form-control" placeholder="New Choice" ng-model="newChoice">
-			</div>
-		  </div>
-      </div>
-      <div class="ui segment actions">
-        <button type="button" class="ui deny button">Cancel</button>
-        <button type="button" class="ui blue close button" ng-click="saveNewChoice(newChoice)">Confirm</button>
-      </div>
+  <div style="margin-top:10px">
+  	<button class="ui button fluid" ng-click="goto('chat/' + topic.$id + '/type/topic')">Chat</button>
+  </div>
+
+  <div style="margin-top:10px">
+  	<button class="ui teal button fluid" ng-click="newChoice='New Choice'; openNewChoiceModal()">Add New Choices</button>
+  </div>
+
+  <!-- newChoiceModal -->
+  <div class="ui modal fade" id="newChoiceModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">New Choice</h4>
+    </div>
+
+    <div class="content">
+    	  <div class="form-group">
+	    <div class="ui fluid input">
+		    <input type="text" class="form-control" placeholder="New Choice" ng-model="newChoice">
+		</div>
+	  </div>
+    </div>
+    <div class="ui segment actions">
+      <button type="button" class="ui deny button">Cancel</button>
+      <button type="button" class="ui blue close button" ng-click="saveNewChoice(newChoice)">Confirm</button>
     </div>
   </div>
 </div>
