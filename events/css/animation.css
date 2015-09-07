@@ -28,11 +28,17 @@
 
 .pageTransition.ng-enter {
   -webkit-animation: fadeInUp 1s;
+  -moz-animation: fadeInUp 1s;
+  -ms-animation: fadeInUp 1s;
+  animation: fadeInUp 1s;
   position:absolute;
   width: 100%;
 }
 .pageTransition.ng-leave {
   -webkit-animation: fadeOutUp 1s;
+  -moz-animation: fadeOutUp 1s;
+  -ms-animation: fadeOutUp 1s;
+  animation: fadeOutUp 1s;
   position:absolute;
   width: 100%;
 }
@@ -55,3 +61,9 @@
 .link.ng-enter.ng-enter-active {
   opacity:1;
 }
+
+
+  -webkit-animation: bounceOut 1s;
+  -moz-animation: bounceOut 1s;
+  -ms-animation: bounceOut 1s;
+  animation: bounceOut 1s;
