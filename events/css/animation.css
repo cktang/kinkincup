@@ -1,0 +1,54 @@
+.slide{
+  left:0;
+}
+.slide.ng-enter{
+  transition:0.15s linear all;
+  position:fixed;
+  z-index:inherit;
+  left:-100%;
+  height:inherit;
+}
+.slide.ng-leave{
+  transition:0.15s linear all;
+  position:fixed;
+  z-index:9999;
+  right:0;
+}
+.slide.ng-leave-active{
+  transition:0.15s linear all;
+  position:fixed;
+  right:-100%;
+  left:100%;
+}
+.slide.ng-enter-active{
+  transition:0.15s linear all;
+  left:0;
+  position:relative;
+}
+
+.pageTransition.ng-enter {
+  -webkit-animation: slideInRight 1s;
+}
+.pageTransition.ng-leave {
+  -webkit-animation: slideOutLeft 1s;
+  position:fixed;
+}
+
+.link.ng-move,
+.link.ng-enter,
+.link.ng-leave {
+  -webkit-transition:all linear 1s;
+  transition:all linear 1s;
+}
+
+.link.ng-leave.ng-leave-active,
+.link.ng-move,
+.link.ng-enter {
+  opacity:0;
+}
+
+.link.ng-leave,
+.link.ng-move.ng-move-active,
+.link.ng-enter.ng-enter-active {
+  opacity:1;
+}

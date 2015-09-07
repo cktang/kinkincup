@@ -166,11 +166,12 @@
 							 <div class="ui orange button" style="margin-left:5px" ng-click="acceptFinalize($event, topics.$getRecord(t), false)"> Decline Event </div>
 						</div>
 					</div>
-
 			</div>
 
   		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
 	</div>
+
+	<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
 
 	<!-- newTopicModal -->
 	<div class="ui modal fade" id="newTopicModal">
@@ -224,6 +225,4 @@
 	    </div>
 	  </div>
 	</div>
-
-	<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
 </div>
