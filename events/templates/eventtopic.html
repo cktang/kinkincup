@@ -3,7 +3,7 @@
     <div class="ui text loader">Loading</div>
   </div>
 
-  <h3>
+  <h4 class="ui header">
     <div style="float: right">
         <div class="ui small button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
     </div>
@@ -14,8 +14,8 @@
       <div class="active section">{{topic.name}}</div>
     </div>
     <h5 class="ui sub header" ng-bind="topic.description"></h5>
-  </h3>
-  
+  </h5>
+
   <style>
     .dim {
       color: silver;
@@ -41,7 +41,7 @@
   <h5 class="ui header"> Vote </h5>
   <div class="topic" ng-class="{ 'dim': topic.finalize }">
   	<div ng-repeat="c in topic.choices"
-  		class="ui attached segment"
+  		class="ui attached segment link"
   		ng-class="{ 'finalized red inverted': topic.finalize == c }"
   		ng-click="vote(topic, c)">
 
