@@ -4,7 +4,7 @@
 }
 
 .container {
-	padding: 0 1em;
+	padding: 0 0.5em;
 }
 
 .link, .button { transition: all .1s; }

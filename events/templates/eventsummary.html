@@ -10,7 +10,7 @@
 	<div ng-show="!eventLoaded || (eventLoaded && event.name)">
 		<div class="ui header">
 			<div style="float: right">
-        <div class="ui small button" ng-click="deleteEvent(event)"><i class="ui delete icon"/> Delete Event</div>
+        <div class="ui mini button" ng-click="deleteEvent(event)"><i class="ui delete icon"/></div>
       </div>
 
 			<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
@@ -62,8 +62,8 @@
 			</div>
 
 			<div class="ui segment actions">
-				<button type="button" class="ui close button">Cancel</button>
-				<button type="button" class="ui blue close button">Confirm</button>
+				<button type="button" class="ui deny button">Cancel</button>
+				<button type="button" class="ui blue deny button">Confirm</button>
 			</div>
 		</div>
 
