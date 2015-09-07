@@ -27,7 +27,7 @@
 }
 
 .pageTransition.ng-enter {
-  -webkit-animation: slideInRight 1s;
+  -webkit-animation: fadeInUp 1s;
   position:absolute;
   width: 100%;
 }
