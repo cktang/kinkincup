@@ -25,11 +25,11 @@
 					'announcement': _(['participate']).contains(h.action),
 					'pin': _(['finalize', 'un-finalize']).contains(h.action)
 				}"/>
-				{{users.$getRecord(h.user).name}}
+				{{users.$getRecord(h.user).name.split(' ')[0]}}
 				<span class="detail">{{h.ts}}</span>
 		</div>
 
 		<div class="ui small label" ng-show="h.topic" style="margin-left:0px">{{ topics.$getRecord(h.topic).name }}</div>
-		<span ng-hide="h.action=='participate'" class="ui column"> {{ h.content }}</span>
+		<span ng-hide="h.action=='participate'" class="ui small basic label"> {{ h.content }}</span>
 	</div>
 </div>

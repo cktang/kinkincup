@@ -150,10 +150,12 @@
 					.controller("chatController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
 						    $scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/chats"));
-								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/" + $routeParams.type + "/" + $routeParams.id + "/history"));
 
 						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/"+ $routeParams.type + "/" + $routeParams.id));
 						    obj.$bindTo($scope, "event");
+								obj.$loaded(function() {
+									$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + ($routeParams.type=='topic'? $scope.event.event: $scope.event.$id) + "/history"));
+								})
 
 						    $scope.r = $routeParams;
 
@@ -162,18 +164,15 @@
 									var c = {
 							     		user: $scope.local.user.$id,
 							     		ts: moment().format('YYYY-MM-DD hh:mm'),
-							     		content: text
+							     		content: text,
+											action: 'chat'
 							     	};
 										if ($routeParams.type=='topic') c.topic = $scope.r.id;
 										if ($routeParams.type=='event') c.event = $scope.r.id;
 
-							     	$scope.chats.$add(c);
-									$scope.history.$add(_(c).extend({action: 'chat'}));
-									$scope.allHistory.$add(_(c).extend({
-										action: 'chat',
-										event: $routeParams.type=='event'? $scope.event.$id: $scope.event.event,
-										topic: $routeParams.type=='topic'? $scope.event.$id: null
-									}));
+							    $scope.chats.$add(c);
+									$scope.history.$add(c);
+									$scope.allHistory.$add(c);
 						     	} catch (e) { console.error(e); }
 						    };
 						}
@@ -525,10 +524,12 @@
 									};
 								});
 
-								$scope.newEvent.history = {
+								$scope.newEvent.history = [];
+								$scope.newEvent.history.push({
 									user: $scope.local.user.$id,
+							 		ts: moment().format('YYYY-MM-DD hh:mm'),
 									action: 'event created'
-								}
+								})
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {
 									$scope.newEvent = $scope.events.$getRecord(ref.key());
