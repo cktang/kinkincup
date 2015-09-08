@@ -83,8 +83,7 @@
 						}"></i>
 						{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
 				</span>
-
-			<h4 class="ui header"> Who is going </h4>
+				<strong>Who is going</strong>
 
 			<style>
 				#attendence .ui.column {
@@ -99,16 +98,19 @@
 			</style>
 			<div class="ui three column grid" id="attendence" style="clear:both">
 				<div class="ui column">
+					Yes<br>
 					<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
 						<span class="ui tiny green button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 					</div>
 				</div>
 				<div class="ui column">
+					Maybe<br>
 					<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
 						<span class="ui tiny yellow button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 					</div>
 				</div>
 				<div class="ui column">
+					No<br>
 					<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
 						<span class="ui tiny red button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 					</div>
@@ -116,47 +118,51 @@
 			</div>
 		</div>
 
+		<style>
+			.ui.segment.topic {
+				padding: 0px;
+			}
+
+			.ui.segment.title {
+				border-bottom: 0px;
+				background-color: #eee;
+			}
+		</style>
+
 		<div ng-repeat="t in event.topics"
-	  		class="ui link segment"
-				ng-class="{
-					no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
-					yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
-				}"
-	  		ng-click="goto('/eventTopic/' + t)">
+			class="ui segment link topic"
+			ng-class="{
+				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
+				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
+			}"
+			style="margin-bottom: 1em">
 
-				<span class="ui ribbon label"
-							ng-class="{
-								'green': topics.$getRecord(t).votes[local.user.$id],
-								'yellow': !topics.$getRecord(t).votes[local.user.$id]
-							}"
-						 ng-if="!topics.$getRecord(t).finalize">
-						 <span style="margin-right:10px"
-						 			class="ui tiny inverted basic button"
-						 			ng-repeat="c in topics.$getRecord(t).votes[local.user.$id]"
-									ng-bind="c">
-						 </span>
-
-						 <span ng-if="!topics.$getRecord(t).votes[local.user.$id]"> ? </span>
-				</span>
-
-				<div class="ui header">
+			<div class="ui attached clearing segment title"
+	  		ng-click="goto('/eventTopic/' + t)"
+			>
+				<div class="ui floated left header">
 					{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
 				</div>
+			</div>
+
+			<div class="ui attached segment">
 
 	  		<div ng-repeat="c in topChoices(t)"
 	  				ng-hide="topics.$getRecord(t).finalize"
-						class="ui choice attached segment">
+						class="ui choice attached segment"
+						style="line-height: 2em">
 
 						<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
+						<span ng-if="voted({topic:topics.$getRecord(t), choice:c})" class="ui circular green label"><i class="ui checkmark icon" style="margin-right:0px"/></span>
 		  			<span ng-bind="c"></span>
 	  		</div>
 
-
-				<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
+				<!-- if your decision different from finalized -->
+				<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})">
 					<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
 				</div>
 
-				<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})" style="margin-top:5px">
+				<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})">
 						<style>
 							td { text-align:center; padding:5px; width:50%; }
 						</style>
@@ -177,12 +183,13 @@
 							<div class="ui pointing red basic large fluid label" style="line-height:2em">
 								 Your choice is different from the finalized decision <br>
 								 <div class="ui green button" ng-click="acceptFinalize($event, topics.$getRecord(t), true)"> Accept </div> or
-								 <div class="ui orange button" style="margin-left:5px" ng-click="acceptFinalize($event, topics.$getRecord(t), false)"> Decline Event </div>
+								 <div class="ui red button" style="margin-left:5px" ng-click="acceptFinalize($event, topics.$getRecord(t), false)"> Decline Event </div>
 							</div>
 						</div>
 				</div>
 
 	  		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
+			</div>
 		</div>
 
 		<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>

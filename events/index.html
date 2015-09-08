@@ -138,6 +138,7 @@
 						};
 
 						$rootScope.voted = function(options) {
+							options.topic = options.topic || $scope.topic;
 							options.userId = options.userId || $rootScope.local.user.$id;
 							options.choice = options.choice || options.topic.finalize;
 							return options.topic &&
@@ -370,6 +371,8 @@
 							};
 
 							$scope.saveNewChoice = function(newChoice) {
+								if (newChoice == '') return;
+
 								$scope.topic.choices.push(newChoice);
 								// $scope.topic.votes = [];
 
