@@ -8,19 +8,15 @@
   </div>
 
   <div ng-show="!topicLoaded || (topicLoaded && topic.name)">
-    <h4 class="ui header">
-      <div style="float: right">
-        <div class="ui mini button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
-        <div class="ui mini button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
-      </div>
+    <div style="float: right">
+      <div class="ui mini button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
+      <div class="ui mini button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
+    </div>
 
-      <div class="ui breadcrumb">
-        <a href="#" ng-click="goto('/eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
-        <div class="divider"> / </div>
-        <div class="active section">{{topic.name}}</div>
-      </div>
-      <h5 class="ui sub header" ng-bind="topic.description"></h5>
-    </h5>
+    <div class="ui header">
+      {{topic.name}}
+      <div class="sub header" ng-bind="topic.description"></div>
+    </div>
 
     <style>
       .dim {
@@ -46,11 +42,12 @@
       .topic .ui.segment {
       	padding: 0.4em !important;
       	background-color: transparent;
-      	border: 0px !important;
+        border-left: 0px;
+        border-right: 0px;
+        border-top: 0px;
       }
     </style>
 
-    <h5 class="ui header"> Vote </h5>
     <div class="topic" ng-class="{ 'dim': topic.finalize }">
     	<div ng-repeat="c in topic.choices"
     		class="ui attached segment link"
@@ -85,7 +82,7 @@
     </div>
 
     <div style="margin-top:10px">
-    	<button class="ui teal button fluid" ng-click="newChoice='New Choice'; openNewChoiceModal()">Add New Choices</button>
+    	<button class="ui teal button fluid" ng-click="newChoice=''; openNewChoiceModal()">Add New Choices</button>
     </div>
   </div>
 
