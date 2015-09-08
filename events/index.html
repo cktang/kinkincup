@@ -43,7 +43,7 @@
 
 	<script>
 		var app = angular
-					.module('app', ["ngAnimate", "ngRoute", "firebase", "ngStorage", 'angular-underscore'])
+					.module('app', ["ngAnimate", "ngRoute", "firebase", "ngStorage", 'angular-underscore', 'angularMoment'])
 
 					.config(function($routeProvider, $locationProvider) {
 					    $locationProvider.hashPrefix('!');
@@ -161,9 +161,12 @@
 						     	try {
 									var c = {
 							     		user: $scope.local.user.$id,
-							     		ts: moment().format('LLL'),
+							     		ts: moment().format('YYYY-MM-DD hh:mm'),
 							     		content: text
 							     	};
+										if ($routeParams.type=='topic') c.topic = $scope.r.id;
+										if ($routeParams.type=='event') c.event = $scope.r.id;
+
 							     	$scope.chats.$add(c);
 									$scope.history.$add(_(c).extend({action: 'chat'}));
 									$scope.allHistory.$add(_(c).extend({
@@ -259,14 +262,14 @@
 
 								$scope.history.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: 'vote',
 									event: topic.$id,
 									content: value
 								});
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: 'vote',
 									event: topic.$id,
 									content: value
@@ -281,7 +284,7 @@
 
 								var logItem = {
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: 'participate',
 									event: $scope.event.$id,
 									content: value
@@ -298,9 +301,27 @@
 								var events = $scope.events;
 
 								newTopic.event = event.$id;
+								var type = "topic added";
 								$scope.topics.$add(angular.copy(newTopic)).then(function(ref) {
 									event.topics.push(ref.key());
 									events.$save(event);
+
+									$scope.history.$add({
+					 		     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD hh:mm'),
+							     		action: type,
+										topic: ref.key(),
+										event: event.$id,
+										content: value
+									});
+									$scope.allHistory.$add({
+							     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD hh:mm'),
+							     		action: type,
+										topic: ref.key(),
+										event: event.$id,
+										content: value
+									});
 								});
 							};
 
@@ -320,13 +341,13 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('LLL'),
+							 		ts: moment().format('YYYY-MM-DD hh:mm'),
 							 		action: 'event removed',
 									event: event.$id
 								});
 								$scope.allHistory.$add({
 							 		user: $scope.local.user.$id,
-							 		ts: moment().format('LLL'),
+							 		ts: moment().format('YYYY-MM-DD hh:mm'),
 							 		action: 'event removed',
 									event: event.$id
 								});
@@ -354,7 +375,7 @@
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -362,7 +383,7 @@
 								});
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -378,7 +399,7 @@
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: 'add choice',
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -386,7 +407,7 @@
 								});
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('LLL'),
+						     		ts: moment().format('YYYY-MM-DD hh:mm'),
 						     		action: 'add choice',
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -401,7 +422,7 @@
 							$scope.unfinalize = function(topic) {
 								$scope.history.$add({
 									user: $scope.local.user.$id,
-									ts: moment().format('LLL'),
+									ts: moment().format('YYYY-MM-DD hh:mm'),
 									action: 'un-finalize',
 									topic: topic.$id,
 									event: topic.event,
@@ -409,7 +430,7 @@
 								});
 								$scope.allHistory.$add({
 									user: $scope.local.user.$id,
-									ts: moment().format('LLL'),
+									ts: moment().format('YYYY-MM-DD hh:mm'),
 									action: 'un-finalize',
 									topic: topic.$id,
 									event: topic.event,
@@ -425,7 +446,7 @@
 
 									$scope.history.$add({
 								   	user: $scope.local.user.$id,
-								 		ts: moment().format('LLL'),
+								 		ts: moment().format('YYYY-MM-DD hh:mm'),
 								 		action: 'finalize',
 										topic: topic.$id,
 										event: topic.event,
@@ -433,7 +454,7 @@
 									});
 									$scope.allHistory.$add({
 								 		user: $scope.local.user.$id,
-								 		ts: moment().format('LLL'),
+								 		ts: moment().format('YYYY-MM-DD hh:mm'),
 								 		action: 'finalize',
 										topic: topic.$id,
 										event: topic.event,
@@ -467,14 +488,14 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('LLL'),
+							 		ts: moment().format('YYYY-MM-DD hh:mm'),
 							 		action: 'topic removed',
 									topic: topic.$id,
 									event: topic.event
 								});
 								$scope.allHistory.$add({
 							 		user: $scope.local.user.$id,
-							 		ts: moment().format('LLL'),
+							 		ts: moment().format('YYYY-MM-DD hh:mm'),
 							 		action: 'topic removed',
 									topic: topic.$id,
 									event: topic.event
@@ -506,7 +527,7 @@
 
 								$scope.newEvent.history = {
 									user: $scope.local.user.$id,
-									action: 'create'
+									action: 'event created'
 								}
 
 								$scope.events.$add($scope.newEvent).then(function(ref) {

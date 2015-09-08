@@ -8,9 +8,18 @@
   </div>
 
 	<div ng-show="!eventLoaded || (eventLoaded && event.name)">
+		<style> .ui.button .icon { margin-right: 0px !important } </style>
 		<div class="ui header">
 			<div style="float: right">
-        <div class="ui mini button" ng-click="deleteEvent(event)"><i class="ui delete icon"/></div>
+				<button class="circular ui icon button" ng-click="goto('/chat/' + event.$id + '/type/event')">
+				  <i class="icon comment"></i>
+				</button>
+				<button class="circular ui icon button" ng-click="goto('/history/' + event.$id)">
+				  <i class="icon history"></i>
+				</button>
+				<button class="circular ui icon button" ng-click="deleteEvent(event)">
+				  <i class="icon delete"></i>
+				</button>
       </div>
 
 			<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
@@ -135,10 +144,10 @@
 				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
 				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
 			}"
+			ng-click="goto('/eventTopic/' + t)"
 			style="margin-bottom: 1em">
 
 			<div class="ui attached clearing segment title"
-	  		ng-click="goto('/eventTopic/' + t)"
 			>
 				<div class="ui floated left header">
 					{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>

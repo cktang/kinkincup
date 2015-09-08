@@ -11,12 +11,10 @@
 	}
 </style>
 
-<div class="ui header" style="margin-top:0"> <a href="#" ng-click="goto(r.type + '/' + r.id)" ng-bind="event.name"></a> - chats </div>
-
 <div class="chats">
 	<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
- 
-	<div class="received" ng-if="chats.length > 8"> 
+
+	<div class="received" ng-if="chats.length > 8">
 		<div class="ui label pointing left">... ...</div>
 	</div>
 
@@ -34,7 +32,7 @@
 	<div style="clear:both">&nbsp;</div>
 </div>
 
-<div style="position:fixed; bottom:0px; width:100%; margin-left:-15px">
+<div style="position:fixed; bottom:0px; width:100%; margin-left:-0.5em">
 	<input placeholder="chat..." class="link" style="padding:10px; width:100%" ng-model="newText"/>
 	<div class="ui fluid button" ng-click="newChat(newText); newText = ''"> Chat </div>
 </div>

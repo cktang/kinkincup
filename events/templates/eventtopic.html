@@ -8,9 +8,11 @@
   </div>
 
   <div ng-show="!topicLoaded || (topicLoaded && topic.name)">
-    <div style="float: right">
-      <div class="ui mini button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
-      <div class="ui mini button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
+    <div style="float: right" class="tools">
+      <button class="ui circular button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
+      <button class="ui circular button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
+      <div class="ui button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
+      <div class="ui circular button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
     </div>
 
     <div class="ui header">
@@ -75,14 +77,6 @@
       		</span>
         </div>
     	</div>
-    </div>
-
-    <div style="margin-top:10px">
-    	<button class="ui button fluid" ng-click="goto('chat/' + topic.$id + '/type/topic')">Chat</button>
-    </div>
-
-    <div style="margin-top:10px">
-    	<button class="ui teal button fluid" ng-click="newChoice=''; openNewChoiceModal()">Add New Choices</button>
     </div>
   </div>
 

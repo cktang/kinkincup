@@ -1,19 +1,35 @@
 
-	
-	
-<div class="ui breadcrumb">
-  <a href="#" ng-click="goto('eventSummary/' + topic.event)" class="section">{{events.$getRecord(topic.event).name}} </a>
-  <div class="divider"> / </div>
-  <div class="active section">History</div>
-</div>
+<style>
+	.ui.column {
+		padding: 0.2em !important;
+	}
+
+</style>
 
 <div class="events" style="margin-top: 20px">
-	<div class="ui one column grid">
-		<div ng-repeat="h in history">
-			<span class="ui small black label" ng-bind="users.$getRecord(h.user).name"></span>
-			<span class="ui small orange label" ng-bind="topics.$getRecord(h.topic).name"></span>
-			<span class="ui small teal label"> {{ h.action }}</span> 					
-			<span class="ui small red label"> {{ h.content }}</span> 					
+	<div  ng-repeat="h in history">
+		<div class="ui small image label"
+				ng-class="{
+					'green': _(['vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
+					'red': _(['unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
+					'yellow': h.action=='participate' && h.content=='maybe'
+				}"
+		>
+			<i class="ui icon"
+				ng-class="{
+					'checkmark': _(['vote', 'unvote']).contains(h.action),
+					'grid layout': _(['event added', 'event removed']).contains(h.action),
+					'list layout': _(['topic added', 'topic removed']).contains(h.action),
+					'block layout': _(['add choice', 'remove choice']).contains(h.action),
+					'comment': _(['chat']).contains(h.action),
+					'announcement': _(['participate']).contains(h.action),
+					'pin': _(['finalize', 'un-finalize']).contains(h.action)
+				}"/>
+				{{users.$getRecord(h.user).name}}
+				<span class="detail">{{h.ts}}</span>
 		</div>
+
+		<div class="ui small label" ng-show="h.topic" style="margin-left:0px">{{ topics.$getRecord(h.topic).name }}</div>
+		<span ng-hide="h.action=='participate'" class="ui column"> {{ h.content }}</span>
 	</div>
 </div>
