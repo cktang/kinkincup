@@ -8,8 +8,7 @@
   </div>
 
 	<div ng-show="!eventLoaded || (eventLoaded && event.name)">
-		<style> .ui.button .icon { margin-right: 0px !important } </style>
-		<div class="ui header">
+		<div class="ui header tools">
 			<div style="float: right">
 				<button class="circular ui icon button" ng-click="goto('/chat/' + event.$id + '/type/event')">
 				  <i class="icon comment"></i>
@@ -167,8 +166,8 @@
 	  		</div>
 
 				<!-- if your decision different from finalized -->
-				<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})">
-					<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize"></div>
+				<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" style="margin:-15px">
+					<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize" style="margin-bottom:0px"></div>
 				</div>
 
 				<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})">
