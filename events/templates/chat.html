@@ -9,12 +9,12 @@
 	.ui.label {
 		margin-left: 0px !important;
 		border-radius: 0px;
+		margin: 0px;
 		overflow: hidden;
 	}
 
 	.ui.name.label {
 		margin-top:10px;
-		border-bottom: 0px;
 	}
 </style>
 
@@ -22,13 +22,13 @@
 	<!--  | filter:matchTopic(h, r) -->
 	<div ng-repeat="h in subhistory">
 
-		<div class="ui medium grey name fluid label"
+		<div class="ui large grey name fluid label"
 			ng-if="h.user != subhistory[$index-1].user">
 			{{ users.$getRecord(h.user).name }}
 			<span class="detail" style="float:right">{{h.ts}}</span>
 		</div>
 
-		<div class="ui medium fluid label"
+		<div class="ui large fluid label"
 				ng-class="{
 					'green': _(['vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
 					'red': _(['unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
