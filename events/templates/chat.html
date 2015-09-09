@@ -1,35 +1,41 @@
 
 
 <style>
-	.chats .chat {
-		clear:both;
-		margin: 10px 0px;
-	}
-
-	.chats .sent {
-		float:right;
-	}
-
 	.dim {
-		opacity: 0.8;
+		opacity: 1;
+		background-color: #eee !important;
+	}
+
+	.ui.label {
+		margin-left: 0px !important;
+		border-radius: 0px;
+	}
+
+	.ui.name.label {
+		margin-top:10px;
+		border-bottom: 0px;
 	}
 </style>
 
 <div class="chats">
-	<div
-			ng-repeat="h in history | orderBy:'ts' | reverse "
-			ng-if="!(h.topic && h.topic!=r.id)"
-			style="margin-top:5px; clear:both">
+	<!--  | filter:matchTopic(h, r) -->
+	<div ng-repeat="h in subhistory">
 
-		<div class="ui small image label"
+		<div class="ui medium grey name fluid label"
+			ng-if="h.user != subhistory[$index-1].user">
+			{{ users.$getRecord(h.user).name }}
+			<span class="detail" style="float:right">{{h.ts}}</span>
+		</div>
+
+		<div class="ui medium fluid label"
 				ng-class="{
 					'green': _(['vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
 					'red': _(['unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
 					'yellow': h.action=='participate' && h.content=='maybe',
 					'fluid basic dim': h.action != 'chat',
 					'teal': h.action == 'chat',
-				}"
-		>
+				}">
+
 			<i class="ui icon"
 				ng-class="{
 					'checkmark': _(['vote', 'unvote']).contains(h.action),
@@ -41,10 +47,7 @@
 					'pin': _(['finalize', 'un-finalize']).contains(h.action)
 				}"/>
 
-				<span ng-if="h.action != 'chat'" style="float:right">{{h.ts}}</span>
-
-				{{users.$getRecord(h.user).name.split(' ')[0]}}:
-				<span style="margin-left:0.2em">{{ h.content }}</span>
+			<span>{{ h.content }}</span>
 		</div>
 	</div>
 

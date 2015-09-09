@@ -42,6 +42,7 @@
 			.ui.segment .choice {
 				padding: 0em !important;
 				border: 0px !important;
+        color: silver;
 			}
 
 			#participants .ui.grid {
@@ -82,11 +83,21 @@
         <div class="label"> attendence </div>
       </div>
 
+      <div class="iconRight"><i class="large icon angle right"/></div>
+
 			<style>
 				#attendence .ui.column {
 					padding: 0px;
 					margin: 0px;
 				}
+
+        .iconRight {
+          position: absolute;
+          right: 0px;
+          top: 40%;
+          z-index: 10000;
+          color: grey;
+        }
 			</style>
 			<div class="ui three column grid" id="attendence">
 				<div class="ui column">
@@ -106,7 +117,7 @@
           </div>
 				</div>
 				<div class="ui column">
-          <div ng-if="_(event.users).findWhere({ id: local.user.$id }).decision=='no'" class="ui mini compact circular red icon button"><i class="icon remove"/></div>
+          <div ng-if="_(event.users).findWhere({ id: local.user.$id }).decision=='no'" class="ui mini compact circular red icon button"><i class="icon remove "/></div>
 					No<br>
           <div class="ui statistic">
             <div class="value" ng-bind="_(event.users).where({ decision: 'no'}).length"></div>
@@ -122,6 +133,7 @@
       <!-- if your decision different from finalized -->
       <div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" class="ui green yes segment">
         <div class="ui tiny statistic">
+          <div class="iconRight"><i class="large icon angle right"/></div>
           <div class="label" ng-bind="topics.$getRecord(t).name" style="text-align:left"></div>
           <div class="value" ng-bind="topics.$getRecord(t).finalize"></div>
         </div>
@@ -133,6 +145,8 @@
         <div class="ui statistic">
           <div class="label"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small> </div>
         </div>
+
+        <div class="iconRight"><i class="large icon angle right"/></div>
 
 	  		<div ng-repeat="c in topChoices(t)"
 						class="ui choice attached segment"

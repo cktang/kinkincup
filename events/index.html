@@ -189,6 +189,9 @@
 						    obj.$bindTo($scope, "event");
 								obj.$loaded(function() {
 									$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + ($routeParams.type=='topic'? $scope.event.event: $scope.event.$id) + "/history"));
+									$scope.history.$loaded(function() {
+										$scope.subhistory = $scope.history.filter($scope.matchTopic).reverse();
+									});
 								})
 
 						    $scope.r = $routeParams;
@@ -209,6 +212,12 @@
 									$scope.allHistory.$add(c);
 						     	} catch (e) { console.error(e); }
 						    };
+
+								$scope.matchTopic = function(query) {
+									return function(h) {
+										return !(h.topic && h.topic!=$scope.r.id);
+									}
+								};
 						}
 					)
 
