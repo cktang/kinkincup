@@ -50,7 +50,7 @@
     <div class="topic" ng-class="{ 'dim': topic.finalize }">
     	<div ng-repeat="c in topic.choices"
     		class="ui vertical segment link"
-    		ng-class="{ 'finalized red inverted': topic.finalize == c }"
+    		ng-class="{ 'finalized green inverted': topic.finalize == c }"
     		ng-click="vote(topic, c)">
 
         <button class="circular ui mini icon button" ng-class="{'inverted': !voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
