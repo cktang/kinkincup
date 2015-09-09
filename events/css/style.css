@@ -45,3 +45,11 @@
 .ui.segment.yes.title { background-color: #dfd; }
 
 .tools .ui.button .icon { margin-right: 0px !important }
+
+.ui.statistic .label {
+  font-family: 'Bad Script' !important;
+}
+
+*:not(.icon) {
+  font-family: 'Kalam' !important;
+}

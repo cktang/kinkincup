@@ -58,7 +58,7 @@
         <div style="margin-left:30px">
       		<span ng-repeat="userId in _(topic.votes).keys()"
                 ng-if="voted({topic:topic, choice:c, userId:userId})"
-                class="ui small label"
+                class="ui small basic grey label"
       			    ng-bind="users.$getRecord(userId).name">
       		</span>
         </div>
