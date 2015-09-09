@@ -10,6 +10,9 @@
 	<div ng-show="!eventLoaded || (eventLoaded && event.name)">
 		<div class="ui header tools">
 			<div style="float: right">
+        <button class="circular ui icon button" ng-click="openNewTopicModal()">
+				  <i class="icon plus"></i>
+				</button>
 				<button class="circular ui icon button" ng-click="goto('/chat/' + event.$id + '/type/event')">
 				  <i class="icon comment"></i>
 				</button>
@@ -28,18 +31,22 @@
 		</div>
 
 		<style>
+      .ui.segments {
+        margin:0px;
+      }
+
 			.ui.segment {
 				background-color: #f8f8f8;
 			}
 
-			div.choice {
+			.ui.segment .choice {
 				padding: 0em !important;
 				border: 0px !important;
 			}
 
 			#participants .ui.grid {
 				margin: inherit;
-        margin-bottom: 0px;
+        margin: 0px;
         text-align: center;
 			}
 		</style>
@@ -71,46 +78,35 @@
 				ng-click="decision('participants')"
 				ng-class="_(event.users).findWhere({ id: local.user.$id }).decision" ng-cloak>
 
-				<span class="ui ribbon label" ng-class="{
-						'green': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
-						'yellow': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
-						'red': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
-					}">
-						<i class="ui icon" ng-class="{
-							'checkmark': _(event.users).findWhere({ id: local.user.$id }).decision == 'yes',
-							'help': _(event.users).findWhere({ id: local.user.$id }).decision == 'maybe',
-							'remove': _(event.users).findWhere({ id: local.user.$id }).decision == 'no'
-						}"></i>
-						{{ _(event.users).findWhere({ id: local.user.$id }).decision }}
-				</span>
-				<strong>Who is going</strong>
+      <div class="ui statistic">
+        <div class="label"> attendence </div>
+      </div>
 
 			<style>
 				#attendence .ui.column {
 					padding: 0px;
 					margin: 0px;
 				}
-
-				#attendence .ui.button {
-					padding: 5px 10px;
-					border-radius: 0px;
-				}
 			</style>
-			<div class="ui three column grid" id="attendence" style="clear:both">
+			<div class="ui three column grid" id="attendence">
 				<div class="ui column">
-					Yes<br>
+					<div ng-if="_(event.users).findWhere({ id: local.user.$id }).decision=='yes'" class="ui mini compact circular green icon button"><i class="icon checkmark"/></div>
+          Yes
+          <br>
 
           <div class="ui statistic">
             <div class="value" ng-bind="_(event.users).where({ decision: 'yes'}).length"></div>
           </div>
 				</div>
 				<div class="ui column">
+          <div ng-if="_(event.users).findWhere({ id: local.user.$id }).decision=='maybe'" class="ui mini compact circular yellow icon button"><i class="icon question mark"/></div>
 					Maybe<br>
           <div class="ui statistic">
             <div class="value" ng-bind="_(event.users).where({ decision: 'maybe'}).length"></div>
           </div>
 				</div>
 				<div class="ui column">
+          <div ng-if="_(event.users).findWhere({ id: local.user.$id }).decision=='no'" class="ui mini compact circular red icon button"><i class="icon remove"/></div>
 					No<br>
           <div class="ui statistic">
             <div class="value" ng-bind="_(event.users).where({ decision: 'no'}).length"></div>
@@ -119,22 +115,9 @@
 			</div>
 		</div>
 
-		<style>
-			.ui.segment.topic {
-				padding: 0px;
-			}
-
-			.ui.segment.title {
-				border-bottom: 0px;
-				background-color: #eee;
-			}
-		</style>
-
 		<div ng-repeat="t in event.topics"
 			class="link topic"
-      ng-class="{'ui segments': !topics.$getRecord(t).finalize}"
-			ng-click="goto('/eventTopic/' + t)"
-			style="margin-bottom: 1em">
+			ng-click="goto('/eventTopic/' + t)">
 
       <!-- if your decision different from finalized -->
       <div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" class="ui green yes segment">
@@ -144,7 +127,7 @@
         </div>
       </div>
 
-			<div class="ui segment"
+			<div class="ui brown segment"
           ng-if="!topics.$getRecord(t).finalize || (topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)}))">
 
         <div class="ui statistic">
@@ -190,8 +173,6 @@
 	  		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
 			</div>
 		</div>
-
-		<div ng-click="openNewTopicModal()" class="ui small fluid button"> <i class="ui add square icon"></i> New Topic </div>
 
 		<!-- newTopicModal -->
 		<div class="ui modal fade" id="newTopicModal">

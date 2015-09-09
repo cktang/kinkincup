@@ -144,8 +144,42 @@
 							return options.topic &&
 											options.topic.votes &&
 											_(options.topic.votes[options.userId]).contains(options.choice);
+						};
+
+						$rootScope.attend = function(options) {
+							try {
+								var event = options.event || $scope.event;
+								options.userId = options.userId || $rootScope.local.user.$id;
+
+								console.log('here');
+								return options.decision?
+									_(event.users).findWhere({ id: $rootScope.local.user.$id }).decision == options.decision:
+									_(event.users).findWhere({ id: $rootScope.local.user.$id }).decision;
+							} catch(e) {
+								return false;
+							}
 						}
 					})
+
+					.filter('reverse', function() {
+			      function toArray(list) {
+			         var k, out = [];
+			         if( list ) {
+			            if( angular.isArray(list) ) {
+			               out = list;
+			            }
+			            else if( typeof(list) === 'object' ) {
+			               for (k in list) {
+			                  if (list.hasOwnProperty(k)) { out.push(list[k]); }
+			               }
+			            }
+			         }
+			         return out;
+			      }
+			      return function(items) {
+			         return toArray(items).slice().reverse();
+			      };
+			   })
 
 					.controller("chatController",
 						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
@@ -163,7 +197,7 @@
 						     	try {
 									var c = {
 							     		user: $scope.local.user.$id,
-							     		ts: moment().format('YYYY-MM-DD hh:mm'),
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
 							     		content: text,
 											action: 'chat'
 							     	};
@@ -261,14 +295,14 @@
 
 								$scope.history.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: 'vote',
 									event: topic.$id,
 									content: value
 								});
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: 'vote',
 									event: topic.$id,
 									content: value
@@ -283,7 +317,7 @@
 
 								var logItem = {
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: 'participate',
 									event: $scope.event.$id,
 									content: value
@@ -307,7 +341,7 @@
 
 									$scope.history.$add({
 					 		     		user: $scope.local.user.$id,
-							     		ts: moment().format('YYYY-MM-DD hh:mm'),
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
 							     		action: type,
 										topic: ref.key(),
 										event: event.$id,
@@ -315,7 +349,7 @@
 									});
 									$scope.allHistory.$add({
 							     		user: $scope.local.user.$id,
-							     		ts: moment().format('YYYY-MM-DD hh:mm'),
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
 							     		action: type,
 										topic: ref.key(),
 										event: event.$id,
@@ -340,13 +374,13 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD hh:mm'),
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'event removed',
 									event: event.$id
 								});
 								$scope.allHistory.$add({
 							 		user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD hh:mm'),
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'event removed',
 									event: event.$id
 								});
@@ -374,7 +408,7 @@
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -382,7 +416,7 @@
 								});
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -398,7 +432,7 @@
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: 'add choice',
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -406,7 +440,7 @@
 								});
 								$scope.allHistory.$add({
 						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD hh:mm'),
+						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: 'add choice',
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
@@ -421,7 +455,7 @@
 							$scope.unfinalize = function(topic) {
 								$scope.history.$add({
 									user: $scope.local.user.$id,
-									ts: moment().format('YYYY-MM-DD hh:mm'),
+									ts: moment().format('YYYY-MM-DD HH.mm'),
 									action: 'un-finalize',
 									topic: topic.$id,
 									event: topic.event,
@@ -429,7 +463,7 @@
 								});
 								$scope.allHistory.$add({
 									user: $scope.local.user.$id,
-									ts: moment().format('YYYY-MM-DD hh:mm'),
+									ts: moment().format('YYYY-MM-DD HH.mm'),
 									action: 'un-finalize',
 									topic: topic.$id,
 									event: topic.event,
@@ -445,7 +479,7 @@
 
 									$scope.history.$add({
 								   	user: $scope.local.user.$id,
-								 		ts: moment().format('YYYY-MM-DD hh:mm'),
+								 		ts: moment().format('YYYY-MM-DD HH.mm'),
 								 		action: 'finalize',
 										topic: topic.$id,
 										event: topic.event,
@@ -453,7 +487,7 @@
 									});
 									$scope.allHistory.$add({
 								 		user: $scope.local.user.$id,
-								 		ts: moment().format('YYYY-MM-DD hh:mm'),
+								 		ts: moment().format('YYYY-MM-DD HH.mm'),
 								 		action: 'finalize',
 										topic: topic.$id,
 										event: topic.event,
@@ -487,14 +521,14 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD hh:mm'),
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'topic removed',
 									topic: topic.$id,
 									event: topic.event
 								});
 								$scope.allHistory.$add({
 							 		user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD hh:mm'),
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'topic removed',
 									topic: topic.$id,
 									event: topic.event
@@ -527,7 +561,7 @@
 								$scope.newEvent.history = [];
 								$scope.newEvent.history.push({
 									user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD hh:mm'),
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 									action: 'event created'
 								})
 

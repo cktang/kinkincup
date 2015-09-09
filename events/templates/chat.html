@@ -9,27 +9,46 @@
 	.chats .sent {
 		float:right;
 	}
+
+	.dim {
+		opacity: 0.8;
+	}
 </style>
 
 <div class="chats">
-	<div style="padding:10px" ng-show="!chats || chats.length == 0"> No Chat </div>
+	<div
+			ng-repeat="h in history | orderBy:'ts' | reverse "
+			ng-if="!(h.topic && h.topic!=r.id)"
+			style="margin-top:5px; clear:both">
 
-	<div class="received" ng-if="chats.length > 8">
-		<div class="ui label pointing left">... ...</div>
-	</div>
+		<div class="ui small image label"
+				ng-class="{
+					'green': _(['vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
+					'red': _(['unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
+					'yellow': h.action=='participate' && h.content=='maybe',
+					'fluid basic dim': h.action != 'chat',
+					'teal': h.action == 'chat',
+				}"
+		>
+			<i class="ui icon"
+				ng-class="{
+					'checkmark': _(['vote', 'unvote']).contains(h.action),
+					'grid layout': _(['event added', 'event removed']).contains(h.action),
+					'list layout': _(['topic added', 'topic removed']).contains(h.action),
+					'block layout': _(['add choice', 'remove choice']).contains(h.action),
+					'comment': _(['chat']).contains(h.action),
+					'announcement': _(['participate']).contains(h.action),
+					'pin': _(['finalize', 'un-finalize']).contains(h.action)
+				}"/>
 
-	<div ng-repeat="c in chats"
-		ng-if="$index >= chats.length - 8"
-		class="chat"
-		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
-		<div class="ui large label" ng-class="{'orange':c.user!=local.user.$id, 'teal':c.user==local.user.$id}">
-			<div ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></div>
-			<!-- <h6 class="ui label green" ng-bind="c.ts"></h6> -->
-			{{c.content}}
+				<span ng-if="h.action != 'chat'" style="float:right">{{h.ts}}</span>
+
+				{{users.$getRecord(h.user).name.split(' ')[0]}}:
+				<span style="margin-left:0.2em">{{ h.content }}</span>
 		</div>
 	</div>
 
-	<div style="clear:both">&nbsp;</div>
+	<div style="clear:both; height:100px;">&nbsp;</div>
 </div>
 
 <div style="position:fixed; bottom:0px; width:100%; margin-left:-0.5em">
