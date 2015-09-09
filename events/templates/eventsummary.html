@@ -29,17 +29,7 @@
 
 		<style>
 			.ui.segment {
-				border: 1px solid silver;
 				background-color: #f8f8f8;
-			}
-
-			div.choice .badge {
-				font-weight: normal !important;
-			}
-
-			div.choice.chosen {
-				font-weight: bold !important;
-				background-color: #ccc;
 			}
 
 			div.choice {
@@ -49,6 +39,8 @@
 
 			#participants .ui.grid {
 				margin: inherit;
+        margin-bottom: 0px;
+        text-align: center;
 			}
 		</style>
 
@@ -106,22 +98,23 @@
 			</style>
 			<div class="ui three column grid" id="attendence" style="clear:both">
 				<div class="ui column">
-					Yes<br><Br>
-					<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
-						<span class="ui tiny green button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
-					</div>
+					Yes<br>
+
+          <div class="ui statistic">
+            <div class="value" ng-bind="_(event.users).where({ decision: 'yes'}).length"></div>
+          </div>
 				</div>
 				<div class="ui column">
-					Maybe<br><br>
-					<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
-						<span class="ui tiny yellow button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
-					</div>
+					Maybe<br>
+          <div class="ui statistic">
+            <div class="value" ng-bind="_(event.users).where({ decision: 'maybe'}).length"></div>
+          </div>
 				</div>
 				<div class="ui column">
-					No<br><br>
-					<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
-						<span class="ui tiny red button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
-					</div>
+					No<br>
+          <div class="ui statistic">
+            <div class="value" ng-bind="_(event.users).where({ decision: 'no'}).length"></div>
+          </div>
 				</div>
 			</div>
 		</div>
@@ -138,30 +131,29 @@
 		</style>
 
 		<div ng-repeat="t in event.topics"
-			class="ui segments link topic"
+			class="link topic"
+      ng-class="{'ui segments': !topics.$getRecord(t).finalize}"
 			ng-click="goto('/eventTopic/' + t)"
 			style="margin-bottom: 1em">
 
-			<div class="ui clearing segment title"
-  			ng-class="{
-  				'no red': topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
-  				'yes green': topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
-  			}">
-				<div class="ui floated left header">
-					{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
-				</div>
-			</div>
-
       <!-- if your decision different from finalized -->
-      <div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" class="ui green inverted segment">
-        <div ng-bind="topics.$getRecord(t).finalize"></div>
+      <div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" class="ui green yes segment">
+        <div class="ui tiny statistic">
+          <div class="label" ng-bind="topics.$getRecord(t).name" style="text-align:left"></div>
+          <div class="value" ng-bind="topics.$getRecord(t).finalize"></div>
+        </div>
       </div>
 
 			<div class="ui segment"
-          ng-if="!topics.$getRecord(t).finalize">
+          ng-if="!topics.$getRecord(t).finalize || (topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)}))">
+
+        <div class="ui statistic">
+          <div class="label"> {{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small> </div>
+        </div>
 
 	  		<div ng-repeat="c in topChoices(t)"
 						class="ui choice attached segment"
+            ng-if="!topics.$getRecord(t).finalize"
 						style="line-height: 2em">
 
 						<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>

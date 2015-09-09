@@ -22,23 +22,11 @@
 
     <style>
       .dim {
-        color: silver;
+        opacity: 0.5;
       }
 
       .finalized {
         font-weight: bolder;
-      }
-
-      .ui.attached.segment {
-         line-height:2.5em;
-      }
-
-      .ui.inverted.green.segment {
-        border-bottom: 1px solid darkgreen !important;
-      }
-
-      .ui.attached.segment {
-        border-bottom: 1px solid #eee !important;
       }
 
       .topic .ui.segment {
@@ -47,10 +35,11 @@
       }
     </style>
 
-    <div class="topic" ng-class="{ 'dim': topic.finalize }">
+    <div class="topic">
     	<div ng-repeat="c in topic.choices"
     		class="ui vertical segment link"
-    		ng-class="{ 'finalized green inverted': topic.finalize == c }"
+    		ng-class="{ 'finalized green inverted': topic.finalize == c,
+                    'dim': topic.finalize && topic.finalize != c }"
     		ng-click="vote(topic, c)">
 
         <button class="circular ui mini icon button" ng-class="{'inverted': !voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
