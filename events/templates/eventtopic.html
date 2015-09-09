@@ -44,15 +44,12 @@
       .topic .ui.segment {
       	padding: 0.4em !important;
       	background-color: transparent;
-        border-left: 0px;
-        border-right: 0px;
-        border-top: 0px;
       }
     </style>
 
     <div class="topic" ng-class="{ 'dim': topic.finalize }">
     	<div ng-repeat="c in topic.choices"
-    		class="ui attached segment link"
+    		class="ui vertical segment link"
     		ng-class="{ 'finalized red inverted': topic.finalize == c }"
     		ng-click="vote(topic, c)">
 

@@ -138,25 +138,29 @@
 		</style>
 
 		<div ng-repeat="t in event.topics"
-			class="ui segment link topic"
-			ng-class="{
-				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
-				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
-			}"
+			class="ui segments link topic"
 			ng-click="goto('/eventTopic/' + t)"
 			style="margin-bottom: 1em">
 
-			<div class="ui attached clearing segment title"
-			>
+			<div class="ui clearing segment title"
+  			ng-class="{
+  				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
+  				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
+  			}">
 				<div class="ui floated left header">
 					{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
 				</div>
 			</div>
 
-			<div class="ui attached segment">
+      <!-- if your decision different from finalized -->
+      <div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" class="ui green inverted segment">
+        <div ng-bind="topics.$getRecord(t).finalize"></div>
+      </div>
+
+			<div class="ui segment"
+          ng-if="!topics.$getRecord(t).finalize">
 
 	  		<div ng-repeat="c in topChoices(t)"
-	  				ng-hide="topics.$getRecord(t).finalize"
 						class="ui choice attached segment"
 						style="line-height: 2em">
 
@@ -164,11 +168,6 @@
 						<span ng-if="voted({topic:topics.$getRecord(t), choice:c})" class="ui circular green label"><i class="ui checkmark icon" style="margin-right:0px"/></span>
 		  			<span ng-bind="c"></span>
 	  		</div>
-
-				<!-- if your decision different from finalized -->
-				<div ng-if="topics.$getRecord(t).finalize && voted({topic: topics.$getRecord(t)})" style="margin:-15px">
-					<div class="ui green large fluid button" ng-bind="topics.$getRecord(t).finalize" style="margin-bottom:0px"></div>
-				</div>
 
 				<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})">
 						<style>

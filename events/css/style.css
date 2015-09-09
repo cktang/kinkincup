@@ -39,8 +39,8 @@
   background-color: #fee;
 }
 
-.ui.segment.no .ui.segment.title { background-color: #fdd; }
-.ui.segment.maybe .ui.segment.title { background-color: #ffd; }
-.ui.segment.yes .ui.segment.title { background-color: #dfd; }
+.ui.segment.no.title { background-color: #fdd; }
+.ui.segment.maybe.title { background-color: #ffd; }
+.ui.segment.yes.title { background-color: #dfd; }
 
-.tools .ui.button .icon { margin-right: 0px !important } 
+.tools .ui.button .icon { margin-right: 0px !important }
