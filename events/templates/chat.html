@@ -19,13 +19,13 @@
 	</div>
 
 	<div ng-repeat="c in chats"
-		ng-if="$index >= chats.length - 5"
+		ng-if="$index >= chats.length - 8"
 		class="chat"
 		ng-class="{'received':c.user!=local.user.$id, 'sent':c.user==local.user.$id}">
-		<div class="ui label" ng-class="{'pointing left orange':c.user!=local.user.$id, 'pointing right teal':c.user==local.user.$id}">
+		<div class="ui large label" ng-class="{'orange':c.user!=local.user.$id, 'teal':c.user==local.user.$id}">
 			<div ng-hide="c.user==local.user.$id" style="font-weight:bold" ng-bind="users.$getRecord(c.user).name"></div>
 			<!-- <h6 class="ui label green" ng-bind="c.ts"></h6> -->
-			<div class="detail" ng-bind="c.content"></div>
+			{{c.content}}
 		</div>
 	</div>
 

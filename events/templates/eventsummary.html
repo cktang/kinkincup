@@ -106,19 +106,19 @@
 			</style>
 			<div class="ui three column grid" id="attendence" style="clear:both">
 				<div class="ui column">
-					Yes<br>
+					Yes<br><Br>
 					<div ng-repeat="u in event.users" ng-if="u.decision=='yes'">
 						<span class="ui tiny green button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 					</div>
 				</div>
 				<div class="ui column">
-					Maybe<br>
+					Maybe<br><br>
 					<div ng-repeat="u in event.users" ng-if="u.decision=='maybe'">
 						<span class="ui tiny yellow button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 					</div>
 				</div>
 				<div class="ui column">
-					No<br>
+					No<br><br>
 					<div ng-repeat="u in event.users" ng-if="u.decision=='no'">
 						<span class="ui tiny red button" ng-class="{basic: u.id!=local.user.$id}" ng-bind="users.$getRecord(u.id).name"></span>
 					</div>
@@ -144,8 +144,8 @@
 
 			<div class="ui clearing segment title"
   			ng-class="{
-  				no: topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
-  				yes: topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
+  				'no red': topics.$getRecord(t).finalize && !voted({ topic: topics.$getRecord(t) }),
+  				'yes green': topics.$getRecord(t).finalize && voted({ topic: topics.$getRecord(t) })
   			}">
 				<div class="ui floated left header">
 					{{topics.$getRecord(t).name}} <br> <small> {{topics.$getRecord(t).description}} </small>
