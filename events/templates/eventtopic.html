@@ -29,40 +29,85 @@
         font-weight: bolder;
       }
 
+      .topic {
+        height: 100px;
+        position:relative;
+      }
+
       .topic .ui.segment {
       	padding: 0.4em !important;
       	background-color: transparent;
       }
+
+      .topic .pre {
+        margin-left: -50px;
+      }
+
+      .topic .post {
+        margin-left: 100%;
+      }
+
+      .topic .pre, .topic .post {
+        width: 50px;
+      }
+
+      .topic .pre .ui.button, .topic .post .ui.button {
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
+      }
+
+      .topic .part {
+        position:absolute;
+        height: 100px;
+      }
     </style>
 
-    <div class="topics">
+    <div class="topics" style="overflow:hidden">
     	<div ng-repeat="c in topic.choices"
     		class="ui vertical segment link topic"
     		ng-class="{ 'finalized green inverted': topic.finalize == c,
                     'dim': topic.finalize && topic.finalize != c }"
     		ng-click="vote(topic, c)">
 
-        <button class="circular ui mini icon button" ng-class="{'inverted': !voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
-          <i class="icon checkmark"></i>
-        </button>
-    		<span ng-bind="c"></span>
+        <span class="pre part">
+          <button class="ui green button">
+            <i class="large checkmark icon"></i>
+          </button>
+        </span>
 
-    		<div class="ui right floated medium icon button"
-            ng-click="finalize(topic, c, $event)"
-            ng-show="!topic.finalize">
-    			<i class="ui icon lock"></i>
-    		</div>
+        <span class="part" style="width: 100%">
+          <button class="circular ui mini icon button" ng-class="{'inverted':!voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
+            <i class="icon checkmark"></i>
+          </button>
+      		<span ng-bind="c"></span>
 
-        <div style="clear:both"></div>
+<!--
+      		<div class="ui right floated medium icon button"
+              ng-click="finalize(topic, c, $event)"
+              ng-show="!topic.finalize">
+      			<i class="ui icon lock"></i>
+      		</div>
+          <div style="clear:both"></div>
+-->
 
-        <div style="margin-left:30px">
-      		<span ng-repeat="userId in _(topic.votes).keys()"
-                ng-if="voted({topic:topic, choice:c, userId:userId})"
-                class="ui small basic grey label"
-      			    ng-bind="users.$getRecord(userId).name">
-      		</span>
-        </div>
+          <div style="width: 100%; margin-top: 0.4em; margin-left: 2em;">
+        		<span ng-repeat="userId in _(topic.votes).keys()"
+                  ng-if="voted({topic:topic, choice:c, userId:userId})"
+                  class="ui small basic grey label"
+        			    ng-bind="users.$getRecord(userId).name">
+        		</span>
+          </div>
+        </span>
+
+        <span class="post part">
+          <button class="ui red button">
+            <i class="large remove icon"></i>
+          </button>
+        </span>
     	</div>
+
+      <div style="clear:both"> &nbsp; </div>
     </div>
   </div>
 
