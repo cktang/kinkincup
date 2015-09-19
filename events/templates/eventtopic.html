@@ -66,6 +66,8 @@
     <div class="topics" style="overflow:hidden">
     	<div ng-repeat="c in topic.choices"
     		class="ui vertical segment link topic"
+        topic="{{topic.$id}}"
+        choice="{{c}}"
     		ng-class="{ 'finalized green inverted': topic.finalize == c,
                     'dim': topic.finalize && topic.finalize != c }"
     		ng-click="vote(topic, c)">

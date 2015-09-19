@@ -419,20 +419,21 @@
 										axis: 'x',
 										revert: true,
 										revertDuration: 50,
-										stop: function() {
-											var movements = arguments[1].offset.left;
+										stop: function(event, ui) {
+											var movements = ui.offset.left;
+											var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
+											var choice = $(event.target).attr('choice');
 
-											$scope.decison = '';
-											if (movements >= 100) $scope.decision  = 'yes';
-											if (movements <= -100) $scope.decision = 'no';
-											console.log(movements, $scope.decision);
+											if (movements >= 100) $scope.vote(topic, choice, true);
+											if (movements <= -100) $scope.vote(topic, choice, false);
+											// console.log(movements, $scope.decision);
 										}
 									});
 								}, 1000);
 							});
 
 							$scope.log = function(value, type) {
-								console.log('vote changed: ' + value);
+								console.log('vote changed: ' + value, type);
 								type = type || 'vote';
 
 								$scope.history.$add({
@@ -527,18 +528,22 @@
 								$event.stopPropagation();
 							};
 
-							$scope.vote = function(topic, choice) {
+							$scope.vote = function(topic, choice, value) {
 								if (!topic.finalize) {
 									topic.votes = topic.votes || [];
 									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || [];
 
-									if (_(topic.votes[$scope.local.user.$id]).contains(choice)) {
+									var vote = _.isUndefined(value)? !_(topic.votes[$scope.local.user.$id]).contains(choice): value;
+
+									if (!vote) {
 										topic.votes[$scope.local.user.$id] = _.without(topic.votes[$scope.local.user.$id], choice);
 										$scope.log(choice, 'unvote');
 									} else {
-										topic.votes[$scope.local.user.$id] = _.union(topic.votes[$scope.local.user.$id], [choice]);
+										topic.votes[$scope.local.user.$id] = _.union([], topic.votes[$scope.local.user.$id], [choice]);
 										$scope.log(choice, 'vote');
 									}
+
+									$scope.topics.$save(topic);
 								}
 							};
 
