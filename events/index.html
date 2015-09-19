@@ -418,12 +418,14 @@
 									$('.topics .topic').draggable({
 										axis: 'x',
 										revert: true,
+										revertDuration: 50,
 										stop: function() {
-											var movements = arguments[0].offsetX;
-											console.log(movements);
+											var movements = arguments[1].offset.left;
 
-											if (movements >= 50) alert('yes');
-											if (movements <= -50) alert('no');
+											$scope.decison = '';
+											if (movements >= 100) $scope.decision  = 'yes';
+											if (movements <= -100) $scope.decision = 'no';
+											console.log(movements, $scope.decision);
 										}
 									});
 								}, 1000);

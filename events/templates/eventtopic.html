@@ -16,7 +16,7 @@
     </div>
 
     <div class="ui header">
-      {{topic.name}}
+      {{topic.name}} {{decision}}
       <div class="sub header" ng-bind="topic.description"></div>
     </div>
 
@@ -40,7 +40,7 @@
       }
 
       .topic .pre {
-        margin-left: -50px;
+        margin-left: -100px;
       }
 
       .topic .post {
@@ -48,7 +48,7 @@
       }
 
       .topic .pre, .topic .post {
-        width: 50px;
+        width: 100px;
       }
 
       .topic .pre .ui.button, .topic .post .ui.button {
@@ -72,7 +72,7 @@
 
         <span class="pre part">
           <button class="ui green button">
-            <i class="large checkmark icon"></i>
+            <i class="big checkmark icon"></i>
           </button>
         </span>
 
@@ -102,7 +102,7 @@
 
         <span class="post part">
           <button class="ui red button">
-            <i class="large remove icon"></i>
+            <i class="big remove icon"></i>
           </button>
         </span>
     	</div>
