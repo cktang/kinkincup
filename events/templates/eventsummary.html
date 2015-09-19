@@ -140,6 +140,15 @@
         </div>
       </div>
 
+      <!-- if not voted -->
+      <!-- <div ng-if="!topics.$getRecord(t).votes[local.user.$id]" class="ui yellow yes segment">
+        <div class="ui tiny statistic">
+          <div class="iconRight"><i class="large icon angle right"/></div>
+          <div class="label" ng-bind="topics.$getRecord(t).name" style="text-align:left"></div>
+          <div class="value" style="margin-top:5px"> Please Vote ... </div>
+        </div>
+      </div> -->
+
 			<div class="ui brown segment"
           ng-if="!topics.$getRecord(t).finalize || (topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)}))">
 
