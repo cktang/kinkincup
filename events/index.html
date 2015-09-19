@@ -539,6 +539,7 @@
 										topic.votes[$scope.local.user.$id] = _.without(topic.votes[$scope.local.user.$id], choice);
 										$scope.log(choice, 'unvote');
 									} else {
+										if (_( topic.votes[$scope.local.user.$id] ).contains(choice)) return;
 										topic.votes[$scope.local.user.$id] = _.union([], topic.votes[$scope.local.user.$id], [choice]);
 										$scope.log(choice, 'vote');
 									}
