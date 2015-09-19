@@ -1,4 +1,4 @@
-*:not(input):not(textarea):not(.topic) {
+*:not(input):not(textarea) {
   -webkit-user-select: none; //disable selection/Copy of UIWebView
   -webkit-touch-callout: none; //disable the IOS popup when long-press on a link
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

@@ -65,7 +65,7 @@
 
     <div class="topics" style="overflow:hidden">
     	<div ng-repeat="c in topic.choices"
-    		class="ui vertical segment link topic"
+    		class="ui vertical segment topic"
         topic="{{topic.$id}}"
         choice="{{c}}"
     		ng-class="{ 'finalized green inverted': topic.finalize == c,
