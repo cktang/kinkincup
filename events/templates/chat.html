@@ -7,25 +7,14 @@
 	}
 
 	.ui.label {
-		margin-left: 0px !important;
 		border-radius: 0px;
-	}
-
-	.ui.name.label {
-		margin-top:10px;
-		border-bottom: 0px;
+		margin-bottom: 0.4em;
 	}
 </style>
 
 <div class="chats">
 	<!--  | filter:matchTopic(h, r) -->
-	<div ng-repeat="h in subhistory">
-
-		<div class="ui large grey name fluid label"
-			ng-if="h.user != subhistory[$index-1].user">
-			{{ users.$getRecord(h.user).name }}
-			<span class="detail" style="float:right">{{h.ts}}</span>
-		</div>
+	<div ng-repeat="h in history">
 
 		<div class="ui large fluid label"
 				ng-class="{

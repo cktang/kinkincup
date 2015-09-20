@@ -143,12 +143,15 @@
 						};
 
 						$rootScope.voted = function(options) {
-							options.topic = options.topic || $scope.topic;
+							options.topic = options.topic;
 							options.userId = options.userId || $rootScope.local.user.$id;
 							options.choice = options.choice || options.topic.finalize;
-							return options.topic &&
+							return !_.isUndefined(options.value)?
+											options.topic &&
 											options.topic.votes &&
-											_(options.topic.votes[options.userId]).contains(options.choice);
+											options.topic.votes[options.userId][options.choice] &&
+											options.topic.votes[options.userId][options.choice].value == options.value
+										: options.topic.votes[options.userId][options.choice];
 						};
 
 						$rootScope.attend = function(options) {
@@ -531,20 +534,23 @@
 							$scope.vote = function(topic, choice, value) {
 								if (!topic.finalize) {
 									topic.votes = topic.votes || [];
-									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || [];
+									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || {};
 
-									var vote = _.isUndefined(value)? !_(topic.votes[$scope.local.user.$id]).contains(choice): value;
+									//ask for a reason
+									$('#reasonModal')
+										.modal({
+											onApprove: function() {
+												var vote = {
+														value: value,
+														reason: $scope.reason
+												};
 
-									if (!vote) {
-										topic.votes[$scope.local.user.$id] = _.without(topic.votes[$scope.local.user.$id], choice);
-										$scope.log(choice, 'unvote');
-									} else {
-										if (_( topic.votes[$scope.local.user.$id] ).contains(choice)) return;
-										topic.votes[$scope.local.user.$id] = _.union([], topic.votes[$scope.local.user.$id], [choice]);
-										$scope.log(choice, 'vote');
-									}
-
-									$scope.topics.$save(topic);
+												topic.votes[$scope.local.user.$id][choice] = vote;
+												$scope.log(choice + ", " + $scope.reason, value? 'Accept': 'Reject');
+												$scope.topics.$save(topic);
+											}
+										})
+										.modal('show')
 								}
 							};
 

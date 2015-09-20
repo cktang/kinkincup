@@ -69,8 +69,7 @@
         topic="{{topic.$id}}"
         choice="{{c}}"
     		ng-class="{ 'finalized green inverted': topic.finalize == c,
-                    'dim': topic.finalize && topic.finalize != c }"
-    		ng-click="vote(topic, c)">
+                    'dim': topic.finalize && topic.finalize != c }">
 
         <span class="pre part">
           <button class="ui green button">
@@ -79,9 +78,18 @@
         </span>
 
         <span class="part" style="width: 100%">
-          <button class="circular ui mini icon button" ng-class="{'inverted':!voted({topic:topic, choice:c}), 'green':voted({topic:topic, choice:c})}">
+          <button class="circular ui mini icon green button"  ng-if="voted({topic:topic, choice:c, value:true})">
             <i class="icon checkmark"></i>
           </button>
+
+          <button class="circular ui mini icon red button"  ng-if="voted({topic:topic, choice:c, value:false})">
+            <i class="icon remove"></i>
+          </button>
+
+          <button class="circular ui mini white icon button"  ng-if="!voted({topic:topic, choice:c})" style="opacity: 0">
+            <i class="icon checkmark"></i>
+          </button>
+
       		<span ng-bind="c"></span>
 
 <!--
@@ -128,7 +136,26 @@
     </div>
     <div class="ui segment actions">
       <button type="button" class="ui deny button">Cancel</button>
-      <button type="button" class="ui blue deny button" ng-click="saveNewChoice(newChoice)">Confirm</button>
+      <button type="button" class="ui blue ok button" ng-click="saveNewChoice(newChoice)">Confirm</button>
+    </div>
+  </div>
+
+  <!-- newChoiceModal -->
+  <div class="ui basic modal fade" id="reasonModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">Reason</h4>
+    </div>
+
+    <div class="content">
+    	  <div class="form-group">
+	    <div class="ui fluid input">
+		    <input type="text" class="form-control" placeholder="Reason" ng-model="reason">
+		</div>
+	  </div>
+    </div>
+    <div class="ui segment actions">
+      <button type="button" class="ui grey basic cancel button">Cancel</button>
+      <button type="button" class="ui green basic ok button">Confirm</button>
     </div>
   </div>
 </div>
