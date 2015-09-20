@@ -30,8 +30,10 @@
       }
 
       .topic {
-        height: 100px;
+        min-height: 4em;
         position:relative;
+        top: 0px !important;
+        font-size: 18px !important;
       }
 
       .topic .ui.segment {
@@ -47,10 +49,6 @@
         margin-left: 100%;
       }
 
-      .topic .pre, .topic .post {
-        width: 100px;
-      }
-
       .topic .pre .ui.button, .topic .post .ui.button {
         width: 100%;
         height: 100%;
@@ -59,7 +57,14 @@
 
       .topic .part {
         position:absolute;
-        height: 100px;
+        top: 0px;
+        width: 100px;
+        height: 100%;
+      }
+
+      .topic .finalizeButton {
+        position: absolute;
+        right: 0.2em;
       }
     </style>
 
@@ -77,7 +82,7 @@
           </button>
         </span>
 
-        <span class="part" style="width: 100%">
+        <span style="width: 100%">
           <button class="circular ui mini icon green button"  ng-if="voted({topic:topic, choice:c, value:true})">
             <i class="icon checkmark"></i>
           </button>
@@ -86,26 +91,21 @@
             <i class="icon remove"></i>
           </button>
 
-          <button class="circular ui mini white icon button"  ng-if="!voted({topic:topic, choice:c})" style="opacity: 0">
-            <i class="icon checkmark"></i>
-          </button>
-
       		<span ng-bind="c"></span>
 
-<!--
-      		<div class="ui right floated medium icon button"
+      		<div class="ui right floated medium icon finalizeButton button"
               ng-click="finalize(topic, c, $event)"
               ng-show="!topic.finalize">
       			<i class="ui icon lock"></i>
       		</div>
           <div style="clear:both"></div>
--->
 
-          <div style="width: 100%; margin-top: 0.4em; margin-left: 2em;">
+          <div style="width: 100%; margin-top: 0.2em; margin-left: 2em;">
         		<span ng-repeat="userId in _(topic.votes).keys()"
-                  ng-if="voted({topic:topic, choice:c, userId:userId})"
-                  class="ui small basic grey label"
-        			    ng-bind="users.$getRecord(userId).name">
+                  ng-if="topic.votes[userId][c]"
+                  ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value, basic:userId==local.user.$id}"
+                  class="ui label">
+                  {{users.$getRecord(userId).name}}: {{topic.votes[userId][c].reason}}
         		</span>
           </div>
         </span>

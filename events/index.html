@@ -8,9 +8,8 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
 	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<script src="js/jquery.ui.touch-punch.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
@@ -244,7 +243,10 @@
 
 							var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
 							obj.$bindTo($scope, "event");
-							obj.$loaded(function() { $scope.eventLoaded = true; });
+							obj.$loaded(function() {
+								$scope.topChoices = $scope.event.topics.map($scope.findTopChoices);
+								$scope.eventLoaded = true;
+							});
 
 							// try{
 							// 	webkit.messageHandlers.callbackHandler.postMessage("test");
@@ -291,17 +293,18 @@
 								}
 							};
 
-							$scope.topChoices = function(topicId) {
+							$scope.findTopChoices = function(topicId) {
 								// console.log("topChoices: " + topicId);
 								try {
-									return _($scope.topics.$getRecord(topicId).votes)
-												.chain()
-												.flatten()
-												.compact()
-												.groupBy(function(v, k) { return v; })
-												.sortBy(function(v, k) { return v.length})
-												.reverse().values()
-												.map(function(e) { return e[0]; }).values().value();
+									var topic = $scope.topics.$getRecord(topicId);
+									return topic.choices.map(function(c) {
+										return {
+											t: topicId,
+											c: c,
+											yes: _(topic.votes).chain().compact().map(function(e) { return e[c] && e[c].value; }).compact().value().length,
+											no: _(topic.votes).chain().compact().map(function(e) { return e[c] && !e[c].value; }).compact().value().length,
+										};
+									});
 								} catch (e) { return []; }
 							}
 
@@ -535,6 +538,9 @@
 								if (!topic.finalize) {
 									topic.votes = topic.votes || [];
 									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || {};
+
+									//return if already voted the same value
+									if (topic.votes[$scope.local.user.$id][choice] && topic.votes[$scope.local.user.$id][choice].value == value) return;
 
 									//ask for a reason
 									$('#reasonModal')

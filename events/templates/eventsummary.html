@@ -157,15 +157,30 @@
         </div>
 
         <div class="iconRight"><i class="large icon angle right"/></div>
+	  		<div ng-repeat="choices in topChoices"
+          ng-if="!topics.$getRecord(t).finalize && choices[0].t==t">
 
-	  		<div ng-repeat="c in topChoices(t)"
+          <div ng-repeat="choice in choices"
 						class="ui choice attached segment"
-            ng-if="!topics.$getRecord(t).finalize"
+            ng-if="choice.yes+choice.no > 0"
 						style="line-height: 2em">
 
-						<span class="ui horizontal circular label" ng-bind="getVote(t, c)"></span>
-						<span ng-if="voted({topic:topics.$getRecord(t), choice:c})" class="ui circular green label"><i class="ui checkmark icon" style="margin-right:0px"/></span>
-		  			<span ng-bind="c"></span>
+            <button class="ui labeled green mini compact icon button"
+              ng-if="choice.yes>0"
+              style="padding-right: 1em !important; padding-left: 2.5em !important;">
+              <i class="checkmark icon"></i>
+              {{choice.yes}}
+            </button>
+
+            <button class="ui labeled red mini compact icon button"
+              ng-if="choice.no>0"
+              style="padding-right: 1em !important; padding-left: 2.5em !important;">
+              <i class="remove icon"></i>
+              {{choice.no}}
+            </button>
+
+            {{choice.c}}
+          </div>
 	  		</div>
 
 				<div ng-if="topics.$getRecord(t).finalize && !voted({topic: topics.$getRecord(t)})">
@@ -194,7 +209,7 @@
 						</div>
 				</div>
 
-	  		<div ng-if="topChoices(t).length == 0"> No Votes Yet ... </div>
+	  		<div ng-if="!topics.$getRecord(t).votes"> No Votes Yet ... </div>
 			</div>
 		</div>
 
