@@ -592,6 +592,12 @@
 									//ask for a reason
 									$('#reasonModal')
 										.modal({
+											autofocus: false,
+											onShow: function() {
+												setTimeout(function() {
+													$('#reasonModal').find('input').focus();
+												}, 1000);
+											},
 											onApprove: function() {
 												var vote = {
 														value: value,
