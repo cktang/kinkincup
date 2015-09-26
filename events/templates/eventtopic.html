@@ -58,6 +58,7 @@
         position: absolute;
         top: 0px;
         height: 100%;
+        display:none;
       }
 
       .topic .pre .ui.button, .topic .post .ui.button {
@@ -143,6 +144,7 @@
                   class="ui label">
                   {{users.$getRecord(userId).name}}: {{topic.votes[userId][c].reason}}
         		</span>
+            <div></div>
           </div>
         </div>
       </div>

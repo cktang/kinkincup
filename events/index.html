@@ -594,9 +594,9 @@
 										.modal({
 											autofocus: false,
 											onShow: function() {
-												setTimeout(function() {
-													$('#reasonModal').find('input').focus();
-												}, 1000);
+												// setTimeout(function() {
+												// 	$('#reasonModal').find('input').focus();
+												// }, 1000);
 											},
 											onApprove: function() {
 												var vote = {
@@ -607,7 +607,8 @@
 												topic.votes[$scope.local.user.$id][choice] = vote;
 												$scope.log(choice + ", " + $scope.reason, value? 'Accept': 'Reject');
 												$scope.topics.$save(topic);
-											}
+												$('#reasonModal').find('input').val("");
+										}
 										})
 										.modal('show')
 								}
