@@ -433,24 +433,26 @@
 												var movements = ui.offset.left;
 												var el = $(event.target).parents('.topic');
 
-												if (movements > 50) {
-													var length = $(el).find('.pre').find('span').length;
-													$(el).find('.pre').show()
-														.find('span').css({
-															paddingLeft: movements/5/length,
-															paddingRight: movements/5/length
-														});
-													$(el).find('.post').hide();
-												}
-												if (movements < -50) {
-													var length = $(el).find('.post').find('span').length;
-													$(el).find('.post').show()
-														.find('span').css({
-															paddingLeft: -1*movements/5/length,
-															paddingRight: -1*movements/5/length
-														});
-													$(el).find('.pre').hide();
-												}
+												setTimeout(function() {
+													if (movements > 50) {
+														var length = $(el).find('.pre').find('span').length;
+														$(el).find('.pre').show()
+															.find('span').css({
+																paddingLeft: movements/5/length,
+																paddingRight: movements/5/length
+															});
+														$(el).find('.post').hide();
+													}
+													if (movements < -50) {
+														var length = $(el).find('.post').find('span').length;
+														$(el).find('.post').show()
+															.find('span').css({
+																paddingLeft: -1*movements/5/length,
+																paddingRight: -1*movements/5/length
+															});
+														$(el).find('.pre').hide();
+													}
+												}, 0);
 											},
 
 											stop: function(event, ui) {
