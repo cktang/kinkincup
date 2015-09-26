@@ -9,13 +9,16 @@
 
   <div ng-show="!topicLoaded || (topicLoaded && topic.name)">
     <div style="float: right" class="tools">
+      <button class="ui circular button" ng-click="allowFinalize=!allowFinalize"><i class="ui lock icon"/></button>
       <button class="ui circular button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
       <button class="ui circular button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
       <div class="ui button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
       <div class="ui circular button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
     </div>
 
-    <div class="ui header">
+    <div style="clear:both">&nbsp;</div>
+
+    <div class="ui header" style="margin: 0px">
       {{topic.name}} {{decision}}
       <div class="sub header" ng-bind="topic.description"></div>
     </div>
@@ -29,60 +32,93 @@
         font-weight: bolder;
       }
 
-      .topic {
-        min-height: 4em;
-        position:relative;
-        top: 0px !important;
-        font-size: 18px !important;
+      .topics .topic:nth-child(odd) {
+        background-color: #eee;
       }
 
-      .topic .ui.segment {
-      	padding: 0.4em !important;
-      	background-color: transparent;
+      .topics .topic:nth-child(even) {
+        background-color: #ddd;
+      }
+
+      .topics .topic {
+        margin: 0px;
+        padding: 0px;
+        position:relative;
       }
 
       .topic .pre {
-        margin-left: -100px;
+        left: 0px;
       }
 
       .topic .post {
-        margin-left: 100%;
+        right: 0px;
+      }
+
+      .topic .pre, .topic .post {
+        position: absolute;
+        top: 0px;
+        height: 100%;
       }
 
       .topic .pre .ui.button, .topic .post .ui.button {
-        width: 100%;
         height: 100%;
         border-radius: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
       }
 
-      .topic .part {
-        position:absolute;
-        top: 0px;
-        width: 100px;
-        height: 100%;
+      .topic .part .ui.button {
+        margin-right: -5px;
+      }
+
+      .topic .part .ui.button i {
+        margin: 0px;
       }
 
       .topic .finalizeButton {
         position: absolute;
         right: 0.2em;
       }
+
+      .topic .draggable {
+        padding: 10px;
+        background-color: inherit;
+      }
     </style>
 
     <div class="topics" style="overflow:hidden">
     	<div ng-repeat="c in topic.choices"
-    		class="ui vertical segment topic"
+    		class="ui attached topic"
         topic="{{topic.$id}}"
         choice="{{c}}"
     		ng-class="{ 'finalized green inverted': topic.finalize == c,
                     'dim': topic.finalize && topic.finalize != c }">
 
         <span class="pre part">
-          <button class="ui green button">
+          <span class="ui green button" ng-click="vote(topic, c, true); resetPosition($event)">
             <i class="big checkmark icon"></i>
-          </button>
+          </span>
+          <span class="ui yellow button" ng-click="unvote(topic, c); resetPosition($event)">
+            <i class="big question mark icon"></i>
+          </span>
+          <span class="ui red button" ng-click="vote(topic, c, false); resetPosition($event)">
+            <i class="big remove icon"></i>
+          </span>
         </span>
 
-        <span style="width: 100%">
+        <span class="post part">
+          <span class="ui green button" ng-click="vote(topic, c, true); resetPosition($event)">
+            <i class="big checkmark icon"></i>
+          </span>
+          <span class="ui yellow button" ng-click="unvote(topic, c); resetPosition($event)">
+            <i class="big question mark icon"></i>
+          </span>
+          <span class="ui red button" ng-click="vote(topic, c, false); resetPosition($event)">
+            <i class="big remove icon"></i>
+          </span>
+        </span>
+
+        <div style="width: 100%" class="draggable">
           <button class="circular ui mini icon green button"  ng-if="voted({topic:topic, choice:c, value:true})">
             <i class="icon checkmark"></i>
           </button>
@@ -95,7 +131,7 @@
 
       		<div class="ui right floated medium icon finalizeButton button"
               ng-click="finalize(topic, c, $event)"
-              ng-show="!topic.finalize">
+              ng-show="!topic.finalize && allowFinalize">
       			<i class="ui icon lock"></i>
       		</div>
           <div style="clear:both"></div>
@@ -108,14 +144,8 @@
                   {{users.$getRecord(userId).name}}: {{topic.votes[userId][c].reason}}
         		</span>
           </div>
-        </span>
-
-        <span class="post part">
-          <button class="ui red button">
-            <i class="big remove icon"></i>
-          </button>
-        </span>
-    	</div>
+        </div>
+      </div>
 
       <div style="clear:both"> &nbsp; </div>
     </div>

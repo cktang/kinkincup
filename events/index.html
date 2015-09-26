@@ -421,19 +421,48 @@
 								eobj.$loaded(function() { $scope.eventLoaded = true; });
 
 								$timeout( function() {
-									$('.topics .topic').draggable({
-										axis: 'x',
-										revert: true,
-										revertDuration: 50,
-										stop: function(event, ui) {
-											var movements = ui.offset.left;
-											var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
-											var choice = $(event.target).attr('choice');
+									$('.topics .draggable').each(function(i, e) {
 
-											if (movements >= 100) $scope.vote(topic, choice, true);
-											if (movements <= -100) $scope.vote(topic, choice, false);
-											// console.log(movements, $scope.decision);
-										}
+										$(e).find('.pre, .post').hide();
+
+										$(e).draggable({
+											axis: 'x',
+											// revert: true,
+											// revertDuration: 50,
+											drag: function(event, ui) {
+												var movements = ui.offset.left;
+												var el = $(event.target).parents('.topic');
+
+												if (movements > 50) {
+													var length = $(el).find('.pre').find('span').length;
+													$(el).find('.pre').show()
+														.find('span').css({
+															paddingLeft: movements/5/length,
+															paddingRight: movements/5/length
+														});
+													$(el).find('.post').hide();
+												}
+												if (movements < -50) {
+													var length = $(el).find('.post').find('span').length;
+													$(el).find('.post').show()
+														.find('span').css({
+															paddingLeft: -1*movements/5/length,
+															paddingRight: -1*movements/5/length
+														});
+													$(el).find('.pre').hide();
+												}
+											},
+
+											stop: function(event, ui) {
+												var movements = ui.offset.left;
+												var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
+												var choice = $(event.target).attr('choice');
+
+												// if (movements >= 100) $scope.vote(topic, choice, true);
+												// if (movements <= -100) $scope.vote(topic, choice, false);
+												// console.log(movements, $scope.decision);
+											}
+										});
 									});
 								}, 1000);
 							});
@@ -533,6 +562,22 @@
 
 								$event.stopPropagation();
 							};
+
+							$scope.resetPosition = function($event) {
+								// console.log($event);
+								$($event.target).parents('.topic').find('.draggable').css('left', 0);
+							}
+
+							$scope.unvote = function(topic, choice) {
+								if (!topic.finalize) {
+									topic.votes = topic.votes || [];
+									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || {};
+									topic.votes[$scope.local.user.$id][choice] = null;
+
+									$scope.log('unvote', 'unvote');
+									$scope.topics.$save(topic);
+								}
+							}
 
 							$scope.vote = function(topic, choice, value) {
 								if (!topic.finalize) {
