@@ -1,33 +1,50 @@
-
-
 <style>
-	.dim {
-		opacity: 1;
-		background-color: #eee !important;
+	#chats .ui.column {
+		padding: 0.2em 1em;
+		line-height: 2.2em;
 	}
 
-	.ui.label {
-		border-radius: 0px;
-		margin-bottom: 0.4em;
+	#chats .ui.icon {
+		margin-right: 0px;
+	}
+
+	#chats {
+		margin-top: 20px;
 	}
 </style>
 
-<div class="chats">
-	<!--  | filter:matchTopic(h, r) -->
-	<div ng-repeat="h in history">
+<div id="chats">
+	<div id="chatsToolbar">
+		<div style="float:right">
+				<select ng-model="topicToFilter" class="ui dropdown">
+					<option ng-repeat="t in _(history).chain().pluck('topic').uniq().value()" value="{{t}}">{{topics.$getRecord(t).name}}</option>
+				</select>
+		</div>
 
-		<div class="ui large fluid label"
+		<h4>Chats</h4>
+
+		<div style="clear:both">&nbsp;</div>
+	</div>
+
+	<!--  | filter:matchTopic(h, r) -->
+	<div ng-repeat="h in history | filter:filterByTopic | orderBy: 'ts'" class="ui grid">
+
+		<span ng-bind="shortName(h.user)" class="ui two wide column"></span>
+
+		<span class="ui ten wide column">
+		<span class="ui large left pointing label"
 				ng-class="{
-					'green': _(['vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
-					'red': _(['unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
+					'basic': h.action != 'chat',
+					'black': h.action == 'event created',
+					'green': _(['Accept', 'vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
+					'red': _(['Reject', 'unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
 					'yellow': h.action=='participate' && h.content=='maybe',
-					'fluid basic dim': h.action != 'chat',
-					'teal': h.action == 'chat',
 				}">
 
 			<i class="ui icon"
 				ng-class="{
-					'checkmark': _(['vote', 'unvote']).contains(h.action),
+					'certificate': h.action == 'event created',
+					'checkmark': _(['Accept', 'Reject', 'vote', 'unvote']).contains(h.action),
 					'grid layout': _(['event added', 'event removed']).contains(h.action),
 					'list layout': _(['topic added', 'topic removed']).contains(h.action),
 					'block layout': _(['add choice', 'remove choice']).contains(h.action),
@@ -36,8 +53,9 @@
 					'pin': _(['finalize', 'un-finalize']).contains(h.action)
 				}"/>
 
-			<span>{{ h.content }}</span>
-		</div>
+			<span>{{ h.content || h.action }}</span>
+		</span>
+		</span>
 	</div>
 
 	<div style="clear:both; height:100px;">&nbsp;</div>

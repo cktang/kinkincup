@@ -31,6 +31,8 @@
 	<link href="js/semantic/semantic.css" rel="stylesheet">
   <script src="js/semantic/components/modal.js"></script>
 	<link href="js/semantic/components/modal.css" rel="stylesheet">
+  <script src="js/semantic/components/dropdown.js"></script>
+	<link href="js/semantic/components/dropdown.css" rel="stylesheet">
 
 	<!-- css and animations -->
 	<link href="css/animate.css" rel="stylesheet">
@@ -101,12 +103,10 @@
 				    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
 				    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
 				    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
-				    $rootScope.allHistory = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/history"));
 
 						$rootScope.topics.$loaded(function() { $rootScope.topicsLoaded = true; })
 						$rootScope.users.$loaded(function() { $rootScope.usersLoaded = true; })
 						$rootScope.events.$loaded(function() { $rootScope.eventsLoaded = true; })
-						$rootScope.allHistory.$loaded(function() { $rootScope.allHistorysLoaded = true; })
 
 						$rootScope.$on('$routeChangeStart', function(next, current) {
 						   try {
@@ -148,6 +148,7 @@
 							return !_.isUndefined(options.value)?
 											options.topic &&
 											options.topic.votes &&
+											options.topic.votes[options.userId] &&
 											options.topic.votes[options.userId][options.choice] &&
 											options.topic.votes[options.userId][options.choice].value == options.value
 										: options.topic.votes[options.userId][options.choice];
@@ -165,7 +166,7 @@
 							} catch(e) {
 								return false;
 							}
-						}
+						};
 					})
 
 					.filter('reverse', function() {
@@ -216,7 +217,6 @@
 
 							    $scope.chats.$add(c);
 									$scope.history.$add(c);
-									$scope.allHistory.$add(c);
 						     	} catch (e) { console.error(e); }
 						    };
 
@@ -225,6 +225,19 @@
 										return !(h.topic && h.topic!=$scope.r.id);
 									}
 								};
+
+								$scope.shortName = function(userId) {
+									var user = $scope.users.$getRecord(userId);
+									if (!user) return "";
+									return user.name.split(" ")[0];
+								},
+
+								$scope.filterByTopic = function(e) {
+									if (!$scope.topicToFilter || $scope.topicToFilter == '') return true;
+									return e.action=='chat' || e.topic==$scope.topicToFilter;
+								}
+
+								// $('.ui.dropdown').dropdown();
 						}
 					)
 
@@ -320,13 +333,6 @@
 									event: topic.$id,
 									content: value
 								});
-								$scope.allHistory.$add({
-						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD HH.mm'),
-						     		action: 'vote',
-									event: topic.$id,
-									content: value
-								});
 
 								topic.votes[$scope.local.user.$id] = value;
 								$scope.topics.$save(topic);
@@ -343,7 +349,6 @@
 									content: value
 								};
 
-								$scope.allHistory.$add(angular.copy(logItem));
 								$scope.history.$add(angular.copy(logItem));
 
 								_($scope.event.users).findWhere({ id: $scope.local.user.$id }).decision = value;
@@ -361,14 +366,6 @@
 
 									$scope.history.$add({
 					 		     		user: $scope.local.user.$id,
-							     		ts: moment().format('YYYY-MM-DD HH.mm'),
-							     		action: type,
-										topic: ref.key(),
-										event: event.$id,
-										content: value
-									});
-									$scope.allHistory.$add({
-							     		user: $scope.local.user.$id,
 							     		ts: moment().format('YYYY-MM-DD HH.mm'),
 							     		action: type,
 										topic: ref.key(),
@@ -394,12 +391,6 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD HH.mm'),
-							 		action: 'event removed',
-									event: event.$id
-								});
-								$scope.allHistory.$add({
-							 		user: $scope.local.user.$id,
 							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'event removed',
 									event: event.$id
@@ -487,9 +478,10 @@
 								}, 1000);
 							});
 
-							$scope.log = function(value, type) {
+							$scope.log = function(value, type, reason) {
 								console.log('vote changed: ' + value, type);
 								type = type || 'vote';
+								reason = reason || '';
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
@@ -497,15 +489,8 @@
 						     		action: type,
 									topic: $scope.topic.$id,
 									event: $scope.topic.event,
-									content: value
-								});
-								$scope.allHistory.$add({
-						     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD HH.mm'),
-						     		action: type,
-									topic: $scope.topic.$id,
-									event: $scope.topic.event,
-									content: value
+									content: value,
+									reason: reason
 								});
 							};
 
@@ -517,14 +502,6 @@
 
 								$scope.history.$add({
 				 		     		user: $scope.local.user.$id,
-						     		ts: moment().format('YYYY-MM-DD HH.mm'),
-						     		action: 'add choice',
-									topic: $scope.topic.$id,
-									event: $scope.topic.event,
-									content: newChoice
-								});
-								$scope.allHistory.$add({
-						     		user: $scope.local.user.$id,
 						     		ts: moment().format('YYYY-MM-DD HH.mm'),
 						     		action: 'add choice',
 									topic: $scope.topic.$id,
@@ -576,14 +553,6 @@
 									event: topic.event,
 									content: topic.finalize
 								});
-								$scope.allHistory.$add({
-									user: $scope.local.user.$id,
-									ts: moment().format('YYYY-MM-DD HH.mm'),
-									action: 'un-finalize',
-									topic: topic.$id,
-									event: topic.event,
-									content: topic.finalize
-								});
 								topic.finalize = null;
 							}
 
@@ -593,14 +562,6 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD HH.mm'),
-							 		action: 'finalize',
-									topic: topic.$id,
-									event: topic.event,
-									content: choice
-								});
-								$scope.allHistory.$add({
-							 		user: $scope.local.user.$id,
 							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'finalize',
 									topic: topic.$id,
@@ -649,7 +610,7 @@
 												};
 
 												topic.votes[$scope.local.user.$id][choice] = vote;
-												$scope.log(choice + ", " + $scope.reason, value? 'Accept': 'Reject');
+												$scope.log(choice, value? 'Accept': 'Reject', $scope.reason);
 												$scope.topics.$save(topic);
 
 												//reset reason
@@ -668,13 +629,6 @@
 
 								$scope.history.$add({
 							   	user: $scope.local.user.$id,
-							 		ts: moment().format('YYYY-MM-DD HH.mm'),
-							 		action: 'topic removed',
-									topic: topic.$id,
-									event: topic.event
-								});
-								$scope.allHistory.$add({
-							 		user: $scope.local.user.$id,
 							 		ts: moment().format('YYYY-MM-DD HH.mm'),
 							 		action: 'topic removed',
 									topic: topic.$id,
