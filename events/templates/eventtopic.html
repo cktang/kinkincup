@@ -1,4 +1,4 @@
-<div style="margin-top:20px">
+<div style="margin-top:20px; min-height:100%">
   <div class="ui inverted dimmer" ng-class="{active: !topicLoaded}">
     <div class="ui text loader">Loading</div>
   </div>
@@ -148,7 +148,7 @@
                   ng-if="topic.votes[userId][c]"
                   ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value, basic:userId==local.user.$id}"
                   class="ui label">
-                  {{users.$getRecord(userId).name}}: {{topic.votes[userId][c].reason}}
+                  {{users.$getRecord(userId).name.split(" ")[0]}}: {{topic.votes[userId][c].reason}}
         		</span>
             <div>&nbsp;</div>
           </div>

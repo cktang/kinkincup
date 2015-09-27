@@ -425,22 +425,24 @@
 
 										$(e).find('.pre, .post').hide();
 
+										var el = $(e).parents('.topic');
+										var preEl = $(el).find('.pre');
+										var postEl = $(el).find('.post');
 										$(e).draggable({
 											axis: 'x',
 											// revert: true,
 											// revertDuration: 50,
 											drag: function(event, ui) {
 												var movements = ui.offset.left;
-												var el = $(event.target).parents('.topic');
 
 												setTimeout(function() {
 													if (movements > 1) {
-														$(el).find('.pre').show()
-														$(el).find('.post').hide();
+														$(preEl).show()
+														$(postEl).hide();
 													}
 													if (movements < -1) {
-														$(el).find('.post').show()
-														$(el).find('.pre').hide();
+														$(postEl).show()
+														$(preEl).hide();
 													}
 												}, 0);
 											},
@@ -455,15 +457,15 @@
 												// console.log(movements, $scope.decision);
 
 												if (Math.abs(movements) < 50) {
-													$(event.target).parents('.topic').find('.draggable').css('left', 0);
+													$(el).find('.draggable').css('left', 0);
 												}
 
 												if (movements > 190) {
-													$(event.target).parents('.topic').find('.draggable').css('left', 190);
+													$(el).find('.draggable').css('left', 190);
 												}
 
 												if (movements < -190) {
-													$(event.target).parents('.topic').find('.draggable').css('left', -190);
+													$(el).find('.draggable').css('left', -190);
 												}
 											}
 										});
@@ -515,6 +517,8 @@
 									event: $scope.topic.event,
 									content: newChoice
 								});
+
+								$scope.vote($scope.topic, newChoice, true);
 							};
 
 							$scope.openNewChoiceModal = function() {
