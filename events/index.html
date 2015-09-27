@@ -518,7 +518,11 @@
 							};
 
 							$scope.openNewChoiceModal = function() {
-								$('#newChoiceModal').modal('show');
+								$('#newChoiceModal')
+									.modal({
+											autofocus: false
+									})
+									.modal('show');
 							};
 
 							$scope.unfinalize = function(topic) {
@@ -610,7 +614,7 @@
 												$scope.log(choice + ", " + $scope.reason, value? 'Accept': 'Reject');
 												$scope.topics.$save(topic);
 												$('#reasonModal').find('input').val("");
-										}
+											}
 										})
 										.modal('show')
 								}
