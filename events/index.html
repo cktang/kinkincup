@@ -434,22 +434,12 @@
 												var el = $(event.target).parents('.topic');
 
 												setTimeout(function() {
-													if (movements > 50) {
-														var length = $(el).find('.pre').find('span').length;
+													if (movements > 1) {
 														$(el).find('.pre').show()
-															.find('span').css({
-																paddingLeft: movements/5/length,
-																paddingRight: movements/5/length
-															});
 														$(el).find('.post').hide();
 													}
-													if (movements < -50) {
-														var length = $(el).find('.post').find('span').length;
+													if (movements < -1) {
 														$(el).find('.post').show()
-															.find('span').css({
-																paddingLeft: -1*movements/5/length,
-																paddingRight: -1*movements/5/length
-															});
 														$(el).find('.pre').hide();
 													}
 												}, 0);
@@ -457,12 +447,24 @@
 
 											stop: function(event, ui) {
 												var movements = ui.offset.left;
-												var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
-												var choice = $(event.target).attr('choice');
 
+												// var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
+												// var choice = $(event.target).attr('choice');
 												// if (movements >= 100) $scope.vote(topic, choice, true);
 												// if (movements <= -100) $scope.vote(topic, choice, false);
 												// console.log(movements, $scope.decision);
+
+												if (Math.abs(movements) < 50) {
+													$(event.target).parents('.topic').find('.draggable').css('left', 0);
+												}
+
+												if (movements > 190) {
+													$(event.target).parents('.topic').find('.draggable').css('left', 190);
+												}
+
+												if (movements < -190) {
+													$(event.target).parents('.topic').find('.draggable').css('left', -190);
+												}
 											}
 										});
 									});

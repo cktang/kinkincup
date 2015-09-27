@@ -8,24 +8,28 @@
   </div>
 
   <div ng-show="!topicLoaded || (topicLoaded && topic.name)">
-    <div style="float: right" class="tools">
-      <button class="ui circular button" ng-click="allowFinalize=!allowFinalize"><i class="ui lock icon"/></button>
-      <button class="ui circular button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
-      <button class="ui circular button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
-      <div class="ui button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
-      <div class="ui circular button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
-    </div>
-
-    <div style="clear:both">&nbsp;</div>
-
-    <div class="ui header" style="margin: 0px">
+    <div class="ui header" style="margin: 0px; float:left">
       {{topic.name}} {{decision}}
       <div class="sub header" ng-bind="topic.description"></div>
     </div>
 
+    <div style="float: right" class="tools">
+      <button class="ui circular icon button" ng-click="allowFinalize=!allowFinalize"><i class="ui lock icon"/></button>
+      <button class="ui circular icon button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
+      <button class="ui circular icon button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
+      <div class="ui button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
+      <div class="ui circular icon button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
+    </div>
+
+    <div style="clear:both">&nbsp;</div>
+
     <style>
       .dim {
         opacity: 0.5;
+      }
+
+      .tools .icon.button {
+        background-color: #f8f8f8;
       }
 
       .finalized {
@@ -64,8 +68,8 @@
       .topic .pre .ui.button, .topic .post .ui.button {
         height: 100%;
         border-radius: 0px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 15px;
+        padding-right: 15px;
       }
 
       .topic .part .ui.button {
@@ -87,7 +91,9 @@
       }
     </style>
 
-    <div class="topics" style="overflow:hidden">
+    <div class="topics" style="overflow:hidden;
+          margin-left: -10px;
+          margin-right: -10px;">
     	<div ng-repeat="c in topic.choices"
     		class="ui attached topic"
         topic="{{topic.$id}}"
@@ -144,7 +150,7 @@
                   class="ui label">
                   {{users.$getRecord(userId).name}}: {{topic.votes[userId][c].reason}}
         		</span>
-            <div></div>
+            <div>&nbsp;</div>
           </div>
         </div>
       </div>
