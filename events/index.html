@@ -428,13 +428,15 @@
 										var preEl = $(el).find('.pre');
 										var postEl = $(el).find('.post');
 										var startY = 0;
+										var startScrollY = 0;
 										$(e).draggable({
 											axis: 'x',
 											// revert: true,
 											// revertDuration: 50,
 											start: function(event, ui) {
 												startY = event.clientY;
-												// console.log(ui.offset.left, event.clientY);
+												startScrollY = $('body').scrollTop();
+												// console.log(event, ui);
 											},
 
 											drag: function(event, ui) {
@@ -453,7 +455,7 @@
 													}
 
 													$('html, body').animate({
-											        scrollTop: startY - top
+											        scrollTop: startScrollY + (startY - top)
 											    }, 0);
 												}, 0);
 											},
