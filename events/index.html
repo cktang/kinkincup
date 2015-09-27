@@ -617,7 +617,9 @@
 												topic.votes[$scope.local.user.$id][choice] = vote;
 												$scope.log(choice + ", " + $scope.reason, value? 'Accept': 'Reject');
 												$scope.topics.$save(topic);
-												$('#reasonModal').find('input').val("");
+
+												//reset reason
+												$scope.reason = "";
 											}
 										})
 										.modal('show')

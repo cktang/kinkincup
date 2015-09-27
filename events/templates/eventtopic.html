@@ -148,7 +148,7 @@
                   ng-if="topic.votes[userId][c]"
                   ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value, basic:userId==local.user.$id}"
                   class="ui label">
-                  {{users.$getRecord(userId).name.split(" ")[0]}}: {{topic.votes[userId][c].reason}}
+                  {{users.$getRecord(userId).name.split(" ")[0]}}{{topic.votes[userId][c].reason? ": " + topic.votes[userId][c].reason: ""}}
         		</span>
             <div>&nbsp;</div>
           </div>
