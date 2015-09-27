@@ -422,18 +422,25 @@
 
 								$timeout( function() {
 									$('.topics .draggable').each(function(i, e) {
-
 										$(e).find('.pre, .post').hide();
 
 										var el = $(e).parents('.topic');
 										var preEl = $(el).find('.pre');
 										var postEl = $(el).find('.post');
+										var startY = 0;
 										$(e).draggable({
 											axis: 'x',
 											// revert: true,
 											// revertDuration: 50,
+											start: function(event, ui) {
+												startY = event.clientY;
+												// console.log(ui.offset.left, event.clientY);
+											},
+
 											drag: function(event, ui) {
 												var movements = ui.offset.left;
+												var top = event.clientY;
+												// console.log(movements, top - startY);
 
 												setTimeout(function() {
 													if (movements > 1) {
@@ -444,6 +451,10 @@
 														$(postEl).show()
 														$(preEl).hide();
 													}
+
+													$('html, body').animate({
+											        scrollTop: top - startY
+											    }, 0);
 												}, 0);
 											},
 
