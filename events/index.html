@@ -462,6 +462,7 @@
 
 											stop: function(event, ui) {
 												var movements = ui.offset.left;
+												var threshold = 80;
 
 												// var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
 												// var choice = $(event.target).attr('choice');
@@ -469,15 +470,15 @@
 												// if (movements <= -100) $scope.vote(topic, choice, false);
 												// console.log(movements, $scope.decision);
 
-												if (Math.abs(movements) < 50) {
+												if (Math.abs(movements) < threshold) {
 													$(el).find('.draggable').css('left', 0);
 												}
 
-												if (movements > 190) {
+												if (movements > threshold) {
 													$(el).find('.draggable').css('left', 190);
 												}
 
-												if (movements < -190) {
+												if (movements < threshold * -1) {
 													$(el).find('.draggable').css('left', -190);
 												}
 											}
@@ -534,10 +535,34 @@
 								$scope.vote($scope.topic, newChoice, true);
 							};
 
+							$scope.openLockModal = function(topic, choice) {
+								if (topic.finalize) return;
+
+								$('#lockModal')
+									.modal({
+											autofocus: false,
+											onApprove: function() {
+												$scope.finalize(topic, choice)
+											}
+									})
+									.modal('show');
+							};
+
 							$scope.openNewChoiceModal = function() {
 								$('#newChoiceModal')
 									.modal({
 											autofocus: false
+									})
+									.modal('show');
+							};
+
+							$scope.openRemoveTopicModal = function(topic) {
+								$('#removeTopicModal')
+									.modal({
+											autofocus: false,
+											onApprove: function() {
+												$scope.removeTopic(topic)
+											}
 									})
 									.modal('show');
 							};
@@ -562,30 +587,26 @@
 								topic.finalize = null;
 							}
 
-							$scope.finalize = function(topic, choice, $event) {
-								if (confirm('finalize choice' + choice + '?')) {
-									topic.finalize = choice;
-									topic.decisionMade = [];
+							$scope.finalize = function(topic, choice) {
+								topic.finalize = choice;
+								topic.decisionMade = [];
 
-									$scope.history.$add({
-								   	user: $scope.local.user.$id,
-								 		ts: moment().format('YYYY-MM-DD HH.mm'),
-								 		action: 'finalize',
-										topic: topic.$id,
-										event: topic.event,
-										content: choice
-									});
-									$scope.allHistory.$add({
-								 		user: $scope.local.user.$id,
-								 		ts: moment().format('YYYY-MM-DD HH.mm'),
-								 		action: 'finalize',
-										topic: topic.$id,
-										event: topic.event,
-										content: choice
-									});
-								}
-
-								$event.stopPropagation();
+								$scope.history.$add({
+							   	user: $scope.local.user.$id,
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
+							 		action: 'finalize',
+									topic: topic.$id,
+									event: topic.event,
+									content: choice
+								});
+								$scope.allHistory.$add({
+							 		user: $scope.local.user.$id,
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
+							 		action: 'finalize',
+									topic: topic.$id,
+									event: topic.event,
+									content: choice
+								});
 							};
 
 							$scope.resetPosition = function($event) {

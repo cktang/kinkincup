@@ -14,18 +14,17 @@
     </div>
 
     <div style="float: right" class="tools">
-      <button class="ui circular icon button" ng-click="allowFinalize=!allowFinalize"><i class="ui lock icon"/></button>
+      <button class="ui circular icon button" ng-show="topic.finalize" ng-click="unfinalize(topic)"><i class="ui lock icon"/></button>
       <button class="ui circular icon button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
       <button class="ui circular icon button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
-      <div class="ui button" ng-show="topic.finalize" ng-click="unfinalize(topic)">Un-Finalize</div>
-      <div class="ui circular icon button" ng-click="deleteTopic(topic)"><i class="ui delete icon"/></div>
+      <div class="ui circular icon button" ng-click="openRemoveTopicModal(topic)"><i class="ui delete icon"/></div>
     </div>
 
     <div style="clear:both">&nbsp;</div>
 
     <style>
       .dim {
-        opacity: 0.5;
+        opacity: 0.2;
       }
 
       .tools .icon.button {
@@ -114,13 +113,13 @@
         </span>
 
         <span class="post part">
-          <span class="ui green button" ng-click="vote(topic, c, true); resetPosition($event)">
-            <i class="big checkmark icon"></i>
+          <span class="ui button" ng-click=" resetPosition($event)">
+            <i class="big edit icon"></i>
           </span>
-          <span class="ui yellow button" ng-click="unvote(topic, c); resetPosition($event)">
-            <i class="big question mark icon"></i>
+          <span class="ui button" ng-click="openLockModal(topic, c); resetPosition($event)">
+            <i class="big lock icon"></i>
           </span>
-          <span class="ui red button" ng-click="vote(topic, c, false); resetPosition($event)">
+          <span class="ui button" ng-click=" resetPosition($event)">
             <i class="big remove icon"></i>
           </span>
         </span>
@@ -134,6 +133,10 @@
             <i class="icon remove"></i>
           </button>
 
+          <button class="circular ui mini icon button"  ng-if="!topic.votes[local.user.$id][c]" style="background-color:transparent">
+            <i class="icon ok"></i>
+          </button>
+
       		<span ng-bind="c"></span>
 
       		<div class="ui right floated medium icon finalizeButton button"
@@ -143,14 +146,12 @@
       		</div>
           <div style="clear:both"></div>
 
-          <div style="width: 100%; margin-top: 0.2em; margin-left: 2em;">
+          <div style="width: 100%; margin-top: 0.2em; margin-left: 2.5em">
         		<span ng-repeat="userId in _(topic.votes).keys()"
                   ng-if="topic.votes[userId][c]"
-                  ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value, basic:userId==local.user.$id}"
-                  class="ui label">
-                  {{users.$getRecord(userId).name.split(" ")[0]}}{{topic.votes[userId][c].reason? ": " + topic.votes[userId][c].reason: ""}}
-        		</span>
-            <div>&nbsp;</div>
+                  ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value}"
+                  class="ui image label">{{users.$getRecord(userId).name.split(" ")[0]}}<span class="detail" ng-if="topic.votes[userId][c].reason" ng-bind="topic.votes[userId][c].reason"></span></span>
+            <div style="height:1px">&nbsp;</div>
           </div>
         </div>
       </div>
@@ -194,6 +195,30 @@
     <div class="ui segment actions">
       <button type="button" class="ui grey basic cancel button">Cancel</button>
       <button type="button" class="ui green basic ok button">Confirm</button>
+    </div>
+  </div>
+
+  <!-- lockModal -->
+  <div class="ui basic modal fade" id="lockModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">Finalize Choice ??</h4>
+    </div>
+
+    <div class="ui segment actions">
+      <button type="button" class="ui grey basic cancel button">Cancel</button>
+      <button type="button" class="ui green basic ok button">Lock</button>
+    </div>
+  </div>
+
+  <!-- removeTopic -->
+  <div class="ui basic modal fade" id="removeTopicModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">Remove topic ??</h4>
+    </div>
+
+    <div class="ui segment actions">
+      <button type="button" class="ui grey basic cancel button">Cancel</button>
+      <button type="button" class="ui green basic ok button">Remove</button>
     </div>
   </div>
 </div>
