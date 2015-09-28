@@ -44,7 +44,6 @@
 					'red': _(['Reject', 'unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
 					'yellow': h.action=='participate' && h.content=='maybe' || h.action=='unvote',
 				}">
-				{{ topics.$getRecord(h.topic).name }}
 
 			<i class="ui icon"
 				ng-class="{
