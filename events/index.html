@@ -231,6 +231,11 @@
 									var user = $scope.users.$getRecord(userId);
 									if (!user) return "";
 									return user.name.split(" ")[0];
+								};
+								
+								$scope.filterByTopic = function(e) {
+									if (!$scope.topicToFilter || $scope.topicToFilter == '') return true;
+									return e.action=='chat' || e.topic==$scope.topicToFilter;
 								}
 						}
 					)
