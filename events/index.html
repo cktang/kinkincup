@@ -619,7 +619,7 @@
 									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || {};
 									topic.votes[$scope.local.user.$id][choice] = null;
 
-									$scope.log('unvote', 'unvote');
+									$scope.log(choice, 'unvote');
 									$scope.topics.$save(topic);
 								}
 							}
@@ -644,8 +644,11 @@
 											onApprove: function() {
 												var vote = {
 														value: value,
-														reason: $scope.reason
 												};
+
+												if ($scope.reason && $scope.reason.length > 0) {
+													vote.reason = $scope.reason;
+												}
 
 												topic.votes[$scope.local.user.$id][choice] = vote;
 												$scope.log(choice, value? 'Accept': 'Reject', $scope.reason);
