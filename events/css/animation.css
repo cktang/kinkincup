@@ -28,26 +28,10 @@
   animation: flash 3s;
 }
 
-.link.ng-move,
-.link.ng-enter,
-.link.ng-leave {
-  transition:all linear 1s;
+.link, .button, .draggable { transition: all .1s; }
+.link:active, .button:active {
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: scale3d(0.98, 0.98, 0.98);
+  opacity:0.7;
+  /*background-color: silver;*/
 }
-
-.link.ng-leave.ng-leave-active,
-.link.ng-move,
-.link.ng-enter {
-  opacity:0;
-}
-
-.link.ng-leave,
-.link.ng-move.ng-move-active,
-.link.ng-enter.ng-enter-active {
-  opacity:1;
-}
-
-
-  -webkit-animation: bounceOut 1s;
-  -moz-animation: bounceOut 1s;
-  -ms-animation: bounceOut 1s;
-  animation: bounceOut 1s;
