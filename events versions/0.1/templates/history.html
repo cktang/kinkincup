@@ -1,0 +1,37 @@
+
+<style>
+	.ui.column {
+		padding: 0.2em !important;
+	}
+
+</style>
+
+<div class="events" style="margin-top: 20px">
+	<div  ng-repeat="h in history">
+		<div class="ui small image label"
+				ng-class="{
+					'green': _(['vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
+					'red': _(['unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
+					'yellow': h.action=='participate' && h.content=='maybe'
+				}"
+		>
+			<i class="ui icon"
+				ng-class="{
+					'checkmark': _(['vote', 'unvote']).contains(h.action),
+					'grid layout': _(['event added', 'event removed']).contains(h.action),
+					'list layout': _(['topic added', 'topic removed']).contains(h.action),
+					'block layout': _(['add choice', 'remove choice']).contains(h.action),
+					'comment': _(['chat']).contains(h.action),
+					'announcement': _(['participate']).contains(h.action),
+					'pin': _(['finalize', 'un-finalize']).contains(h.action)
+				}"/>
+				{{users.$getRecord(h.user).name.split(' ')[0]}}
+				<span class="detail">{{h.ts}}</span>
+		</div>
+
+		<div class="ui small image basic label" ng-show="h.topic" style="margin-left:0px">
+			{{ topics.$getRecord(h.topic).name }}
+			<span ng-hide="h.action=='participate'" class="detail"> {{ h.content }}</span>
+		</div>
+	</div>
+</div>

@@ -15,7 +15,7 @@
 
     <div style="float: right" class="tools">
       <button class="ui circular icon button" ng-show="topic.finalize" ng-click="unfinalize(topic)"><i class="ui lock icon"/></button>
-      <button class="ui circular icon button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
+      <button class="ui circular icon button" ng-click="goto('chat/' + topic.event)"><i class="ui comment icon"/></button>
       <button class="ui circular icon button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
       <div class="ui circular icon button" ng-click="openRemoveTopicModal(topic)"><i class="ui delete icon"/></div>
     </div>
@@ -148,10 +148,15 @@
           <div style="clear:both"></div>
 
           <div style="width: 100%; margin-top: 0.2em; margin-left: 2.5em">
-        		<span ng-repeat="userId in _(topic.votes).keys()"
+        		<div ng-repeat="userId in _(topic.votes).keys()"
                   ng-if="topic.votes[userId][c]"
-                  ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value}"
-                  class="ui image label">{{users.$getRecord(userId).name.split(" ")[0]}}<span class="detail" ng-if="topic.votes[userId][c].reason" ng-bind="topic.votes[userId][c].reason"></span></span>
+                  style="margin-bottom:2px">
+
+                  <span
+                    ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value}"
+                    class="ui image label">{{users.$getRecord(userId).name.split(" ")[0]}}<span class="detail" ng-if="topic.votes[userId][c].reason" ng-bind="topic.votes[userId][c].reason"></span>
+                  </span>
+            </div>
             <div style="height:1px">&nbsp;</div>
           </div>
         </div>

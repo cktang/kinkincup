@@ -18,11 +18,12 @@
 </style>
 
 <div id="chats">
-	<div id="chatsToolbar">
+	<div id="chatsToolbar" style="ui sticky">
 		<h4>
 			Chats
 			<div style="float:right">
 					<select ng-model="topicToFilter" class="ui dropdown">
+						<option value=""></option>
 						<option ng-repeat="t in _(history).chain().pluck('topic').uniq().value()" value="{{t}}">{{topics.$getRecord(t).name}}</option>
 					</select>
 			</div>
@@ -31,43 +32,45 @@
 		<div style="clear:both">&nbsp;</div>
 	</div>
 
-	<!--  | filter:matchTopic(h, r) -->
-	<div ng-repeat="h in history | filter:filterByTopic | orderBy: 'ts' | reverse" class="ui grid">
-		<span ng-bind="shortName(h.user)" class="ui two wide column"></span>
+	<div class="ui button" style="background-color:#f8f8f8; margin-bottom:1em" ng-click="n=n+10"> More ... </div>
 
-		<span class="ui ten wide column">
-		<span class="ui large left pointing label"
-				ng-class="{
-					'basic': h.action != 'chat',
-					'black': h.action == 'event created',
-					'green': _(['Accept', 'vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
-					'red': _(['Reject', 'unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
-					'yellow': h.action=='participate' && h.content=='maybe' || h.action=='unvote',
-				}">
+	<div ng-repeat="h in hh = (history | filter:filterByTopic | orderBy: 'ts')" ng-if="hh.length-$index <= n" class="ui grid">
+			<span ng-bind="shortName(h.user)" class="ui two wide column"></span>
+			<span class="ui ten wide column">
+			<span class="ui large left pointing label"
+					ng-class="{
+						'basic': h.action != 'chat',
+						'black': h.action == 'event created',
+						'green': _(['Accept', 'vote', 'add choice', 'finalize', 'topic added', 'add choice', 'add event']).contains(h.action) || (h.action=='participate' && h.content=='yes'),
+						'red': _(['Reject', 'unvote', 'un-finalize', 'remove choice', 'topic removed', 'event removed']).contains(h.action) || ( h.action=='participate' && h.content=='no'),
+						'yellow': h.action=='participate' && h.content=='maybe' || h.action=='unvote',
+					}">
 
-			<i class="ui icon"
-				ng-class="{
-					'certificate': h.action == 'event created',
-					'question mark': _(['unvote']).contains(h.action),
-					'checkmark': _(['Accept', 'vote']).contains(h.action),
-					'remove': _(['Reject']).contains(h.action),
-					'grid layout': _(['event added', 'event removed']).contains(h.action),
-					'list layout': _(['topic added', 'topic removed']).contains(h.action),
-					'block layout': _(['add choice', 'remove choice']).contains(h.action),
-					'announcement': _(['participate']).contains(h.action),
-					'pin': _(['finalize', 'un-finalize']).contains(h.action)
-				}"/>
+				<i class="ui icon"
+					ng-class="{
+						'certificate': h.action == 'event created',
+						'question mark': _(['unvote']).contains(h.action),
+						'checkmark': _(['Accept', 'vote']).contains(h.action),
+						'remove': _(['Reject']).contains(h.action),
+						'grid layout': _(['event added', 'event removed']).contains(h.action),
+						'list layout': _(['topic added', 'topic removed']).contains(h.action),
+						'block layout': _(['add choice', 'remove choice']).contains(h.action),
+						'announcement': _(['participate']).contains(h.action),
+						'pin': _(['finalize', 'un-finalize']).contains(h.action)
+					}"/>
 
-			<span>{{h.content}}</span>
-			<span><Strong>{{ h.reason }}</strong></span>
-		</span>
-		</span>
+				<span ng-if="h.action!='chat'">{{topics.$getRecord(h.topic).name}}: </span>
+				<span>{{h.content}}</span>
+				<span><Strong>{{ h.reason }}</strong></span>
+			</span>
+			</span>
 	</div>
 
 	<div style="clear:both; height:100px;">&nbsp;</div>
 </div>
 
-<div style="position:fixed; bottom:0px; width:100%; margin-left:-0.5em">
-	<input placeholder="chat..." class="link" style="padding:10px; width:100%" ng-model="newText"/>
-	<div class="ui fluid button" ng-click="newChat(newText); newText = ''"> Chat </div>
+<div style="position:fixed; bottom:0px; width:100%; margin-left:-0.5em; overflow:hidden">
+	<input placeholder="chat..." class="link" style="padding:10px; width:80%; margin:0px"
+					ng-model="newText" ng-keypress="checkNewChat($event)"/>
+	<span class="ui button" ng-click="newChat(newText); newText = ''" style="margin:0px; border:2px solid #eee; background-color:white"> Chat </span>
 </div>

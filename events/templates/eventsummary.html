@@ -13,11 +13,8 @@
         <button class="circular ui icon button" ng-click="openNewTopicModal()">
 				  <i class="icon plus"></i>
 				</button>
-				<button class="circular ui icon button" ng-click="goto('/chat/' + event.$id + '/type/event')">
+				<button class="circular ui icon button" ng-click="goto('/chat/' + event.$id)">
 				  <i class="icon comment"></i>
-				</button>
-				<button class="circular ui icon button" ng-click="goto('/history/' + event.$id)">
-				  <i class="icon history"></i>
 				</button>
 				<button class="circular ui icon button" ng-click="deleteEvent(event)">
 				  <i class="icon delete"></i>
