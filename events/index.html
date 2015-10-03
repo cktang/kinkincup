@@ -217,6 +217,7 @@
 								$('.ui.sticky').sticky();
 
 								$scope.checkNewChat = function($event) {
+
 										if ($event.charCode == 13) {
 											$scope.newChat($scope.newText);
 											$scope.newText = "";
@@ -224,6 +225,8 @@
 								};
 
 						    $scope.newChat = function(text) {
+									if (text == "") return;
+
 						     	try {
 									var c = {
 							     		user: $scope.local.user.$id,
