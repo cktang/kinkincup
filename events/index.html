@@ -207,6 +207,7 @@
 								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
 								$scope.history.$loaded(function() {
 									$scope.history.$watch(function(event) {
+										$scope.n = $scope.n+1;
 										$scope.scrollToBottom();
 									});
 								})
@@ -217,7 +218,6 @@
 								$('.ui.sticky').sticky();
 
 								$scope.checkNewChat = function($event) {
-
 										if ($event.charCode == 13) {
 											$scope.newChat($scope.newText);
 											$scope.newText = "";

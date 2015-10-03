@@ -34,7 +34,7 @@
 
 	<div class="ui button" style="background-color:#f8f8f8; margin-bottom:1em" ng-click="n=n+10"> More ... </div>
 
-	<div ng-repeat="h in hh = (history | filter:filterByTopic | orderBy: 'ts')" ng-if="hh.length-$index <= n" class="ui grid">
+	<div ng-repeat="h in hh = (history | filter:filterByTopic | orderBy: 'ts')" ng-if="hh.length-$index <= n" class="ui grid chat">
 			<span ng-bind="shortName(h.user)" class="ui two wide column"></span>
 			<span class="ui ten wide column">
 			<span class="ui large left pointing label"
