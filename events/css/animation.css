@@ -1,83 +1,36 @@
-.slide{
-  left:0;
-}
-.slide.ng-enter{
-  transition:0.15s linear all;
-  position:fixed;
-  z-index:inherit;
-  left:-100%;
-  height:inherit;
-}
-.slide.ng-leave{
-  transition:0.15s linear all;
-  position:fixed;
-  z-index:9999;
-  right:0;
-}
-.slide.ng-leave-active{
-  transition:0.15s linear all;
-  position:fixed;
-  right:-100%;
-  left:100%;
-}
-.slide.ng-enter-active{
-  transition:0.15s linear all;
-  left:0;
-  position:relative;
-}
-
 .chat.ng-enter {
-  -webkit-animation: slideInLeft 1s;
-  -moz-animation: slideInLeft 1s;
-  -ms-animation: slideInLeft 1s;
   animation: slideInLeft 1s;
 }
 
 .pageTransitionBack.ng-enter {
-  -webkit-animation: fadeInLeft 1s;
-  -moz-animation: fadeInLeft 1s;
-  -ms-animation: fadeInLeft 1s;
   animation: fadeInLeft 1s;
   position:absolute;
   width: 100%;
 }
 .pageTransitionBack.ng-leave {
-  -webkit-animation: fadeOutRight 1s;
-  -moz-animation: fadeOutRight 1s;
-  -ms-animation: fadeOutRight 1s;
   animation: fadeOutRight 1s;
   position:absolute;
   width: 100%;
 }
 
 .pageTransition.ng-enter {
-  -webkit-animation: fadeInRight 1s;
-  -moz-animation: fadeInRight 1s;
-  -ms-animation: fadeInRight 1s;
   animation: fadeInRight 1s;
   position:absolute;
   width: 100%;
 }
 .pageTransition.ng-leave {
-  -webkit-animation: fadeOutLeft 1s;
-  -moz-animation: fadeOutLeft 1s;
-  -ms-animation: fadeOutLeft 1s;
   animation: fadeOutLeft 1s;
   position:absolute;
   width: 100%;
 }
 
 .bounce {
-  -webkit-animation: flash 5s;
-  -moz-animation: flash 3s;
-  -ms-animation: flash 3s;
   animation: flash 3s;
 }
 
 .link.ng-move,
 .link.ng-enter,
 .link.ng-leave {
-  -webkit-transition:all linear 1s;
   transition:all linear 1s;
 }
 
