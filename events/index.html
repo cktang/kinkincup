@@ -685,33 +685,39 @@
 
 							setTimeout(function() {
 								console.log('drag enabled');
-
-								$('.ui.cards .ui.card').css({
-									width: $(window).width() - 60,
-									margin: '70px 30px 100px 30px',
-								});
+								$scope.adjustCardWidth();
 
 								// $('.ui.cards').draggable({
 								// 	axis: 'x'
 								// });
 							}, 1000);
 
+							$scope.adjustCardWidth = function() {
+									$('.ui.cards .ui.card').css({
+										width: $(window).width() - 60
+									});
+							}
+
 							$scope.gotoNextCard = function(i) {
+								$scope.adjustCardWidth();
 								var left = $('.ui.cards').css('left');
 								if (left == 'auto') {
 									$('.ui.cards').css('left', 0);
 									left = 0;
 								}
 
-								$('.ui.cards').css('left', parseInt(left) - $(window).width());
+								if (Math.abs(parseInt(left)) > $(window).width() * ($('.ui.cards .ui.card').length - 2)) return;
+
+								$('.ui.cards').css('left', Math.min(0, parseInt(left) - $(window).width()));
 							}
 
 							$scope.gotoLastCard = function(i) {
+								$scope.adjustCardWidth();
 								var left = $('.ui.cards').css('left');
 								if (left == 'auto') left = 0;
 								if (parseInt(left) == 0) return;
 
-								$('.ui.cards').css('left', parseInt(left) + $(window).width());
+								$('.ui.cards').css('left', Math.min(0, parseInt(left) + $(window).width()));
 							}
 
 							$scope.addEvent = function() {
@@ -745,6 +751,10 @@
 								console.log('save topics');
 
 								$scope.newTopicIds = [];
+
+								if (_($scope.newTopics).keys().length == 0) {
+									$scope.updateEvent();
+								}
 
 								_($scope.newTopics).each(function(topic) {
 									topic.event = id;
