@@ -454,8 +454,6 @@
 										var startScrollY = 0;
 										$(e).draggable({
 											axis: 'x',
-											// revert: true,
-											// revertDuration: 50,
 											start: function(event, ui) {
 												startY = event.clientY;
 												startScrollY = $('body').scrollTop();
@@ -486,12 +484,6 @@
 											stop: function(event, ui) {
 												var movements = ui.offset.left;
 												var threshold = 80;
-
-												// var topic = $scope.topics.$getRecord($(event.target).attr('topic'));
-												// var choice = $(event.target).attr('choice');
-												// if (movements >= 100) $scope.vote(topic, choice, true);
-												// if (movements <= -100) $scope.vote(topic, choice, false);
-												// console.log(movements, $scope.decision);
 
 												if (Math.abs(movements) < threshold) {
 													$(el).find('.draggable').css('left', 0);
@@ -690,6 +682,37 @@
 							$scope.venues = [];
 							$scope.newTopics = {};
 							var count = 1;
+
+							setTimeout(function() {
+								console.log('drag enabled');
+
+								$('.ui.cards .ui.card').css({
+									width: $(window).width() - 60,
+									margin: '70px 30px 100px 30px',
+								});
+
+								// $('.ui.cards').draggable({
+								// 	axis: 'x'
+								// });
+							}, 1000);
+
+							$scope.gotoNextCard = function(i) {
+								var left = $('.ui.cards').css('left');
+								if (left == 'auto') {
+									$('.ui.cards').css('left', 0);
+									left = 0;
+								}
+
+								$('.ui.cards').css('left', parseInt(left) - $(window).width());
+							}
+
+							$scope.gotoLastCard = function(i) {
+								var left = $('.ui.cards').css('left');
+								if (left == 'auto') left = 0;
+								if (parseInt(left) == 0) return;
+
+								$('.ui.cards').css('left', parseInt(left) + $(window).width());
+							}
 
 							$scope.addEvent = function() {
 								if (!$scope.newEvent || !$scope.newEvent.name || !$scope.newEvent.description) {

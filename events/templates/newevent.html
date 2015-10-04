@@ -1,59 +1,108 @@
-<div style="margin-top:20px">
-	<div class="ui button fluid"
-    	ng-class="{good:newEvent.name, bad:!newEvent.name}" ng-click="openEvent()">
-			<div class="ui header" style="margin-top:0px"> Event Name </div>
-      		{{newEvent.name}}
-			<Br>
-			<small>{{newEvent.description}}</small>
-	</div>
+<style>
+	.ui.cards {
+		position: absolute;
+		height: 105%;
+		overflow-x: hidden;
+		overflow-y: hidden;
+		background-color: #eee;
+	}
 
-	<div class="ui button fluid"
-	  	ng-class="{good: newTopics['Time'], bad: !newTopics['Time']}"
-	  	ng-click="openTopic('Time')">
-			<div class="ui header"> Time </div>
-      		<div ng-repeat="c in newTopics['Time'].choices" style="line-height:20px">
-		  		<small ng-bind="c"></small><Br>
-	  		</div>
-	</div>
+	.ui.cards .wrapper {
+		width: 5000px;
+		height: 100%;
+	}
 
-	<div class="ui button fluid"
-	  	ng-class="{good: newTopics['Venue'], bad: !newTopics['Venue']}"
-	  	ng-click="openTopic('Venue')">
-			<div class="ui header"> Place </div>
-      		<div ng-repeat="c in newTopics['Venue'].choices" style="line-height:20px">
-		  		<small ng-bind="c"></small><Br>
-	  		</div>
-	</div>
+	.ui.cards .ui.card {
+		padding: 2em;
+		height: 70%;
+		float:left;
+    box-shadow: silver 2px 2px 10px;
+	}
 
-	<div class="ui button fluid"
-	  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}"
-	  	ng-click="openParticipants()">
-			<div class="ui header"> Participants </div>
+	.ui.card {
+		position: relative;
+	}
+
+	.ui.card .editButton {
+		position:absolute;
+		bottom: 0px;
+		left: 0px;
+	}
+</style>
+
+<div class="ui cards draggable">
+	<div class="wrapper">
+		<div class="ui card"
+	    	ng-class="{good:newEvent.name, bad:!newEvent.name}">
+
+				<div class="ui header" style="margin-top:0px"> Event Name </div>
+
+	      {{newEvent.name}}
+				<Br>
+				<small>{{newEvent.description}}</small>
+
+				<div class="ui teal button editButton" ng-click="openEvent()"> Edit </div>
+		</div>
+
+		<div class="ui card"
+		  	ng-class="{good: newTopics['Time'], bad: !newTopics['Time']}">
+				<div class="ui header"> Time </div>
+	      		<div ng-repeat="c in newTopics['Time'].choices" style="line-height:20px">
+			  		<span ng-bind="c"></span><Br>
+		  		</div>
+
+				<div class="ui teal button editButton" ng-click="openTopic('Time')"> Edit </div>
+		</div>
+
+		<div class="ui card"
+		  	ng-class="{good: newTopics['Venue'], bad: !newTopics['Venue']}">
+				<div class="ui header"> Place </div>
+	      		<div ng-repeat="c in newTopics['Venue'].choices" style="line-height:20px">
+			  		<span ng-bind="c"></span><Br>
+		  		</div>
+
+					<div class="ui teal button editButton" ng-click="openTopic('Venue')"> Edit </div>
+		</div>
+
+		<div class="ui card"
+		  	ng-class="{good: _(users).filter({ selected: true }).length > 0, bad:_(users).filter({ selected: true }).length <= 0}">
+				<div class="ui header"> Participants </div>
 	  		<div ng-repeat="c in _(users).filter({selected:true})" style="line-height:20px">
-		  		<small ng-bind="c.name"></small><Br>
+		  		<span ng-bind="c.name"></span><Br>
 	  		</div>
-	</div>
+				<div class="ui teal button editButton" ng-click="openParticipants()"> Edit </div>
+		</div>
 
-
-	  <div 	ng-repeat="t in newTopics"
-	  		class="ui button fluid"
-	  		ng-hide="{{t.id=='Venue' || t.id=='Time'}}"
-	  		ng-click="openTopic(t.name)">
+		<div 	ng-repeat="t in newTopics"
+			class="ui card"
+			ng-hide="{{t.id=='Venue' || t.id=='Time'}}"
+			ng-click="openTopic(t.name)">
 	  	<span ng-bind="t.name" class="ui header"></span>
 	  	<span class="main">
 	  		<div ng-repeat="c in t.choices" style="line-height:20px">
-		  		<small ng-bind="c"></small><Br>
+		  		<span ng-bind="c"></span><Br>
 	  		</div>
 	  	</span>
-	  </div>
+			<div class="ui teal button editButton" ng-click="openParticipants()"> Edit </div>
+		</div>
 
-	  <div class="new ui basic orange button fluid" style="margin-top:20px" ng-click="openTopic('newTopic')">
-	  	<span class="ui header"> Gift?? Reminder??? Travel Tips?? </span>
-	  </div>
+		<div class="ui card">
+			<span class="ui header"> New Topics ? </span>
+			<span class="ui header"> Gift?? Reminder??? Travel Tips?? </span>
+
+			<div class="new ui orange button editButton" ng-click="openTopic('newTopic')"> Create Topic </div>
+		</div>
 	</div>
 
-	<hr>
-	<button ng-click="addEvent()" class="ui fluid orange button"> Submit </button>
+	<div style="position:fixed; top:0px; left:0px; width:100%; height:3em; padding:1em">
+		<div class="ui header"> Create New Event </div>
+	</div>
+
+	<div style="position:fixed; bottom:0px; left:0px; width:100%; height:3em">
+		<button ng-click="addEvent()" class="ui orange button" style="float:right"> Submit </button>
+		<button class="ui basic button" style="float:right"> Cancel </button>
+	</div>
+</div>
 
 	<!-- Modal -->
 	<style>
@@ -154,4 +203,14 @@
 	    </div>
 	  </div>
 	</div>
+</div>
+
+<div style="position:absolute; top:45%" class="ui black circular button icon" ng-click="gotoLastCard()">
+	<i class="ui chevron left icon"/>
+</div>
+
+<div style="position:absolute; top:45%; right:10px" class="ui black circular button icon" ng-click="gotoNextCard()">
+	<i class="ui chevron right icon" style="margin: 0px"/>
+</div>
+
 </div>
