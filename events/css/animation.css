@@ -28,7 +28,8 @@
   animation: flash 3s;
 }
 
-.link, .button, .draggable { transition: all .1s; }
+.draggable { transition: all .5s; }
+.link, .button { transition: all .1s; }
 .link:active, .button:active {
   -webkit-transform-style: preserve-3d;
   -webkit-transform: scale3d(0.98, 0.98, 0.98);
