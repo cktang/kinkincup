@@ -683,19 +683,23 @@
 							$scope.newTopics = {};
 							var count = 1;
 
-							setTimeout(function() {
-								console.log('drag enabled');
-								$scope.adjustCardWidth();
+							// setTimeout(function() {
+								// console.log('drag enabled');
+								// $scope.adjustCardWidth();
+							// }, 1000);
 
-								// $('.ui.cards').draggable({
-								// 	axis: 'x'
-								// });
-							}, 1000);
+							$scope.flip = function($event) {
+								setTimeout(function() {
+									$($event.target).parents('.shape').shape('flip over');
+								}, 500);
+							}
 
 							$scope.adjustCardWidth = function() {
-									$('.ui.cards .ui.card').css({
+									$('.ui.cards .wrapper').find('.ui.shape, .ui.card').css({
 										width: $(window).width() - 60
 									});
+
+									$('.ui.card').css('height', $('.ui.shape').height());
 							}
 
 							$scope.gotoNextCard = function(i) {
