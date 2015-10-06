@@ -691,7 +691,7 @@
 							$scope.flip = function($event) {
 								setTimeout(function() {
 									var shape = $($event.target).parents('.shape');
-									$('.shape').parents('.wrapper').find('.shape').not(shape).hide();
+									// $('.shape').parents('.wrapper').find('.shape').not(shape).hide();
 									$(shape).shape('flip up');
 
 									// setTimeout(function() {
