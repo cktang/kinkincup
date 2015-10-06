@@ -132,9 +132,9 @@ $.fn.shape = function(parameters) {
               $module
                 .addClass(className.animating)
               ;
-              $activeSide
-                .addClass(className.hidden)
-              ;
+              // $activeSide
+              //   .addClass(className.hidden)
+              // ;
             });
           }
           else {
