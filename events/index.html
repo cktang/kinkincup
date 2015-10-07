@@ -692,7 +692,9 @@
 								setTimeout(function() {
 									var shape = $($event.target).parents('.shape');
 									// $('.shape').parents('.wrapper').find('.shape').not(shape).hide();
-									$(shape).shape('flip up');
+									$(shape).shape({
+										duration: 7000
+									}).shape('flip up');
 
 									// setTimeout(function() {
 									// 	$('.shape').parents('.wrapper').find('.shape').not(shape).show();
@@ -705,7 +707,7 @@
 										width: $(window).width() - 60
 									});
 
-									$('.ui.shape, .sides, .side').css('height', $('.ui.shapewrapper').height());
+									$('.ui.card').css('height', $('.ui.shape').height());
 							}
 
 							$scope.gotoNextCard = function(i) {
