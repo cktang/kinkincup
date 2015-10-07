@@ -691,14 +691,12 @@
 							$scope.flip = function($event) {
 								setTimeout(function() {
 									var shape = $($event.target).parents('.shape');
-									// $('.shape').parents('.wrapper').find('.shape').not(shape).hide();
-									$(shape).shape({
-										duration: 7000
-									}).shape('flip up');
+									$('.shape').parents('.wrapper').find('.shape').not(shape).hide();
+									$(shape).shape('flip up');
 
-									// setTimeout(function() {
-									// 	$('.shape').parents('.wrapper').find('.shape').not(shape).show();
-									// }, 3000);
+									setTimeout(function() {
+										$('.shape').parents('.wrapper').find('.shape').not(shape).show();
+									}, 5000);
 								}, 500);
 							}
 
