@@ -1,0 +1,36 @@
+<div class="ui form card">
+  <div class="content">
+      <div class="form-group">
+    <label for="name">Name</label>
+    <div class="ui fluid input">
+      <input type="text" class="form-control" placeholder="Topic Name" ng-model="currentTopic.name">
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <div class="ui fluid input">
+      <input type="description" class="form-control" placeholder="Event Description" ng-model="currentTopic.description"></input>
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="choices">Choices</label>
+  <div class=" ui fluid input">
+      <input type="text" class="form-control" placeholder="Choice 1" ng-model="currentTopic.choices[0]"/>
+  </div>
+    <div class=" ui fluid input">
+      <input type="text" class="form-control" placeholder="Choice 2" ng-model="currentTopic.choices[1]"/>
+  </div>
+    <div class=" ui fluid input">
+      <input type="text" class="form-control" placeholder="Choice 3" ng-model="currentTopic.choices[2]"/>
+  </div>
+    <div class=" ui fluid input">
+      <input type="text" class="form-control" placeholder="Choice 4" ng-model="currentTopic.choices[3]"/>
+  </div>
+    <div class=" ui fluid input">
+      <input type="text" class="form-control" placeholder="Choice 5" ng-model="currentTopic.choices[4]"/>
+  </div>
+  </div>
+  </div>
+
+  <div class="ui big green button editButton" ng-click="flip($event)"> OK </div>
+</div>

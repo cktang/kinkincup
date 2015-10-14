@@ -691,12 +691,7 @@
 							$scope.flip = function($event) {
 								setTimeout(function() {
 									var shape = $($event.target).parents('.shape');
-									$('.shape').parents('.wrapper').find('.shape').not(shape).hide();
 									$(shape).shape('flip up');
-
-									setTimeout(function() {
-										$('.shape').parents('.wrapper').find('.shape').not(shape).show();
-									}, 5000);
 								}, 500);
 							}
 
@@ -787,7 +782,7 @@
 								});
 							}
 
-							$scope.openTopic = function(id) {
+							$scope.openTopic = function(id, $event) {
 								if (id == 'newTopic') {
 									id = 'newTopic ' + count++;
 								}
@@ -795,20 +790,26 @@
 								$scope.currentTopic = $scope.newTopics[id];
 								$scope.currentTopic = $scope.currentTopic || { id:id, name:id };
 								$scope.topicId = id;
-								$('#form5').modal('show');
+
+								// $('#form5').modal('show');
+								$scope.flip($event);
 							};
 
-							$scope.saveTopic = function(id) {
+							$scope.saveTopic = function($event) {
 								$scope.newTopics[$scope.topicId] = $scope.currentTopic;
-								$('#form5').modal('hide');
+
+								// $('#form5').modal('hide');
+								$scope.flip($event);
 							};
 
-							$scope.openParticipants = function() {
-								$('#form4').modal('show');
+							$scope.openParticipants = function($event) {
+								// $('#form4').modal('show');
+								$scope.flip($event);
 							};
 
-							$scope.openEvent = function() {
-								$('#form1').modal('show');
+							$scope.openEvent = function($event) {
+								// $('#form1').modal('show');
+								$scope.flip($event);
 							};
 						}
 					);

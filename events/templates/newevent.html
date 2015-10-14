@@ -26,6 +26,10 @@
 	.ui.form.card {
 		background-color: #ffe;
 	}
+
+	.ui.form .form-group {
+		margin-bottom: 1em;
+	}
 </style>
 
 <div class="ui cards draggable">
@@ -88,9 +92,11 @@
 					  		</div>
 							</div>
 
-							<div class="ui big teal button editButton" ng-click="openTopic('Time')"> Edit </div>
+							<div class="ui big teal button editButton" ng-click="openTopic('Time', $event)"> Edit </div>
 					</div>
 				</div>
+
+				<div class="side" ng-include="'templates/newEventModal.html'"></div>
 			</div>
 		</div>
 
@@ -108,9 +114,11 @@
 					  		</div>
 							</div>
 
-							<div class="ui big teal button editButton" ng-click="openTopic('Venue')"> Edit </div>
+							<div class="ui big teal button editButton" ng-click="openTopic('Venue', $event)"> Edit </div>
 					</div>
 				</div>
+
+				<div class="side" ng-include="'templates/newEventModal.html'"></div>
 			</div>
 		</div>
 
@@ -128,7 +136,23 @@
 					  		</div>
 							</div>
 
-							<div class="ui big teal button editButton" ng-click="openParticipants()"> Edit </div>
+							<div class="ui big teal button editButton" ng-click="openParticipants($event)"> Edit </div>
+					</div>
+				</div>
+
+				<div class="side">
+					<div class="ui card">
+						<div class="ui segments content" style="padding:0px">
+							<h5 	ng-repeat="u in users"
+									class="ui attached segment"
+									ng-click="u.selected = !u.selected"
+									ng-class="{'inverted green': u.selected}">
+								<span ng-show="u.selected"><i class="ui checkmark icon"></i></span>
+								<span>{{u.name}}</span>
+							</h5>
+						</div>
+
+						<div class="ui big green button editButton" ng-click="flip($event)"> OK </div>
 					</div>
 				</div>
 			</div>
@@ -154,9 +178,10 @@
 						  	</span>
 							</div>
 
-							<div class="ui big teal button editButton" ng-click="openTopic(t.name)"> Edit </div>
+							<div class="ui big teal button editButton" ng-click="openTopic(t.name, $event)"> Edit </div>
 						</div>
 				</div>
+				<div class="side" ng-include="'templates/newEventModal.html'"></div>
 			</div>
 		</div>
 
@@ -164,24 +189,28 @@
 			<div class="sides">
 				<div class="active side">
 					<div class="ui card">
-						<span class="ui header"> New Topics ? </span>
-						<span class="ui header"> Gift?? Reminder??? Travel Tips?? </span>
-						<div class="new ui big orange button editButton" ng-click="openTopic('newTopic')"> Create Topic </div>
+						<div class="content">
+							<span class="header"> New Topics ? </span>
+							<span class="header"> Gift?? Reminder??? Travel Tips?? </span>
+						</div>
+
+						<div class="new ui big orange button editButton" ng-click="openTopic('newTopic', $event)"> Create Topic </div>
 					</div>
 				</div>
+				<div class="side" ng-include="'templates/newEventModal.html'">
 			</div>
 		</div>
 
 	</div>
+</div>
 
-	<div style="position:fixed; top:0px; left:0px; width:100%; height:3em; padding:1em">
-		<div class="ui header"> Create New Event </div>
-	</div>
+<div style="position:fixed; top:0px; left:0px; width:100%; height:3em; padding:1em">
+	<div class="ui header"> Create New Event </div>
+</div>
 
-	<div style="position:fixed; bottom:0px; left:0px; width:100%; height:3em">
-		<button ng-click="addEvent()" class="ui orange button" style="float:right"> Submit </button>
-		<button class="ui basic button" style="float:right"> Cancel </button>
-	</div>
+<div style="position:fixed; bottom:0px; left:0px; width:100%; height:3em">
+	<button ng-click="addEvent()" class="ui orange button" style="float:right"> Submit </button>
+	<button class="ui basic button" style="float:right"> Cancel </button>
 </div>
 
 	<!-- Modal -->
