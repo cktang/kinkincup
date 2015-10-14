@@ -1,4 +1,6 @@
-<div style="margin-top: 20px">
+<div class="ui bottom horizontal inverted sidebar labeled icon visible small menu" ng-include="'templates/menu.html'"></div>
+
+<div class="pusher">
   <div class="ui inverted dimmer" ng-class="{active: !eventLoaded}">
     <div class="ui text loader">Loading</div>
   </div>
@@ -9,20 +11,15 @@
 
 	<div ng-show="!eventLoaded || (eventLoaded && event.name)">
 		<div class="ui header tools">
-			<div style="float: right">
-        <button class="circular ui icon button" ng-click="openNewTopicModal()">
-				  <i class="icon plus"></i>
-				</button>
-				<button class="circular ui icon button" ng-click="goto('/chat/' + event.$id)">
-				  <i class="icon comment"></i>
-				</button>
-				<button class="circular ui icon button" ng-click="deleteEvent(event)">
-				  <i class="icon delete"></i>
-				</button>
+      <div style="float: right">
+        <button class="circular ui icon button" >
+          <i class="icon plus"></i>
+        </button>
+        <button class="circular ui icon button">
+          <i class="icon delete"></i>
+        </button>
       </div>
 
-			<!-- <div ng-click="goto('history/' + event.$id)" class="ui right floated tiny button"> <i class="ui icon history"></i> History </div>
-			<div ng-click="goto('chat/' + event.$id + '/type/event')" class="ui right floated tiny button"> <i class="ui icon wechat"></i> Chat </div> -->
 			<span id="eventName">{{event.name}}</span>
 			<div class="ui sub header">{{event.description}}</div>
 		</div>

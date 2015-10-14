@@ -43,6 +43,7 @@
 
 <body ontouchstart="">
 	<!-- <div class="ui fixed main menu" ng-include="'header.html'"></div> -->
+
  	<div ng-view class="container pageTransition" style="width:100%; height:100%"></div>
 
 	<script>
@@ -176,6 +177,15 @@
 							} catch(e) {
 								return false;
 							}
+						};
+
+						$rootScope.toggleMenu = function() {
+							$('.ui.labeled.icon.sidebar')
+								.sidebar({
+									dimPage: false
+								})
+							  .sidebar('setting', 'transition', 'overlay')
+							  .sidebar('toggle');
 						}
 					})
 

@@ -17,22 +17,20 @@
 	}
 </style>
 
-<div id="chats">
+<div class="ui bottom horizontal inverted sidebar labeled icon visible small menu" ng-include="'templates/menu.html'"></div>
+
+<div id="chats" class="pusher">
 	<div id="chatsToolbar" style="ui sticky">
-		<h4>
-			Chats
-			<div style="float:right">
+			<div style="position:fixed; right:0px; top:20px">
 					<select ng-model="topicToFilter" class="ui dropdown">
 						<option value=""></option>
 						<option ng-repeat="t in _(history).chain().pluck('topic').uniq().value()" value="{{t}}">{{topics.$getRecord(t).name}}</option>
 					</select>
 			</div>
-		</h4>
-
 		<div style="clear:both">&nbsp;</div>
 	</div>
 
-	<div class="ui button" style="background-color:#f8f8f8; margin-bottom:1em" ng-click="n=n+10"> More ... </div>
+	<div class="ui black button" style="position:fixed; left:0px; top:20px; z-index:100" ng-click="n=n+10"> More ... </div>
 
 	<div ng-repeat="h in hh = (history | filter:filterByTopic | orderBy: 'ts')" ng-if="hh.length-$index <= n" class="ui grid chat">
 			<span ng-bind="shortName(h.user)" class="ui two wide column"></span>
@@ -69,7 +67,7 @@
 	<div style="clear:both; height:100px;">&nbsp;</div>
 </div>
 
-<div style="position:fixed; bottom:0px; width:100%; margin-left:-0.5em; overflow:hidden">
+<div style="position:fixed; bottom:70px; width:100%; margin-left:-0.5em; overflow:hidden">
 	<input placeholder="chat..." class="ui input" style="padding:10px; width:100%; margin:0px"
 					ng-model="newText" ng-keypress="checkNewChat($event)"/>
 	<!-- <span class="ui button" ng-click="newChat(newText); newText = ''" style="margin:0px; border:2px solid #eee; background-color:white"> Chat </span> -->
