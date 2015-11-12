@@ -259,8 +259,8 @@
 										</div>
 
                     <div ng-show="m.edit" class="ui buttons">
-                      <span class="ui green compact button" ng-click="match.save(m)"> <i class="ui checkmark icon"></i> </span>
-                      <span class="ui red compact button" ng-click="match.save(m)"> <i class="ui remove icon"></i> </span>
+                      <span class="ui green compact icon button" ng-click="match.save(m)"> <i class="ui checkmark icon"></i> </span>
+                      <span class="ui red compact icon button" ng-click="match.save(m)"> <i class="ui remove icon"></i> </span>
                     </div>
 									</div>
 								</div>
@@ -276,8 +276,7 @@
 	<script>
 		var app = angular
 					.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
-		  			.controller("Controller",
-						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
+		  			.controller("Controller", function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
 							$scope.d = moment();
 							$scope.today = $scope.d.format('YYYY-MM-DD');
 							$scope.players = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/players"));
@@ -411,6 +410,16 @@
 							}
 
 						}
+
+            .filter("toArray", function(){
+                return function(obj) {
+                    var result = [];
+                    angular.forEach(obj, function(val, key) {
+                        result.push(val);
+                    });
+                    return result;
+                };
+            });
 					);
 	</script>
 </body>
