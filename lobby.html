@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
+    <script src="http://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+    <script src="http://firebase.github.io/backfire/backbone-firebase.js"></script>
+    <script src="kinkincup.js"></script>
+
+    <script src="js/libs/bootstrap2/js/bootstrap.js"></script>
+    <link href="js/libs/bootstrap2/css/bootstrap.css" rel="stylesheet"/>
+    <link href="js/libs/bootstrap2/css/bootstrap-responsive.css" rel="stylesheet"/>
+
+</head>
+<body>
+    <style>
+        #rooms div {
+            padding:5px;
+            border-bottom: 1px solid silver;
+        }
+        #rooms div:hover {
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #rooms div:active {
+            text-indent: 2px;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="pull-right label label-inverse" style='padding:5px 10px; margin-top:5px'>Welcome <span class=playerName></span></div>
+        <h4 class="row-fluid"> Lobby </h4>
+        <div id="rooms" class="row-fluid" style="width:100%">
+        </div>
+    </div>
+
+    <script>
+        App.Lobby = Backbone.View.extend({
+            events : {
+                'click .room': 'gotoRoom'
+            },
+
+            initialize: function() {
+                this.collection = new App.Rooms;
+                this.collection.on('all', this.render, this);
+            },
+
+            render: function(action, collection, objects) {
+                console.log('action: ' + action);
+                $(this.el).empty();
+                var self = this;
+                this.collection.each(function(e, i) {
+                    $(self.el).append($("<div class=room>" + e.get('name') + "</div>").data('obj', e));
+                })
+            },
+
+            gotoRoom: function(e) {
+                var roomid = $(e.target).attr('roomid');
+                console.log('moving to room ' + roomid);
+                App.param.set('room', $(e.target).data('obj'));
+                location.href = 'room.html';
+            }
+        });
+
+        var lobby;
+        $(document).ready(function() {
+            lobby = new App.Lobby({ el:$('#rooms') });
+
+            if (!App.param.get('player'))
+                App.param.set('player', new App.Players().create({name: prompt('Name?')}));
+
+            $('.playerName').html(App.param.get('player').name);
+        });
+    </script>
+</body>
+</html>

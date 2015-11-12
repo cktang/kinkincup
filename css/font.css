@@ -1,0 +1,102 @@
+@media screen {
+
+@font-face {
+  font-family: 'Damion';
+  font-style: normal;
+  font-weight: 400;
+  src: url('Damion-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Myriad-light';
+  font-style: normal;
+  font-weight: 400;
+  src: url('font/Myriad/MyriadPro-Light.otf');
+}
+
+@font-face {
+  font-family: 'Myriad-regular';
+  font-style: normal;
+  font-weight: 400;
+  src: url('font/Myriad/MyriadPro-Regular.otf');
+}
+
+
+@font-face {
+  font-family: 'Myriad-italic';
+  font-style: normal;
+  font-weight: 400;
+  src: url('font/Myriad/MyriadPro-SemiboldCondIt.otf');
+}
+
+@font-face {
+  font-family: 'ContrailOne';
+  font-style: normal;
+  font-weight: 400;
+  src: url('ContrailOne-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Cutive';
+  font-style: normal;
+  font-weight: 400;
+  src: url('Cutive-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'KaushanScript';
+  font-style: normal;
+  font-weight: 400;
+  src: url('KaushanScript-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'MeriendaOne';
+  font-style: normal;
+  font-weight: 400;
+  src: url('MeriendaOne-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'PoiretOne';
+  font-style: normal;
+  font-weight: 400;
+  src: url('PoiretOne-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'FrancoisOne';
+  font-style: normal;
+  src: url('FrancoisOne.ttf');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url('font/Lato/Lato-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato Light'), local('Lato-Light'), url('font/Lato/Lato-Light.ttf');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url('font/Lato/Lato-Regular.ttf');
+}
+
+
+@font-face {
+  font-family: 'HNL';
+  src: url('F:/WarrantMM/Kin/Journal/v3test/font/HelveticaNeue-UltraLight.otf');
+}
+
+
+
+}
