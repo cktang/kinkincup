@@ -143,7 +143,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat=" p in t | orderBy:'-points' ">
+								<tr ng-repeat="p in t">
 									<td>{{$index+1}} </td>
 									<td>{{p.name}}</td>
 									<td ng-bind="p.played"></td>
@@ -208,7 +208,7 @@
 					</div>
 				</div>
 				<div class="ui divider"></div>
-
+<!--
 				<div class="ui form">
 					<div class="two fields">
 						<div class="field">
@@ -220,6 +220,7 @@
 						</div>
 					</div>
 				</div>
+ -->
 			</div>
 
 
@@ -395,6 +396,7 @@
 						m.awayScore = parseInt(m.awayScore);
 						m.homePoint = m.homeScore > m.awayScore? 3: m.homeScore == m.awayScore? 1: 0;
 						m.awayPoint = m.homePoint == 3? 0: m.homePoint == 1? 1: 3;
+						m.time = new Date();
 						$scope.matches.$save(m);
 
 						m.edit = false;
@@ -460,7 +462,10 @@
 								goalDifference: $scope.table.goalDifference(p),
 								points: $scope.table.points(p)
 							});
-							$scope.t = t;
+
+							$scope.t = _(t).sortBy(function(e) {
+								return e.points * 1000 + e.goalDifference;
+							}).reverse();
 						});
 					}
 				}
