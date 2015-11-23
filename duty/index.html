@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+	<Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore-contrib/0.3.0/underscore-contrib.min.js"></script>
+		<Script src="../events/js/angular-underscore.js"></script>
+
+			<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+			<meta name="viewport" content="width=device-width" />
+
+			<!-- semantics -->
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.js"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.css"/>
+
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+			<meta name="apple-mobile-web-app-capable" content="yes"/>
+		</head>
+
+		<body ontouchstart="" ng-controller="Controller">
+
+		<style>
+			body {
+				padding: 0rem 1rem;
+			}
+
+			.ui.dText {
+				position: absolute;
+				top: 20%;
+				left: 20%;
+				font-size: 20px;
+			}
+
+			.field {
+				padding: 2px !important;
+			}
+		</style>
+
+		<div class="ui header">
+			<div class="content">
+				Duty Analysis
+				</div>
+			</div>
+
+			<div class="ui stackable grid">
+				<div class="ui four wide column">
+					<div id="calendar" class="ui secondary column segment">
+						<div class="ui header">
+							Calendar
+							<div class="ui sub header">
+								<span> {{ d | amDateFormat: 'MMMM YYYY' }} </span>
+								<span> <i class="ui angle left icon link" ng-click="lastMonth()"></i> </span>
+								<span> <i class="ui angle right icon link" ng-click="nextMonth()"></i> </span>
+							</div>
+						</div>
+
+						<div id="dates" class="ui seven column grid">
+							<div class="column">Sun</div>
+							<div class="column">Mon</div>
+							<div class="column">Tue</div>
+							<div class="column">Wed</div>
+							<div class="column">Thu</div>
+							<div class="column">Fri</div>
+							<div class="column">Sat</div>
+
+							<div class="column" ng-repeat="a in emptiness"></div>
+							<div
+							class="ui column link date"
+							style="min-height: 4em"
+							ng-repeat="date in dd.dates">
+
+							<span class="ui dText" ng-class="{ today:date==today, disabled:d.format(date, 'YYYY-MM-DD') < startDate || d.format(date, 'YYYY-MM-DD') > endDate }">
+								{{ date | amDateFormat: 'D' }}
+							</span>
+
+							<div style="margin-left:2em">
+								<span class="ui blue basic label"
+								ng-repeat="d in dropped">
+								{{d.home}} <Br> vs <br> {{d.away}}
+								</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui twelve wide column">
+			<div class="ui segments">
+				<div id="matches" class="ui secondary segment" style="overflow-x:scroll">
+					<div class="ui header">Data</div>
+
+					<table class="ui very basic celled table">
+						<thead>
+							<tr>
+								<th>
+									<span> {{ d | amDateFormat: 'MMMM YYYY' }} </span>
+								</th>
+								<th ng-repeat="d in dd.dates"> {{ d | amDateFormat: 'D' }} </th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr ng-repeat="w in workmen">
+								<th ng-bind="w"></th>
+								<td ng-repeat="d in dd.dates" style="padding:0px">
+									<div class="ui form">
+									  <div class="fields">
+									    <div class="field">
+									      <label>Duty</label>
+									      <input type="text" ng-model="records[d][w].duty">
+									    </div>
+									    <div class="field">
+									      <label>Buy</label>
+									      <input type="text" ng-model="records[d][w].buy">
+									    </div>
+									  </div>
+									</div>
+								</td>
+						</tbody>
+					</table>
+				</div>
+				<div class="ui secondary basic segment">
+					<div class="ui green button"> Save </div>
+				</div>
+			</div>
+		</div>
+
+			<script>
+			var app = angular
+			.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
+			.controller("Controller", function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
+				$scope.d = moment();
+				$scope.today = $scope.d.format('YYYY-MM-DD');
+				$scope.records = $firebaseArray(new Firebase("https://dataAnalysis.firebaseio.com/records"));
+
+				$scope.workmen = ['W1', 'W2', 'W3', 'W4', 'W5'];
+
+				$scope.nextMonth = function() {
+					$scope.d = $scope.d.add(1, 'M');
+					$scope.defineCal();
+				}
+
+				$scope.lastMonth = function() {
+					$scope.d = $scope.d.add(-1, 'M');
+					$scope.defineCal();
+				}
+
+				$scope.defineCal = function() {
+					var d = new moment($scope.d.toDate()).startOf('month');
+					$scope.dd = $scope.dd || {};
+					$scope.dd.dates = [];
+					$scope.emptiness = _.range(d.weekday());
+
+					while(true) {
+						$scope.dd.dates.push(d.format('YYYY-MM-DD'));
+						d.add(1, 'd');
+						if (d.format('DD') == 1) break;
+					}
+				}
+
+				$scope.defineCal();
+
+				/***/
+
+			})
+			</script>
+		</body>
+		</html>
