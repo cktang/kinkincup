@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
@@ -16,21 +17,25 @@
 	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
 	<Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore-contrib/0.3.0/underscore-contrib.min.js"></script>
-		<Script src="../events/js/angular-underscore.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore-contrib/0.3.0/underscore-contrib.min.js"></script>
+	<Script src="../events/js/angular-underscore.js"></script>
 
-			<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
-			<meta name="viewport" content="width=device-width" />
+	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
 
-			<!-- semantics -->
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.js"></script>
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.css"/>
+	<!-- semantics -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.5/semantic.css"/>
 
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
 
-			<meta name="apple-mobile-web-app-capable" content="yes"/>
-		</head>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.js"></script>
+	<script src="http://mbostock.github.io/d3/talk/20111018/colorbrewer/colorbrewer.js"></script>
+	<link rel="stylesheet" href="http://mbostock.github.io/d3/talk/20111116/colorbrewer/colorbrewer.css"/>
+</head>
 
 		<body ontouchstart="" ng-controller="Controller">
 
@@ -62,10 +67,6 @@
 			left:0px;
 		}
 
-		.link:hover, .button:hover {
-			opacity:0.5;
-		}
-
 		input.score {
 			padding: 0px !important;
 			font-size: 30px !important;
@@ -93,22 +94,11 @@
 			text-align: center !important;
 		}
 
-		#table tbody tr {
-			opacity: 0.5;
+		td input {
+			background-color: transparent !important;
+			border: 0px !important;
 		}
 
-		#table tbody tr:nth-child(1) {
-			opacity: 1;
-			font-weight: bold;
-		}
-
-		#table tbody tr:nth-child(2) {
-			opacity: 0.9;
-		}
-
-		#table tbody tr:nth-child(3) {
-			opacity: 0.8;
-		}
 		</style>
 
 		<div class="ui header">
@@ -129,29 +119,31 @@
 					<div id="table" class="ui secondary segment">
 						<div class="ui header">Table</div>
 
-						<table class="ui very basic collapsing celled unstackable table">
+						<table class="ui very basic collapsing compact celled unstackable table">
 							<thead>
 								<tr>
-									<th> R </th>
 									<th> Team </th>
 									<th> P </th>
 									<th> W </th>
 									<th> D </th>
 									<th> L </th>
+									<th> GF </th>
+									<th> GA </th>
 									<th> GD </th>
 									<th> Pt </th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="p in t">
-									<td>{{$index+1}} </td>
 									<td>{{p.name}}</td>
 									<td ng-bind="p.played"></td>
 									<td ng-bind="p.won"></td>
 									<td ng-bind="p.drawn"></td>
 									<td ng-bind="p.lost"></td>
-									<td ng-bind="p.goalDifference"></td>
-									<td ng-bind="p.points"></td>
+									<td ng-bind="p.goalFor" style="background-color: {{ gfColorScale(p.goalFor) }}"></td>
+									<td ng-bind="p.goalAgainst" style="background-color: {{ gaColorScale(p.goalAgainst) }}"></td>
+									<td ng-bind="p.goalDifference" style="background-color: {{ gdColorScale(p.goalDifference) }}"></td>
+									<td ng-bind="p.points" style="background-color: {{ pointColorScale(p.points) }}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -223,11 +215,12 @@
  -->
 			</div>
 
-
+<!--
 			<div id="players" class="ui secondary segment">
 				<div class="ui header">Admin</div>
 				<div class="ui red fluid button" ng-click="generateMatches()"> <strong>Reset</strong> all Matches </div>
 			</div>
+-->
 		</div>
 
 		<div class="ui twelve wide column">
@@ -256,9 +249,11 @@
 									{{m.home}} <Br> vs <br> {{m.away}}
 									</span>
 
-									<div id="matchDetails" class="ui form" ng-if="(match.played(m) || m.edit) && m.home==p.id && m.away==p2.id" ng-class="match.winner(m)">
+									<div id="matchDetails" class="ui form" ng-if="(match.played(m) || m.edit) && m.home==p.id && m.away==p2.id"
+										style="background-color: {{ wdlScale(m.homeScore-m.awayScore) }}">
+
 										<div class="ui equal width center aligned padded grid">
-											<div class="ui row" style="padding-top:5px">
+											<div class="ui row">
 												<div class="ui column">
 													<div ng-bind="p.name"></div>
 													<div> <input class="score" ng-model="m.homeScore"
@@ -273,7 +268,6 @@
 														</div>
 													</div>
 												</div>
-
 
 												<div ng-show="m.edit" class="ui fluid buttons">
 													<span class="ui green compact icon button" ng-click="match.save(m)"> <i class="ui checkmark icon"></i> </span>
@@ -295,6 +289,8 @@
 			.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
 			.controller("Controller", function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
 				$scope.d = moment();
+				$scope.d3 = $window.d3;
+
 				$scope.today = $scope.d.format('YYYY-MM-DD');
 				$scope.players = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/players"));
 				$scope.players.$loaded(function() {
@@ -302,6 +298,7 @@
 						$scope.generateMatches();
 					});
 				});
+
 
 				$scope.matches = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/matches"));
 				$scope.matches.$watch(function() {
@@ -397,7 +394,7 @@
 						m.awayScore = parseInt(m.awayScore);
 						m.homePoint = m.homeScore > m.awayScore? 3: m.homeScore == m.awayScore? 1: 0;
 						m.awayPoint = m.homePoint == 3? 0: m.homePoint == 1? 1: 3;
-						m.time = moment().format('YYYY-MM-DD HH:mm:ss');
+						m.time = new Date();
 						$scope.matches.$save(m);
 
 						m.edit = false;
@@ -463,14 +460,34 @@
 								goalDifference: $scope.table.goalDifference(p),
 								points: $scope.table.points(p)
 							});
-
-							$scope.t = _(t).sortBy(function(e) {
-								return e.points * 1000 + e.goalDifference;
-							}).reverse();
 						});
+
+						$scope.t = _(t).sortBy(function(e) {
+							return e.points * 1000 + e.goalDifference;
+						}).reverse();
+
+						$scope.pointColorScale = $scope.d3.scale.linear()
+							.domain($scope.d3.extent(_(t).pluck('points')))
+							.range(["pink", "lightblue"]);
+
+						$scope.gfColorScale = $scope.d3.scale.linear()
+							.domain($scope.d3.extent(_(t).pluck('goalFor')))
+							.range(["pink", "lightblue"]);
+
+						$scope.gaColorScale = $scope.d3.scale.linear()
+							.domain($scope.d3.extent(_(t).pluck('goalAgainst')))
+							.range(["lightblue", "pink"]);
+
+						$scope.gdColorScale = $scope.d3.scale.linear()
+							.domain($scope.d3.extent(_(t).pluck('goalDifference')))
+							.range(["pink", "lightblue"]);
 					}
 				}
 
+
+				$scope.wdlScale = $scope.d3.scale.ordinal()
+							.domain($scope.d3.range(-5, 6))
+							.range(colorbrewer.RdYlGn[11]);
 			})
 			</script>
 		</body>
