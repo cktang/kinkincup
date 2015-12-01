@@ -130,11 +130,11 @@
 						<div class="ui header">Ranking</div>
 
 						<div ng-repeat="p in players | orderBy:'elo':true" class="ui attached item">
-							<div class="ui equal width grid">
-								<div class="ui column">{{$index + 1}}</div>
-								<div class="ui right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
-								<div class="ui left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
-								<div class="ui center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
+							<div class="ui grid">
+								<div class="ui one wide column">{{$index + 1}}</div>
+								<div class="ui four wide right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
+								<div class="ui five wide left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
+								<div class="ui five wide center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
 								<!--
 								<div class="ui right aligned column"><span class="ui icon red tiny button" ng-click="removePlayer(p)"><i class="ui remove icon"></i></span></div>
 								-->
