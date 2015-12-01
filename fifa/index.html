@@ -243,7 +243,7 @@
 				<table class="ui very basic celled table">
 					<thead>
 						<tr>
-							<th> Home \ Away </th>
+							<th> Home \ <br> Away </th>
 							<th ng-repeat="p in players" ng-bind="p.name"></th>
 						</tr>
 					</thead>
@@ -256,14 +256,14 @@
 
 								<!--moment().format('YYYY-MM-DD') <= endDate && -->
 								<div ng-repeat="m in matches">
-									<span class="ui small basic blue label"
+									<span class="ui large basic blue label"
 										style="text-align:center; margin:10px"
 										ng-click="match.setEdit(m, true)"
 										ng-show="!m.edit && !match.played(m) && m.home==p.id && m.away==p2.id" >
 
-											{{m.home}} <Br> vs <br> {{m.away}}
+											{{p.name}} <Br> vs <br> {{p2.name}}
 
-										<div class="ui item" style="padding:10px" ng-if="printStars(m).length != 0">
+										<div class="ui item" style="padding:5px 0px" ng-if="printStars(m).length != 0">
 											<i class="ui handicap icon"></i>:<span ng-bind-html="printStars(m)"</span>
 										</div>
 									</span>
@@ -636,7 +636,7 @@
 						(m.homeBaseElo - m.awayBaseElo) / 200:
 						(_($scope.players).findWhere({ id: m.home }).elo - _($scope.players).findWhere({ id: m.away }).elo) / 200;
 
-			var color = val > 0 ? 'yellow': 'red';
+			var color = val > 0 ? 'red': 'yellow';
 
 			val = Math.abs(val);
 			var html = "";
@@ -645,7 +645,7 @@
 					html += "<i class='ui "+color+" star icon'></i>";
 					val--;
 				} else if (val >= 0.5) {
-					html += "<i class='ui "+color+" half star icon'></i>";
+					html += "<i class='ui "+color+" half star empty icon'></i>";
 					val -= 0.5;
 				} else break;
 			}
