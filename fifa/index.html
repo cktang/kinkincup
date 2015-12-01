@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
@@ -42,7 +40,7 @@
 		<style>
 		body {
 			padding: 0rem 1rem;
-		}
+   		}
 
 		.ui.segment {
 			overflow-x: auto;
@@ -97,19 +95,29 @@
 		td input {
 			background-color: transparent !important;
 			border: 0px !important;
+			color: inherit !important;
+		}
+
+		.ui.progress {
+			transition: 300ms;
 		}
 
 		</style>
 
 		<div class="ui header">
 			<div class="content">
+			<!--
 				<div class="ui right floated header">
 					<span class="ui small button"> Prizes </span>
 					<span class="ui small button"> Rules </span>
 				</div>
-
+			-->
 				FIFA 16 League
-				<span class="ui sub header"> Season 1 </div>
+				<span class="ui sub header">
+					<select ng-change="load()"
+							ng-model="season"
+							ng-options="s for s in seasons track by s"></select>
+				</span>
 				</div>
 			</div>
 
@@ -131,19 +139,21 @@
 									<th> GA </th>
 									<th> GD </th>
 									<th> Pt </th>
+									<th/>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="p in t">
 									<td>{{p.name}}</td>
-									<td ng-bind="p.played"></td>
-									<td ng-bind="p.won"></td>
-									<td ng-bind="p.drawn"></td>
-									<td ng-bind="p.lost"></td>
-									<td ng-bind="p.goalFor" style="background-color: {{ gfColorScale(p.goalFor) }}"></td>
-									<td ng-bind="p.goalAgainst" style="background-color: {{ gaColorScale(p.goalAgainst) }}"></td>
-									<td ng-bind="p.goalDifference" style="background-color: {{ gdColorScale(p.goalDifference) }}"></td>
-									<td ng-bind="p.points" style="background-color: {{ pointColorScale(p.points) }}"></td>
+									<td ng-bind="p.played" style="background-color: {{ tScales['played'](p.played) }}"></td>
+									<td ng-bind="p.won" style="background-color: {{ tScales['won'](p.won) }}"></td>
+									<td ng-bind="p.drawn" style="background-color: {{ tScales['drawn'](p.drawn) }}"></td>
+									<td ng-bind="p.lost" style="background-color: {{ tScales2['lost'](p.lost) }}"></td>
+									<td ng-bind="p.goalFor" style="background-color: {{ tScales['goalFor'](p.goalFor) }}"></td>
+									<td ng-bind="p.goalAgainst" style="background-color: {{ tScales2['goalAgainst'](p.goalAgainst) }}"></td>
+									<td ng-bind="p.goalDifference" style="background-color: {{ tScales['goalDifference'](p.goalDifference) }}"></td>
+									<td ng-bind="p.points" style="background-color: {{ tScales['points'](p.points) }}"></td>
+									<td/>
 								</tr>
 							</tbody>
 						</table>
@@ -192,11 +202,14 @@
 			<div id="players" class="ui secondary segment">
 				<div class="ui header">Members</div>
 
-				<div ng-repeat="p in players" class="ui attached item">
+				<div ng-repeat="p in players | orderBy:'elo':true" class="ui attached item">
 					<div class="ui equal width grid">
 						<div class="ui right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
 						<div class="ui left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
+						<div class="ui center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
+						<!--
 						<div class="ui right aligned column"><span class="ui icon red tiny button" ng-click="removePlayer(p)"><i class="ui remove icon"></i></span></div>
+						-->
 					</div>
 				</div>
 				<div class="ui divider"></div>
@@ -215,12 +228,12 @@
  -->
 			</div>
 
-<!--
 			<div id="players" class="ui secondary segment">
 				<div class="ui header">Admin</div>
 				<div class="ui red fluid button" ng-click="generateMatches()"> <strong>Reset</strong> all Matches </div>
+				<div class="ui green fluid button" ng-click="buildElo()"> Update Elo rating </div>
+				<div class="ui orange fluid button" ng-click="clearUnplayed()">Clear all unplayed </div>
 			</div>
--->
 		</div>
 
 		<div class="ui twelve wide column">
@@ -241,16 +254,23 @@
 							<td ng-repeat="p2 in players" style="padding:0px">
 								<span ng-if="p.id==p2.id"> \ </span>
 
+								<!--moment().format('YYYY-MM-DD') <= endDate && -->
 								<div ng-repeat="m in matches">
 									<span class="ui small basic blue label"
-									style="text-align:center; margin:10px"
-									ng-click="match.setEdit(m, true)"
-									ng-show="!m.edit && !match.played(m) && m.home==p.id && m.away==p2.id" >
-									{{m.home}} <Br> vs <br> {{m.away}}
+										style="text-align:center; margin:10px"
+										ng-click="match.setEdit(m, true)"
+										ng-show="!m.edit && !match.played(m) && m.home==p.id && m.away==p2.id" >
+
+											{{m.home}} <Br> vs <br> {{m.away}}
+
+										<div class="ui item" style="padding:10px" ng-if="printStars(m).length != 0">
+											<i class="ui handicap icon"></i>:<span ng-bind-html="printStars(m)"</span>
+										</div>
 									</span>
 
-									<div id="matchDetails" class="ui form" ng-if="(match.played(m) || m.edit) && m.home==p.id && m.away==p2.id"
-										style="background-color: {{ wdlScale(m.homeScore-m.awayScore) }}">
+									<div id="matchDetails" class="ui form"
+										ng-if="(match.played(m) || m.edit) && m.home==p.id && m.away==p2.id"
+										style="background-color: {{ wdlScale(m.homeScore-m.awayScore) }}; color: {{ wdlFontScale(m.homeScore-m.awayScore) }} !important">
 
 										<div class="ui equal width center aligned padded grid">
 											<div class="ui row">
@@ -258,237 +278,381 @@
 													<div ng-bind="p.name"></div>
 													<div> <input class="score" ng-model="m.homeScore"
 														ng-focus="match.setEdit(m, true)"
-														ng-click="match.setEdit(m, true)"/> </div>
+														ng-click="match.setEdit(m, true)"/>
 													</div>
-													<div class="ui column">
-														<div ng-bind="p2.name"></div>
-														<div> <input class="score" ng-model="m.awayScore"
-															ng-focus="match.setEdit(m, true)"
-															ng-click="match.setEdit(m, true)"/> </div>
-														</div>
-													</div>
-												</div>
 
-												<div ng-show="m.edit" class="ui fluid buttons">
+													<select ng-model="m.homeTeam" ng-show="m.edit">
+														<option ng-repeat="t in teams | orderBy:'name'" value="{{t.name}}">
+															<i style="background-image:url({{t.url}})"></i><span>{{t.name}}</span>
+														</option>
+													</select>
+
+													<img src="{{_(teams).findWhere({ name: m.homeTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="50"/>
+												</div>
+												<div class="ui column">
+													<div ng-bind="p2.name"></div>
+													<div> <input class="score" ng-model="m.awayScore"
+														ng-focus="match.setEdit(m, true)"
+														ng-click="match.setEdit(m, true)"/>
+													</div>
+
+													<select ng-model="m.awayTeam" ng-show="m.edit">
+														<option ng-repeat="t in teams | orderBy:'name'" value="{{t.name}}">
+															<i style="background-image:url({{t.url}})"></i><span>{{t.name}}</span>
+														</option>
+													</select>
+
+													<img src="{{_(teams).findWhere({ name: m.awayTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="50"/>
+												</div>
+											</div>
+
+											<div class="ui item" style="padding:10px" ng-if="printStars(m).length != 0">
+												<i class="ui handicap icon"></i>: <span ng-bind-html="printStars(m)"</span>
+											</div>
+
+											<div class="ui item" style="padding:10px" ng-if="m.eloChange">
+												<i class="ui line chart icon"></i> <span ng-bind="m.eloChange"></span>
+											</div>
+
+											<div class="ui row" ng-show="m.edit">
+												<div class="ui fluid buttons">
 													<span class="ui green compact icon button" ng-click="match.save(m)"> <i class="ui checkmark icon"></i> </span>
 													<span class="ui red compact icon button" ng-click="match.remove(m)"> <i class="ui remove icon"></i> </span>
 												</div>
 											</div>
 										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
+		</div>
 
+	<script>
+	var matches;
 
-			<script>
-			var app = angular
-			.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
-			.controller("Controller", function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
-				$scope.d = moment();
-				$scope.d3 = $window.d3;
+	var app = angular
+	.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
+	.controller("Controller", function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout, $sce) {
+		$scope.d = moment();
+		var dScale = d3.time.scale.utc()
+			.domain([new Date($scope.startDate), new Date($scope.endDate)])
+			.range([0, 100]);
+		$scope.d3 = $window.d3;
+		$scope.today = $scope.d.format('YYYY-MM-DD');
 
-				$scope.today = $scope.d.format('YYYY-MM-DD');
-				$scope.players = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/players"));
-				$scope.players.$loaded(function() {
-					$scope.players.$watch(function() {
-						$scope.generateMatches();
-					});
-				});
+		$scope.teams = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/teams"));
 
+		$scope.load = function(season) {
+			$scope.season = season || $scope.season || $scope.seasons[0];
+			$scope.startDate = '2015-12-01';
+			$scope.endDate = '2015-12-31';
 
-				$scope.matches = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/matches"));
-				$scope.matches.$watch(function() {
-					$scope.table.build();
-				});
+			$scope.players = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/"+$scope.season+"/players"));
+			$scope.matches = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/"+$scope.season+"/matches"));
+			$scope.matches.$watch(function() {
+				$scope.eloScale = $scope.d3.scale.linear()
+						.domain(d3.extent(_($scope.players).pluck('elo')))
+						.range(["pink", "lightblue"]);
 
-				$scope.startDate = '2015-11-16';
-				$scope.endDate = '2015-11-29';
+				$scope.wdlScale = $scope.d3.scale.linear()
+							.domain([-4, 0, 5])
+							.range(["black", "white", "black"]);
 
-				$scope.generateMatches = function() {
-					//clear matches first
-					_($scope.matches).each(function(m) {
-						$scope.matches.$remove(m);
-					})
+				$scope.wdlFontScale = $scope.d3.scale.ordinal()
+							.domain([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
+							.range(["white", "white", "black", "black", "black", "black", "black", "white", "white"]);
 
-					_($scope.players).each(function(p) {
-						_($scope.players).each(function(p2) {
-							if (p.id == p2.id) return;
+				$scope.table.build();
+			});
+		}
+		$scope.seasons = ['season1', 'season2'];
+		$scope.load('season2');
 
-							var played = 0; //_([0,1]).sample();
-							var homeScore = played? _([0,1,2,3,4,5]).sample(): 0;
-							var awayScore = played? _([0,1,2,3,4,5]).sample(): 0;
-							var homePoint = played? (homeScore > awayScore? 3: homeScore == awayScore? 1: 0): 0;
-							var awayPoint = played? (homePoint == 3? 0: homePoint == 1? 1: 3): 0;
+		$scope.clearUnplayed = function() {
+			_($scope.matches).chain()
+				.where({ played:false })
+				.each(function(m) {
+					$scope.matches.$remove(m);
+				})
+		}
 
-							$scope.matches.$add({
-								id: p.id+"|"+p2.id,
-								home: p.id,
-								away: p2.id,
-								homeScore: homeScore,
-								awayScore: awayScore,
-								homePoint: homePoint,
-								awayPoint: awayPoint,
-								played: homePoint > 0 || awayPoint > 0
-							});
-						});
-					});
-				};
-
-				$scope.nextMonth = function() {
-					$scope.d = $scope.d.add(1, 'M');
-					$scope.defineCal();
-				}
-
-				$scope.lastMonth = function() {
-					$scope.d = $scope.d.add(-1, 'M');
-					$scope.defineCal();
-				}
-
-				$scope.defineCal = function() {
-					var d = new moment($scope.d.toDate()).startOf('month');
-					$scope.dd = $scope.dd || {};
-					$scope.dd.dates = [];
-					$scope.emptiness = _.range(d.weekday());
-
-					while(true) {
-						$scope.dd.dates.push(d.format('YYYY-MM-DD'));
-						d.add(1, 'd');
-						if (d.format('DD') == 1) break;
-					}
-				}
-
-				$scope.defineCal();
-
-				/***/
-
-				$scope.addPlayer = function() {
-					$scope.players.$add($scope.newPlayer);
-					$scope.newPlayer = {};
-				}
-
-				$scope.removePlayer = function(p) {
-					$scope.players.$remove(p);
-				}
-
-				$scope.match = {
-					played: function(m) {
-						return m.played;
-					},
-
-					setEdit: function(m, value) {
-						m.edit = value;
-					},
-
-					winner: function(m) {
-						return m.homeScore > m.awayScore? "H": m.homeScore == m.awayScore? "D": "A";
-					},
-
-					save: function(m) {
-						m.edit = null;
-						m.played = true;
-						m.homeScore = parseInt(m.homeScore);
-						m.awayScore = parseInt(m.awayScore);
-						m.homePoint = m.homeScore > m.awayScore? 3: m.homeScore == m.awayScore? 1: 0;
-						m.awayPoint = m.homePoint == 3? 0: m.homePoint == 1? 1: 3;
-						m.time = new Date();
-						$scope.matches.$save(m);
-
-						m.edit = false;
-					},
-
-					remove: function(m) {
-						m.edit = null;
-						m.played = false;
-						m.homeScore = 0
-						m.awayScore = 0;
-						m.homePoint = 0;
-						m.awayPoint = 0;
-						$scope.matches.$save(m);
-
-						m.edit = false;
-					}
-				}
-
-				$scope.table = {
-					played: function(p) {
-						return _($scope.matches).filter(function(e) { return (p.id == e.home || p.id == e.away) && e.played }).length;
-					},
-
-					won: function(p) {
-						return _($scope.matches).filter(function(e) { return (p.id==e.home && e.homePoint==3) || (p.id==e.away && e.awayPoint==3) }).length;
-					},
-
-					drawn: function(p) {
-						return _($scope.matches).filter(function(e) { return (p.id==e.home && e.homePoint==1) || (p.id==e.away && e.awayPoint==1) }).length;
-					},
-
-					lost: function(p) {
-						return _($scope.matches).filter(function(e) { return ((p.id==e.home && e.homePoint==0) || (p.id==e.away && e.awayPoint==0)) && e.played }).length;
-					},
-
-					goalFor: function(p) {
-						return _($scope.matches).chain().map(function(e) { return p.id==e.home? +e.homeScore: p.id==e.away? +e.awayScore: 0; }).reduce(function(a,b) { return a+b }).value();
-					},
-
-					goalAgainst: function(p) {
-						return _($scope.matches).chain().map(function(e) { return p.id==e.home? +e.awayScore: p.id==e.away? +e.homeScore: 0; }).reduce(function(a,b) { return a+b }).value();
-					},
-
-					goalDifference: function(p) {
-						return $scope.table.goalFor(p) - $scope.table.goalAgainst(p);
-					},
-
-					points: function(p) {
-						return _($scope.matches).chain().map(function(e) { return p.id==e.home? e.homePoint: p.id==e.away?e.awayPoint: 0; }).reduce(function(a,b) { return a+b }).value();
-					},
-
-					build: function() {
-						var t = [];
-						_($scope.players).each(function(p) {
-							t.push({
-								name: p.name,
-								played: $scope.table.played(p),
-								won: $scope.table.won(p),
-								drawn: $scope.table.drawn(p),
-								lost: $scope.table.lost(p),
-								goalFor: $scope.table.goalFor(p),
-								goalAgainst: $scope.table.goalAgainst(p),
-								goalDifference: $scope.table.goalDifference(p),
-								points: $scope.table.points(p)
-							});
-						});
-
-						$scope.t = _(t).sortBy(function(e) {
-							return e.points * 1000 + e.goalDifference;
-						}).reverse();
-
-						$scope.pointColorScale = $scope.d3.scale.linear()
-							.domain($scope.d3.extent(_(t).pluck('points')))
-							.range(["pink", "lightblue"]);
-
-						$scope.gfColorScale = $scope.d3.scale.linear()
-							.domain($scope.d3.extent(_(t).pluck('goalFor')))
-							.range(["pink", "lightblue"]);
-
-						$scope.gaColorScale = $scope.d3.scale.linear()
-							.domain($scope.d3.extent(_(t).pluck('goalAgainst')))
-							.range(["lightblue", "pink"]);
-
-						$scope.gdColorScale = $scope.d3.scale.linear()
-							.domain($scope.d3.extent(_(t).pluck('goalDifference')))
-							.range(["pink", "lightblue"]);
-					}
-				}
-
-
-				$scope.wdlScale = $scope.d3.scale.ordinal()
-							.domain($scope.d3.range(-5, 6))
-							.range(colorbrewer.RdYlGn[11]);
+		$scope.generateMatches = function() {
+			//clear matches first
+			_($scope.matches).each(function(m) {
+				$scope.matches.$remove(m);
 			})
-			</script>
-		</body>
-		</html>
+
+			_($scope.players).each(function(p) {
+				_($scope.players).each(function(p2) {
+					if (p.id == p2.id) return;
+
+					var played = 0; //_([0,1]).sample();
+					var homeScore = played? _([0,1,2,3,4,5]).sample(): 0;
+					var awayScore = played? _([0,1,2,3,4,5]).sample(): 0;
+					var homePoint = played? (homeScore > awayScore? 3: homeScore == awayScore? 1: 0): 0;
+					var awayPoint = played? (homePoint == 3? 0: homePoint == 1? 1: 3): 0;
+
+					$scope.matches.$add({
+						id: p.id+"|"+p2.id,
+						home: p.id,
+						away: p2.id,
+						homeScore: homeScore,
+						awayScore: awayScore,
+						homePoint: homePoint,
+						awayPoint: awayPoint,
+						played: homePoint > 0 || awayPoint > 0,
+						time: moment().format('YYYY-MM-DD HH:mm:ss')
+					});
+				});
+			});
+		};
+
+		$scope.nextMonth = function() {
+			$scope.d = $scope.d.add(1, 'M');
+			$scope.defineCal();
+		}
+
+		$scope.lastMonth = function() {
+			$scope.d = $scope.d.add(-1, 'M');
+			$scope.defineCal();
+		}
+
+		$scope.defineCal = function() {
+			var d = new moment($scope.d.toDate()).startOf('month');
+			$scope.dd = $scope.dd || {};
+			$scope.dd.dates = [];
+			$scope.emptiness = _.range(d.weekday());
+
+			while(true) {
+				$scope.dd.dates.push(d.format('YYYY-MM-DD'));
+				d.add(1, 'd');
+				if (d.format('DD') == 1) break;
+			}
+		}
+
+		$scope.defineCal();
+
+		/***/
+
+		$scope.addPlayer = function() {
+			$scope.players.$add($scope.newPlayer);
+			$scope.newPlayer = {};
+		}
+
+		$scope.removePlayer = function(p) {
+			$scope.players.$remove(p);
+		}
+
+		$scope.match = {
+			played: function(m) {
+				return m.played;
+			},
+
+			setEdit: function(m, value) {
+				m.edit = value;
+			},
+
+			winner: function(m) {
+				return m.homeScore > m.awayScore? "H": m.homeScore == m.awayScore? "D": "A";
+			},
+
+			winnerR: function(m) {
+				return m.homeScore > m.awayScore? 1: m.homeScore == m.awayScore? 0.5: 0;
+			},
+
+			margin: function(m) {
+				return Math.abs(m.homeScore - m.awayScore);
+			},
+
+			save: function(m) {
+				$scope.match.rewindMatchElo(m);
+
+				m.edit = null;
+				m.played = true;
+				m.homeScore = parseInt(m.homeScore);
+				m.awayScore = parseInt(m.awayScore);
+				m.homePoint = m.homeScore > m.awayScore? 3: m.homeScore == m.awayScore? 1: 0;
+				m.awayPoint = m.homePoint == 3? 0: m.homePoint == 1? 1: 3;
+				m.time = new Date();
+
+				m.edit = false;
+
+				$scope.match.updateMatchElo(m);
+				$scope.matches.$save(m);
+			},
+
+			remove: function(m) {
+				$scope.match.rewindMatchElo(m);
+
+				m.edit = null;
+				m.played = false;
+				m.homeScore = 0;
+				m.awayScore = 0;
+				m.homePoint = 0;
+				m.awayPoint = 0;
+
+				m.awayTeam = null;
+				m.homeTeam = null;
+				m.eloChange = null;
+
+				$scope.matches.$save(m);
+
+				m.edit = false;
+			},
+
+			rewindMatchElo: function(m) {
+				if (!m.eloChange) return;
+
+				var homePlayer = _($scope.players).findWhere({id:m.home});
+				var awayPlayer = _($scope.players).findWhere({id:m.away});
+
+				homePlayer.elo -= m.eloChange;
+				awayPlayer.elo += m.eloChange;
+
+				homePlayer.elo = +(homePlayer.elo).toFixed(2);
+				awayPlayer.elo = +(awayPlayer.elo).toFixed(2);
+
+				$scope.players.$save(homePlayer);
+				$scope.players.$save(awayPlayer);
+			},
+
+			updateMatchElo: function(m) {
+				var homePlayer = _($scope.players).findWhere({id:m.home});
+				var awayPlayer = _($scope.players).findWhere({id:m.away});
+
+				m.homeBaseElo = homePlayer.elo;
+				m.awayBaseElo = awayPlayer.elo;
+
+				var eloDifference = homePlayer.elo - awayPlayer.elo;
+				var e = 1 / ( Math.pow(10, (eloDifference*-1/400)) + 1 );
+				var k = 20;
+
+				var r = $scope.match.winnerR(m);
+				var elo_1x2 = +((r - e) * k * (r==0.5? 1: Math.pow(1.1, $scope.match.margin(m) - 1))).toFixed(2);
+				console.log(homePlayer.elo, awayPlayer.elo, e, elo_1x2);
+
+				homePlayer.elo += elo_1x2;
+				awayPlayer.elo -= elo_1x2;
+				homePlayer.elo = +(homePlayer.elo).toFixed(2);
+				awayPlayer.elo = +(awayPlayer.elo).toFixed(2);
+
+				m.eloChange = elo_1x2;
+				m.homeElo = homePlayer.elo;
+				m.awayElo = awayPlayer.elo;
+
+				$scope.players.$save(homePlayer);
+				$scope.players.$save(awayPlayer);
+			}
+		}
+
+		$scope.table = {
+			played: function(p) {
+				return _($scope.matches).filter(function(e) { return (p.id == e.home || p.id == e.away) && e.played }).length;
+			},
+
+			won: function(p) {
+				return _($scope.matches).filter(function(e) { return (p.id==e.home && e.homePoint==3) || (p.id==e.away && e.awayPoint==3) }).length;
+			},
+
+			drawn: function(p) {
+				return _($scope.matches).filter(function(e) { return (p.id==e.home && e.homePoint==1) || (p.id==e.away && e.awayPoint==1) }).length;
+			},
+
+			lost: function(p) {
+				return _($scope.matches).filter(function(e) { return ((p.id==e.home && e.homePoint==0) || (p.id==e.away && e.awayPoint==0)) && e.played }).length;
+			},
+
+			goalFor: function(p) {
+				return _($scope.matches).chain().map(function(e) { return p.id==e.home? +e.homeScore: p.id==e.away? +e.awayScore: 0; }).reduce(function(a,b) { return a+b }).value();
+			},
+
+			goalAgainst: function(p) {
+				return _($scope.matches).chain().map(function(e) { return p.id==e.home? +e.awayScore: p.id==e.away? +e.homeScore: 0; }).reduce(function(a,b) { return a+b }).value();
+			},
+
+			goalDifference: function(p) {
+				return $scope.table.goalFor(p) - $scope.table.goalAgainst(p);
+			},
+
+			points: function(p) {
+				return _($scope.matches).chain().map(function(e) { return p.id==e.home? e.homePoint: p.id==e.away?e.awayPoint: 0; }).reduce(function(a,b) { return a+b }).value();
+			},
+
+			build: function() {
+				var t = [];
+				_($scope.players).each(function(p) {
+					t.push({
+						name: p.name,
+						played: $scope.table.played(p),
+						won: $scope.table.won(p),
+						drawn: $scope.table.drawn(p),
+						lost: $scope.table.lost(p),
+						goalFor: $scope.table.goalFor(p),
+						goalAgainst: $scope.table.goalAgainst(p),
+						goalDifference: $scope.table.goalDifference(p),
+						points: $scope.table.points(p)
+					});
+				});
+
+				if (t[0]) {
+					$scope.tScales = {};
+					$scope.tScales2 = {};
+					_(t[0]).chain().keys().each(function(key) {
+						$scope.tScales[key] = $scope.d3.scale.linear()
+							.domain($scope.d3.extent(_(t).pluck(key)))
+							.range(["pink", "lightblue"]);
+						$scope.tScales2[key] = $scope.d3.scale.linear()
+							.domain($scope.d3.extent(_(t).pluck(key)))
+							.range(["lightblue", "pink"]);
+					});
+				}
+
+				$scope.t = _(t).sortBy(function(e) {
+					return e.points * 1000 + e.goalDifference;
+				}).reverse();
+
+			}
+		}
+
+		$scope.buildElo = function() {
+			_($scope.matches).chain()
+				.shuffle()
+				.where({ played: true })
+				.each($scope.match.updateMatchElo);
+
+			_($scope.players).each(function(p) {
+				$scope.players.$save(p);
+			});
+			_($scope.matches).each(function(m) {
+				$scope.matches.$save(m);
+			})
+		}
+
+		$scope.printStars = function(m) {
+			var val = m.homeBaseElo?
+						(m.homeBaseElo - m.awayBaseElo) / 200:
+						(_($scope.players).findWhere({ id: m.home }).elo - _($scope.players).findWhere({ id: m.away }).elo) / 200;
+
+			var color = val > 0 ? 'yellow': 'red';
+
+			val = Math.abs(val);
+			var html = "";
+			while(val > 0) {
+				if (val > 1) {
+					html += "<i class='ui "+color+" star icon'></i>";
+					val--;
+				} else if (val >= 0.5) {
+					html += "<i class='ui "+color+" half star icon'></i>";
+					val -= 0.5;
+				} else break;
+			}
+			return $sce.trustAsHtml(html);
+		}
+
+	})
+	</script>
+</body>
+</html>
