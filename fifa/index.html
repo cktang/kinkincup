@@ -113,16 +113,47 @@
 				</div>
 			-->
 				FIFA 16 League
-				<span class="ui sub header">
+
 					<select ng-change="load()"
+							style="margin-left:10px"
 							ng-model="season"
 							ng-options="s for s in seasons track by s"></select>
-				</span>
+
 				</div>
 			</div>
 
 			<div class="ui stackable grid">
 				<div class="ui four wide column">
+
+
+					<div id="players" class="ui secondary segment">
+						<div class="ui header">Ranking</div>
+
+						<div ng-repeat="p in players | orderBy:'elo':true" class="ui attached item">
+							<div class="ui equal width grid">
+								<div class="ui right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
+								<div class="ui left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
+								<div class="ui center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
+								<!--
+								<div class="ui right aligned column"><span class="ui icon red tiny button" ng-click="removePlayer(p)"><i class="ui remove icon"></i></span></div>
+								-->
+							</div>
+						</div>
+		<!--
+						<div class="ui divider"></div>
+						<div class="ui form">
+							<div class="two fields">
+								<div class="field">
+									<input type="text" name="first-name" placeholder="PS4 ID" ng-model="newPlayer.id">
+									<input type="text" name="first-name" placeholder="Name" ng-model="newPlayer.name">
+								</div>
+								<div class="field">
+									<span class="ui button" ng-click="addPlayer()">Join</span>
+								</div>
+							</div>
+						</div>
+		 -->
+					</div>
 
 					<div id="table" class="ui secondary segment">
 						<div class="ui header">Table</div>
@@ -197,53 +228,49 @@
 					</div>
 				</div>
 			</div>
-
-
-			<div id="players" class="ui secondary segment">
-				<div class="ui header">Members</div>
-
-				<div ng-repeat="p in players | orderBy:'elo':true" class="ui attached item">
-					<div class="ui equal width grid">
-						<div class="ui right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
-						<div class="ui left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
-						<div class="ui center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
-						<!--
-						<div class="ui right aligned column"><span class="ui icon red tiny button" ng-click="removePlayer(p)"><i class="ui remove icon"></i></span></div>
-						-->
-					</div>
-				</div>
-				<div class="ui divider"></div>
 <!--
-				<div class="ui form">
-					<div class="two fields">
-						<div class="field">
-							<input type="text" name="first-name" placeholder="PS4 ID" ng-model="newPlayer.id">
-							<input type="text" name="first-name" placeholder="Name" ng-model="newPlayer.name">
-						</div>
-						<div class="field">
-							<span class="ui button" ng-click="addPlayer()">Join</span>
-						</div>
-					</div>
-				</div>
- -->
-			</div>
-
 			<div id="players" class="ui secondary segment">
 				<div class="ui header">Admin</div>
 				<div class="ui red fluid button" ng-click="generateMatches()"> <strong>Reset</strong> all Matches </div>
 				<div class="ui green fluid button" ng-click="buildElo()"> Update Elo rating </div>
 				<div class="ui orange fluid button" ng-click="clearUnplayed()">Clear all unplayed </div>
 			</div>
+ -->
 		</div>
 
 		<div class="ui twelve wide column">
+			<div id="rules" class="ui secondary segment">
+				<div class="ui header">Rules</div>
+
+				1. 聯賽打雙循環，賽期為一個月，開始日為 12-01，終止時間為 12-31
+				<br>
+				2. 贏波3分，和波1分，不打加時
+				<br>
+				3. 同分排名以對賽成績為先，次為得失球，如相同則計得球。
+				<br>
+				4. 每人可選擇任何球隊在此聯賽作賽
+				<br>
+				5. 球賽為6分鐘
+				<br>
+				6. 每場賽事皆會直播，而每場賽事開賽前需要在此group作通知。在完成賽事後要將結果拍照post上此group
+				<br>
+				7. 如有任何賽事未在 12-31 前完成的話則雙方在該場同得零分。
+				<br>
+				8. 如有任何賽事未踢完而因任何問題而终止，則以電腦確認的最後結果為準。
+				<br>
+				9. 主場球隊負責更新到此網頁，必須輸入球賽比數及雙方使用球隊，長期沒有更新可以當作負 0:3
+				<br>
+				10. 比賽有 HANDICAP LOGO 時，一方須使用較弱球隊，例：如顯示紅色半星，主場球隊只可使用不強於 5 - 0.5 即 4.5星球隊作賽，如果是黃色星星，則作客球隊必須作出相對退賽
+
+			</div>
+
 			<div id="matches" class="ui secondary segment">
 				<div class="ui header">Match Grid</div>
 
 				<table class="ui very basic celled table">
 					<thead>
 						<tr>
-							<th> Home \ <br> Away </th>
+							<th> H \ A </th>
 							<th ng-repeat="p in players" ng-bind="p.name"></th>
 						</tr>
 					</thead>
