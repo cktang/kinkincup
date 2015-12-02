@@ -393,11 +393,11 @@
 
 				$scope.wdlScale = $scope.d3.scale.linear()
 							.domain([-4, 0, 5])
-							.range(["black", "white", "black"]);
+							.range(["silver", "white", "silver"]);
 
-				$scope.wdlFontScale = $scope.d3.scale.ordinal()
-							.domain([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
-							.range(["white", "white", "black", "black", "black", "black", "black", "white", "white"]);
+				// $scope.wdlFontScale = $scope.d3.scale.ordinal()
+				// 			.domain([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
+				// 			.range(["white", "white", "black", "black", "black", "black", "black", "white", "white"]);
 
 				$scope.table.build();
 			});
