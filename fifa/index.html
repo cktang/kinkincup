@@ -67,7 +67,7 @@
 
 		input.score {
 			padding: 0px !important;
-			font-size: 30px !important;
+			font-size: 24px !important;
 			width: 35px !important;
 			padding: 5px !important;
 			text-align: center !important;
@@ -135,11 +135,10 @@
 						<div class="ui header">Ranking</div>
 
 						<div ng-repeat="p in players | orderBy:'elo':true" class="ui attached item">
-							<div class="ui grid">
-								<div class="ui one wide column">{{$index + 1}}</div>
-								<div class="ui four wide right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
-								<div class="ui five wide left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
-								<div class="ui five wide center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
+							<div class="ui equal width grid">
+								<div class="ui right aligned column"><span class="ui inverted black compact label">{{p.name}}</span></div>
+								<div class="ui left aligned column"><span class="ui basic compact label">{{p.id}}</span></div>
+								<div class="ui center aligned column"><span class="ui basic compact label" style="background-color:{{ eloScale(p.elo) }}">{{p.elo}}</span></div>
 								<!--
 								<div class="ui right aligned column"><span class="ui icon red tiny button" ng-click="removePlayer(p)"><i class="ui remove icon"></i></span></div>
 								-->
@@ -298,7 +297,7 @@
 											{{p.name}} <Br> vs <br> {{p2.name}}
 
 										<div class="ui item" style="padding:5px 0px" ng-if="printStars(m).length != 0">
-											<i class="ui handicap icon"></i>:<span ng-bind-html="printStars(m)"</span>
+											<i class="ui handicap icon"></i><span ng-bind-html="printStars(m)"</span>
 										</div>
 									</span>
 
@@ -317,11 +316,11 @@
 
 													<select ng-model="m.homeTeam" ng-show="m.edit">
 														<option ng-repeat="t in teams | orderBy:'name'" value="{{t.name}}">
-															<i style="background-image:url({{t.url}})"></i><span>{{t.name}}</span>
+															{{t.name}}
 														</option>
 													</select>
 
-													<img src="{{_(teams).findWhere({ name: m.homeTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="50"/>
+													<img src="{{_(teams).findWhere({ name: m.homeTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="40"/>
 												</div>
 												<div class="ui column">
 													<div ng-bind="p2.name"></div>
@@ -336,12 +335,12 @@
 														</option>
 													</select>
 
-													<img src="{{_(teams).findWhere({ name: m.awayTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="50"/>
+													<img src="{{_(teams).findWhere({ name: m.awayTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="40"/>
 												</div>
 											</div>
 
 											<div class="ui item" style="padding:10px" ng-if="printStars(m).length != 0">
-												<i class="ui handicap icon"></i>: <span ng-bind-html="printStars(m)"</span>
+												<i class="ui handicap icon"></i><span ng-bind-html="printStars(m)"</span>
 											</div>
 
 											<div class="ui item" style="padding:10px" ng-if="m.eloChange">
@@ -387,21 +386,28 @@
 			$scope.players = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/"+$scope.season+"/players"));
 			$scope.matches = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/"+$scope.season+"/matches"));
 			$scope.matches.$watch(function() {
-				$scope.eloScale = $scope.d3.scale.linear()
-						.domain(d3.extent(_($scope.players).pluck('elo')))
-						.range(["pink", "lightblue"]);
-
-				$scope.wdlScale = $scope.d3.scale.linear()
-							.domain([-4, 0, 5])
-							.range(["silver", "white", "silver"]);
-
-				// $scope.wdlFontScale = $scope.d3.scale.ordinal()
-				// 			.domain([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
-				// 			.range(["white", "white", "black", "black", "black", "black", "black", "white", "white"]);
-
-				$scope.table.build();
+				console.log('matches changed');
+				$scope.throttleUpdate();
 			});
 		}
+
+		$scope.update = function() {
+			console.log('update');
+
+			$scope.eloScale = $scope.d3.scale.linear()
+					.domain(d3.extent(_($scope.players).pluck('elo')))
+					.range(["pink", "lightblue"]);
+
+			$scope.wdlScale = $scope.d3.scale.linear()
+						.domain([-4, 0, 5])
+						.range(["silver", "white", "silver"]);
+
+			$scope.table.build();
+			$scope.$apply();
+		}
+
+		$scope.throttleUpdate = _.throttle($scope.update, 5000, {leading: false, trailing: true});
+
 		$scope.seasons = ['season1', 'season2'];
 		$scope.load('season2');
 
