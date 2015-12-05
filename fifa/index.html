@@ -314,13 +314,13 @@
 														ng-click="match.setEdit(m, true)"/>
 													</div>
 
-													<select ng-model="m.homeTeam" ng-show="m.edit">
+													<select ng-model="m.homeTeam" ng-if="m.edit">
 														<option ng-repeat="t in teams | orderBy:'name'" value="{{t.name}}">
 															{{t.name}}
 														</option>
 													</select>
 
-													<img src="{{_(teams).findWhere({ name: m.homeTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="40"/>
+													<img src="{{_(teams).findWhere({ name: m.homeTeam }).url}}" ng-if="!m.edit" ng-click="match.setEdit(m, true)" height="40"/>
 												</div>
 												<div class="ui column">
 													<div ng-bind="p2.name"></div>
@@ -329,13 +329,13 @@
 														ng-click="match.setEdit(m, true)"/>
 													</div>
 
-													<select ng-model="m.awayTeam" ng-show="m.edit">
+													<select ng-model="m.awayTeam" ng-if="m.edit">
 														<option ng-repeat="t in teams | orderBy:'name'" value="{{t.name}}">
 															<i style="background-image:url({{t.url}})"></i><span>{{t.name}}</span>
 														</option>
 													</select>
 
-													<img src="{{_(teams).findWhere({ name: m.awayTeam }).url}}" ng-show="!m.edit" ng-click="match.setEdit(m, true)" height="40"/>
+													<img src="{{_(teams).findWhere({ name: m.awayTeam }).url}}" ng-if="!m.edit" ng-click="match.setEdit(m, true)" height="40"/>
 												</div>
 											</div>
 
@@ -347,7 +347,7 @@
 												<i class="ui line chart icon"></i> <span ng-bind="m.eloChange"></span>
 											</div>
 
-											<div class="ui row" ng-show="m.edit">
+											<div class="ui row" ng-if="m.edit">
 												<div class="ui fluid buttons">
 													<span class="ui green compact icon button" ng-click="match.save(m)"> <i class="ui checkmark icon"></i> </span>
 													<span class="ui red compact icon button" ng-click="match.remove(m)"> <i class="ui remove icon"></i> </span>
