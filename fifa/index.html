@@ -406,7 +406,7 @@
 			$scope.$apply();
 		}
 
-		$scope.throttleUpdate = _.throttle($scope.update, 2000, {leading: false, trailing: true});
+		$scope.throttleUpdate = _.throttle($scope.update, 1000, {leading: false, trailing: true});
 
 		$scope.seasons = ['season1', 'season2'];
 		$scope.load('season2');
