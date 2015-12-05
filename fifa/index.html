@@ -292,7 +292,7 @@
 									<span class="ui large basic blue label"
 										style="text-align:center; margin:10px"
 										ng-click="match.setEdit(m, true)"
-										ng-show="!m.edit && !match.played(m) && m.home==p.id && m.away==p2.id" >
+										ng-if="!m.edit && !match.played(m) && m.home==p.id && m.away==p2.id" >
 
 											{{p.name}} <Br> vs <br> {{p2.name}}
 
