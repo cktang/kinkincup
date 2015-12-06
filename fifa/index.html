@@ -288,21 +288,22 @@
 								<span ng-if="p.id==p2.id"> \ </span>
 
 								<!--moment().format('YYYY-MM-DD') <= endDate && -->
-								<div ng-repeat="m in matches">
+								<div ng-if="p.id!=p2.id">
+									<div style="display:none">{{ m = _(matches).findWhere({ home:p.id, away:p2.id }) }}</div>
 									<span class="ui large basic blue label"
 										style="text-align:center; margin:10px"
 										ng-click="match.setEdit(m, true)"
-										ng-if="!m.edit && !match.played(m) && m.home==p.id && m.away==p2.id" >
+										ng-if="!m.edit && !match.played(m)" >
 
 											{{p.name}} <Br> vs <br> {{p2.name}}
 
 										<div class="ui item" style="padding:5px 0px" ng-if="printStars(m).length != 0">
-											<i class="ui handicap icon"></i><span ng-bind-html="printStars(m)"</span>
+											<i class="ui handicap icon"></i>:<span ng-bind-html="printStars(m)"</span>
 										</div>
 									</span>
 
 									<div id="matchDetails" class="ui form"
-										ng-if="(match.played(m) || m.edit) && m.home==p.id && m.away==p2.id"
+										ng-if="match.played(m) || m.edit"
 										style="background-color: {{ wdlScale(m.homeScore-m.awayScore) }}; color: {{ wdlFontScale(m.homeScore-m.awayScore) }} !important">
 
 										<div class="ui equal width center aligned padded grid">
@@ -386,14 +387,13 @@
 			$scope.players = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/"+$scope.season+"/players"));
 			$scope.matches = $firebaseArray(new Firebase("https://fifa16.firebaseio.com/"+$scope.season+"/matches"));
 			$scope.matches.$watch(function() {
-				console.log('matches changed');
+				// console.log('matches changed');
 				$scope.throttleUpdate();
 			});
 		}
 
 		$scope.update = function() {
-			console.log('update');
-
+			// console.log('update');
 			$scope.eloScale = $scope.d3.scale.linear()
 					.domain(d3.extent(_($scope.players).pluck('elo')))
 					.range(["pink", "lightblue"]);
@@ -488,7 +488,7 @@
 
 		$scope.match = {
 			played: function(m) {
-				return m.played;
+				return m && m.played;
 			},
 
 			setEdit: function(m, value) {
@@ -672,6 +672,8 @@
 		}
 
 		$scope.printStars = function(m) {
+			if (!m) return "";
+
 			var val = m.homeBaseElo?
 						(m.homeBaseElo - m.awayBaseElo) / 200:
 						(_($scope.players).findWhere({ id: m.home }).elo - _($scope.players).findWhere({ id: m.away }).elo) / 200;
