@@ -643,7 +643,7 @@
 					console.log('update');
 					$scope.eloScale = $scope.d3.scale.linear()
 							.domain(d3.extent(_($scope.players).pluck('elo')))
-							.range(["pink", "lightblue"]);
+							.range(["red", "navy"]);
 					$scope.$apply();
 
 					players = _($scope.players).sortBy('elo');
