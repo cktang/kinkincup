@@ -1,51 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="js/jquery-2.1.1.min.js"></script>
-	<script src="js/underscore-min.js"></script>
-	<script src="js/backbone-min.js"></script>
-	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
-    <script src="js/firebase.js"></script>
-    <script src="js/backbone-firebase.js"></script>
-    <script src="js/handlebars-v1.3.0.js"></script>
-    <script src="js/json2.js"></script>
-    <script src="js/jquery.tagsinput.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
-    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
-	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
 
-	<link href="js/jquery.tagsinput.css" rel="stylesheet">
-	<link href="js/bootstrap-3.1.1-dist//css/bootstrap.css" rel="stylesheet">
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
 
-	<link href="css/silly.css" rel="stylesheet">
-	<script src="js/backbonemodel.js"></script>
-	<script src="js/tessharrymodels.js"></script>
-	<script src="js/backbone-listeners.js"></script>
+	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
 
-	<script src="pagejs/index.js"></script>
+    <script src="js/semantic/semantic.js"></script>
+	<link href="js/semantic/semantic.css" rel="stylesheet">
 
-	<meta name="viewport" content="width=device-width,user-scalable=no">
+    <script src="js/semantic/components/modal.js"></script>
+	<link href="js/semantic/components/modal.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
-<body ontouchstart="">
-	<div class="container-fluid">
-		<h3 class=header> 
-			Groups
-			<h6 class="header" style="display: block;">  </h6>
-		</h3>
 
-		<div class="list-group" id="groups">
-			<script class="template" type="text/x-handlebars-template">
-				<div data-target="group.html" data-id-type="group" data-id="{{id}}" class="link list-group-item group full">
-					<div class="pull-right buttonGroup">
-						<a href="#" class="btn btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
-					</div>
-					<h4 style="line-height:1.6em">  {{name}} </h4>
-					<div> {{description}} </div>
-				</div>
-			</script>
+<style>
+	body {
+		padding: 0.5em;
+	}	
+</style>
+
+<body ontouchstart="" ng-controller="Controller">
+	<div> Last Update: {{moment(lastUpdate).fromNow()}} </div>
+	<div> Status: {{status}} </div>
+	
+	<div ng-repeat="d in data" style="margin-top: 1em" class="ui equal width grid">
+		<div class="row">
+			<span class="ui column"><strong>{{d.pokemon_name}}</strong></span>
+			<span class="ui column">{{moment(d.expires*1000).fromNow()}}</span>
+			<span class="ui six wide column">{{d.address}}</span>
+			<span class="ui column">
+				<a target="_blank" href="https://skiplagged.com/pokemon/#{{d.latitude}},{{d.longitude}},19"> Map </a>
+			</span>
 		</div>
 	</div>
+
+<script src="http://maps.google.com/maps/api/js?key=AIzaSyAyTuOL4Z4hyjqIsnk-sgsGgjD0CcKNy5M"></script>
+
+	<script>
+
+		var geocoder = new google.maps.Geocoder();
+		var address = 'London, UK';
+		var pokemons = [];
+		var locations = {};
+		
+		var rarePokemons = [
+			'Kabutops',
+			'Aerodactyl',
+			'Snorlax',
+			'Articuno',
+			'Zapdos',
+			'Moltres',
+			'Ditto',
+			'Dragonair',
+			'Dragonite',
+			'Mewtwo',
+			'Mew',
+			'Lapras',
+			'Kangaskhan',
+			'Chansey',
+			'Omanyte',
+			'Aerodactyl',
+			'Hitmochan',
+			'Hitmonlee',
+			'Mr.Mime',
+			'Jynx',
+			'Magmar',
+			// 'Electabuzz',
+			'Porygon',
+			'Articuno',
+			'Zaptos',
+			'Moltres',
+			'Venusaur',		
+			'Blastoise',
+			'Raichu',
+			'Nidoqueen',
+			'Nidoking',
+			'Kabutops',
+			'Omastar',						
+			'Vaporeon',
+			'Jolteon',
+			'Flareon',
+			'Chansey',
+			'Gyarados',
+			'Muk',
+			'Slowbro',
+			'Machamp',
+			'Charizard',
+			'Victreebel',
+			'Poliwrath',
+			'Vileplume',		
+			'Golduck',
+			'Golem',
+			'Clefable',
+			'Weezing',
+			'Ninetales',
+			'Starmie',
+			'Seaking'
+		]
+		
+		var app = angular
+					.module('app', ['angularMoment', 'angular-underscore'])
+		  			.controller("Controller",
+						function($scope, $window, $timeout, $interval, $http) {
+							
+							$scope.moment = moment;
+							
+							// $scope.url = 'https://skiplagged.com/api/pokemon.php?bounds=22.272059,114.118954,22.362497,114.208733'
+							$scope.url = 'java.json';
+							$scope.method = "GET";
+							
+							$scope.request = function() { 
+								$scope.lastUpdate = new Date();
+								console.log('reading from skip lagged', $scope.lastUpdate);
+								
+								$http({method: $scope.method, url: $scope.url})
+									.then(function(response) {
+										$scope.status = response.status;
+										// $scope.data = response.data.pokemons;
+										pokemons = response.data.pokemons;
+										
+										var oldData = _($scope.data).filter(function(d) {
+											return d.expires * 1000 > new Date().getTime()
+										});
+										
+										$scope.data = _([
+											_(pokemons).chain()
+												.filter(function(e) { return _(rarePokemons).contains(e.pokemon_name); })
+												.values().value(),
+											oldData
+										]).chain()
+											.flatten()
+											.uniq(function(e) {
+												return e.latitude + "" + e.longitude;
+											})
+											.value();
+										
+										_($scope.data).each(function(d) {
+											if (locations[d.latitude + ',' + d.longitude]) {
+												d.address = locations[d.latitude + ',' + d.longitude];
+												return;
+											}
+											
+											console.log('requesting: ' + d.latitude + "," + d.longitude);
+											locations[d.latitude + ',' + d.longitude] = true;
+														
+											geocoder.geocode(
+												{ 'location': { lat: d.latitude , lng: d.longitude } }, 
+												function (results, status) {
+													if (status == google.maps.GeocoderStatus.OK) {
+														d.address = results[0].formatted_address											
+														locations[d.latitude + ',' + d.longitude] = d.address;
+														$scope.$apply();
+													}
+												}
+											);
+										})			
+									}, function(response) {
+										$scope.data = response.data || "Request failed";
+										$scope.status = response.status;
+									});								
+							};
+							
+							$scope.request();
+							$interval($scope.request, 5000);
+						}
+					);
+	</script>
 </body>
 </html>
