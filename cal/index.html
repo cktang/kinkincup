@@ -8,23 +8,33 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
 
-	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
-	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
 
-    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<!-- AngularJS -->
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>-->
+
+	<!-- mapbox -->
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.22.1/mapbox-gl.js'></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v0.22.1/mapbox-gl.css' rel='stylesheet' />
+	<script src="https://raw.githubusercontent.com/mapbox/mapbox-gl-js/13a9015341f0602ccb55c98c53079838ad4b70b5/js/ui/camera.js"></script>
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet"/>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet"/>
+
+  <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
 	<Script src="js/angular-underscore.js"></script>
 
-	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
 
-    <script src="js/semantic/semantic.js"></script>
+  <script src="js/semantic/semantic.js"></script>
 	<link href="js/semantic/semantic.css" rel="stylesheet">
-
-    <script src="js/semantic/components/modal.js"></script>
-	<link href="js/semantic/components/modal.css" rel="stylesheet">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Covered+By+Your+Grace" rel="stylesheet">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
@@ -32,155 +42,722 @@
 <style>
 	body {
 		padding: 0.5em;
-	}	
+		display: flex;
+		flex-direction: column;
+	}
+
+	.mapboxgl-marker {
+    background-color: red;
+    width: 1em;
+    height: 1em;
+    border-radius: 10px;
+	}
+
+	.mapboxgl-marker.here {
+		background-color: blue;
+	}
+
+	.mapboxgl-control-container {
+		display: none;
+	}
+
+	.ui.segment {
+		border: 0px;
+	    box-shadow: 0px 0px 0px transparent;
+	}
+
+	.ui.icon.text.button {
+		padding: 10px 13px;
+	}
+
 </style>
 
 <body ontouchstart="" ng-controller="Controller">
-	<div> Last Update: {{moment(lastUpdate).fromNow()}} </div>
-	<div> Status: {{status}} </div>
-	
-	<div ng-repeat="d in data" style="margin-top: 1em" class="ui equal width grid">
-		<div class="row">
-			<span class="ui column"><strong>{{d.pokemon_name}}</strong></span>
-			<span class="ui column">{{moment(d.expires*1000).fromNow()}}</span>
-			<span class="ui six wide column">{{d.address}}</span>
-			<span class="ui column">
-				<a target="_blank" href="https://skiplagged.com/pokemon/#{{d.latitude}},{{d.longitude}},19"> Map </a>
-			</span>
+	<h3>
+		<div style="float:right">
+			<span class="ui tiny basic label">{{data && data.length}} Pokemons</span>
+			<span class="ui blue tiny basic label">Kin</span>
+		</div>
+
+		Rare Pokemon Tracker
+
+	</h3>
+
+	<div id='map' style='width: 100%; flex:5; border-bottom:1px solid black; transition:1s'>
+		<div ng-click="hideMap()"
+			style="position:absolute; z-index:10000; top:0px; left:0px; margin:0.2em;"
+			class="ui big black circular icon button">
+				<i class="fa fa-remove"></i>
 		</div>
 	</div>
 
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAyTuOL4Z4hyjqIsnk-sgsGgjD0CcKNy5M"></script>
+	<div
+		ng-if="data"
+		style="margin-top: 1em; flex: 5; overflow: scroll"
+		class="ui six doubling cards">
 
-	<script>
+    <div class="card longpress"
+			ng-click="showMap(d)"
+			ng-repeat="d in data | orderBy: 'distance' track by $index">
 
-		var geocoder = new google.maps.Geocoder();
-		var address = 'London, UK';
-		var pokemons = [];
-		var locations = {};
-		
-		var rarePokemons = [
-			'Kabutops',
-			'Aerodactyl',
-			'Snorlax',
-			'Articuno',
-			'Zapdos',
-			'Moltres',
-			'Ditto',
-			'Dragonair',
-			'Dragonite',
-			'Mewtwo',
-			'Mew',
-			'Lapras',
-			'Kangaskhan',
-			'Chansey',
-			'Omanyte',
-			'Aerodactyl',
-			'Hitmochan',
-			'Hitmonlee',
-			'Mr.Mime',
-			'Jynx',
-			'Magmar',
-			// 'Electabuzz',
-			'Porygon',
-			'Articuno',
-			'Zaptos',
-			'Moltres',
-			'Venusaur',		
-			'Blastoise',
-			'Raichu',
-			'Nidoqueen',
-			'Nidoking',
-			'Kabutops',
-			'Omastar',						
-			'Vaporeon',
-			'Jolteon',
-			'Flareon',
-			'Chansey',
-			'Gyarados',
-			'Muk',
-			'Slowbro',
-			'Machamp',
-			'Charizard',
-			'Victreebel',
-			'Poliwrath',
-			'Vileplume',		
-			'Golduck',
-			'Golem',
-			'Clefable',
-			'Weezing',
-			'Ninetales',
-			'Starmie',
-			'Seaking'
-		]
-		
-		var app = angular
-					.module('app', ['angularMoment', 'angular-underscore'])
-		  			.controller("Controller",
-						function($scope, $window, $timeout, $interval, $http) {
-							
-							$scope.moment = moment;
-							
-							// $scope.url = 'https://skiplagged.com/api/pokemon.php?bounds=22.272059,114.118954,22.362497,114.208733'
-							$scope.url = 'java.json';
-							$scope.method = "GET";
-							
-							$scope.request = function() { 
-								$scope.lastUpdate = new Date();
-								console.log('reading from skip lagged', $scope.lastUpdate);
-								
-								$http({method: $scope.method, url: $scope.url})
-									.then(function(response) {
-										$scope.status = response.status;
-										// $scope.data = response.data.pokemons;
-										pokemons = response.data.pokemons;
-										
-										var oldData = _($scope.data).filter(function(d) {
-											return d.expires * 1000 > new Date().getTime()
-										});
-										
-										$scope.data = _([
-											_(pokemons).chain()
-												.filter(function(e) { return _(rarePokemons).contains(e.pokemon_name); })
-												.values().value(),
-											oldData
-										]).chain()
-											.flatten()
-											.uniq(function(e) {
-												return e.latitude + "" + e.longitude;
-											})
-											.value();
-										
-										_($scope.data).each(function(d) {
-											if (locations[d.latitude + ',' + d.longitude]) {
-												d.address = locations[d.latitude + ',' + d.longitude];
-												return;
-											}
-											
-											console.log('requesting: ' + d.latitude + "," + d.longitude);
-											locations[d.latitude + ',' + d.longitude] = true;
-														
-											geocoder.geocode(
-												{ 'location': { lat: d.latitude , lng: d.longitude } }, 
-												function (results, status) {
-													if (status == google.maps.GeocoderStatus.OK) {
-														d.address = results[0].formatted_address											
-														locations[d.latitude + ',' + d.longitude] = d.address;
-														$scope.$apply();
-													}
-												}
-											);
-										})			
-									}, function(response) {
-										$scope.data = response.data || "Request failed";
-										$scope.status = response.status;
-									});								
-							};
-							
-							$scope.request();
-							$interval($scope.request, 5000);
+				<!--<div
+					style="
+						color: {{ d.source=='pokeradar'? 'red': 'green' }};
+						text-shadow: 2px 2px #ddd;
+						font-family: 'Covered By Your Grace';
+						position:absolute;
+						top: -0.6em;
+						left: -0.4em;
+					"
+					ng-bind="d.source"></div>-->
+
+          <div class="ui" style="
+							background-color: {{ d.distance < 0.5? 'red': d.distance < 1? 'orange': 'transparent' }};
+							padding: 0.15em;
+		                    position: absolute;
+							font-size: 2em;
+							color: #333;
+							font-family: 'Covered By Your Grace';
+							text-shadow: 0.1em 0.1em silver;
+							transform: rotate(5deg);
+              right: -0.2em; top: -0.55em" ng-bind="d.pokemon_name"></div>
+
+          <div class="image">
+              <img src="{{all[(d.pokemon_name||'').toLowerCase()]}}">
+          </div>
+
+          <div class="content" style="position:relative">
+              <div class="right floated author" style="margin: -4em -0.5em; transform: rotate({{d.bearing-90}}deg)">
+                  <!-- <a target="_blank" href="https://skiplagged.com/pokemon/#{{d.latitude}},{{d.longitude}},19"> -->
+									<a href="#"
+                      <span class="ui circular green icon button">
+                        <i class="ui right arrow icon"></i>
+                      </span>
+                  </a>
+              </div>
+
+              <div class="ui meta" style="margin-top: -0.5em">
+                  <span class="ui ">
+							<span class="ui huge header" >{{ moment(d.expires).diff(moment(), 'minutes') }} </span> min
+						</span>
+
+                        <span class="ui" style="margin-left:1em">
+							<span class="ui header" > {{d.distance | number: 1}} </span> km
+						</span>
+          </div>
+
+                    <!--<h3 class="ui tiny header">{{d.showFullAddress? d.fullAddress: d.address}}</h3>-->
+					<h3 class="ng-binding" style="
+						position: absolute;
+						bottom: 0px;
+						padding: 0.2em;
+						margin: 0px;
+						opacity: 0.25;
+						font-size: 2.5em;
+						right: 0px;
+					">{{d.address}}</h3>
+        </div>
+
+      </div>
+	</div>
+
+<script>
+	var currentLocation;
+
+	function getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		}
+	}
+	function showPosition(position) {
+		currentLocation = position;
+	}
+
+	setInterval(function() {
+		getLocation()
+	}, 10 * 1000);
+
+	getLocation();
+</script>
+
+<script>
+		var map;
+		initMap = function() {
+			mapboxgl.accessToken = 'pk.eyJ1Ijoia2luIiwiYSI6IjUwZjM3NzMxODc1ZWZhNmFlMDk0ZWI4NTRjMjQyNTNiIn0.IWGYKh6S1rlplwtdEaNyyA';
+				map = new mapboxgl.Map({
+			    container: 'map',
+			    style: 'mapbox://styles/mapbox/light-v9',
+					center: [114.1, 22.35],
+					zoom: 10,
+					animation: true
+			});
+		}
+
+		initMap();
+</script>
+
+<script>
+	_.mixin({
+		capitalize: function(string) {
+			return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
+		}
+	});
+
+	// Converts from degrees to radians.
+	Math.radians = function(degrees) {
+		return degrees * Math.PI / 180;
+	};
+
+	// Converts from radians to degrees.
+	Math.degrees = function(radians) {
+		return radians * 180 / Math.PI;
+	};
+
+	findDistance = function(t1, n1, t2, n2) {
+		// var Rm = 3961; // mean radius of the earth (miles) at 39 degrees from the equator
+		var Rk = 6373; // mean radius of the earth (km) at 39 degrees from the equator
+
+		// round to the nearest 1/1000
+		function round(x) {
+			return Math.round( x * 1000) / 1000;
+		}
+
+		var lat1, lon1, lat2, lon2, dlat, dlon, a, c, dm, dk, mi, km;
+		// convert coordinates to radians
+		lat1 = Math.radians(t1);
+		lon1 = Math.radians(n1);
+		lat2 = Math.radians(t2);
+		lon2 = Math.radians(n2);
+
+		// find the differences between the coordinates
+		dlat = lat2 - lat1;
+		dlon = lon2 - lon1;
+
+		// here's the heavy lifting
+		a  = Math.pow(Math.sin(dlat/2),2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon/2),2);
+		c  = 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); // great circle distance in radians
+		// dm = c * Rm; // great circle distance in miles
+		dk = c * Rk; // great circle distance in km
+
+		// round the results down to the nearest 1/1000
+		// mi = round(dm);
+		km = round(dk);
+		return km;
+	}
+
+	findBearing = function(t1, n1, t2, n2) {
+
+		var lat1, lon1, lat2, lon2, dlat, dlon;
+		// convert coordinates to radians
+		lat1 = Math.radians(t1);
+		lon1 = Math.radians(n1);
+		lat2 = Math.radians(t2);
+		lon2 = Math.radians(n2);
+
+		// find the differences between the coordinates
+		dlat = lat2 - lat1;
+		dlon = lon2 - lon1;
+
+		return Math.degrees(Math.atan2(dlon, dlat));
+	}
+
+	var pokemons = [];
+	var notified = [];
+	var alerts = {};
+	var markers = [];
+	var currentLocationMarker;
+
+	var allPokemons = [
+			["bulbasaur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png"],
+			["ivysaur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/002.png"],
+			["venusaur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/003.png"],
+			["charmander","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/004.png"],
+			["charmeleon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/005.png"],
+			["charizard","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/006.png"],
+			["squirtle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/007.png"],
+			["wartortle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/008.png"],
+			["blastoise","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/009.png"],
+			["caterpie","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/010.png"],
+			["metapod","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/011.png"],
+			["butterfree","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/012.png"],
+			["weedle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/013.png"],
+			["kakuna","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/014.png"],
+			["beedrill","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/015.png"],
+			["pidgey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/016.png"],
+			["pidgeotto","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/017.png"],
+			["pidgeot","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/018.png"],
+			["rattata","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/019.png"],
+			["raticate","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/020.png"],
+			["spearow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/021.png"],
+			["fearow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/022.png"],
+			["ekans","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/023.png"],
+			["arbok","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/024.png"],
+			["pikachu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/025.png"],
+			["raichu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/026.png"],
+			["sandshrew","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/027.png"],
+			["sandslash","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/028.png"],
+			["nidoran-female","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/029.png"],
+			["nidorina","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/030.png"],
+			["nidoqueen","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/031.png"],
+			["nidoran-male","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/032.png"],
+			["nidorino","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/033.png"],
+			["nidoking","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/034.png"],
+			["clefairy","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/035.png"],
+			["clefable","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/036.png"],
+			["vulpix","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/037.png"],
+			["ninetales","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/038.png"],
+			["jigglypuff","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/039.png"],
+			["wigglytuff","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/040.png"],
+			["zubat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/041.png"],
+			["golbat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/042.png"],
+			["oddish","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/043.png"],
+			["gloom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/044.png"],
+			["vileplume","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/045.png"],
+			["paras","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/046.png"],
+			["parasect","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/047.png"],
+			["venonat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/048.png"],
+			["venomoth","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/049.png"],
+			["diglett","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/050.png"],
+			["dugtrio","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/051.png"],
+			["meowth","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/052.png"],
+			["persian","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/053.png"],
+			["psyduck","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/054.png"],
+			["golduck","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/055.png"],
+			["mankey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/056.png"],
+			["primeape","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/057.png"],
+			["growlithe","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/058.png"],
+			["arcanine","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/059.png"],
+			["poliwag","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/060.png"],
+			["poliwhirl","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/061.png"],
+			["poliwrath","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/062.png"],
+			["abra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/063.png"],
+			["kadabra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/064.png"],
+			["alakazam","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/065.png"],
+			["machop","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/066.png"],
+			["machoke","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/067.png"],
+			["machamp","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/068.png"],
+			["bellsprout","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/069.png"],
+			["weepinbell","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/070.png"],
+			["victreebel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/071.png"],
+			["tentacool","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/072.png"],
+			["tentacruel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/073.png"],
+			["geodude","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/074.png"],
+			["graveler","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/075.png"],
+			["golem","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/076.png"],
+			["ponyta","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/077.png"],
+			["rapidash","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/078.png"],
+			["slowpoke","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/079.png"],
+			["slowbro","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/080.png"],
+			["magnemite","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/081.png"],
+			["magneton","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/082.png"],
+			["farfetchd","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/083.png"],
+			["doduo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/084.png"],
+			["dodrio","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/085.png"],
+			["seel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/086.png"],
+			["dewgong","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/087.png"],
+			["grimer","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/088.png"],
+			["muk","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/089.png"],
+			["shellder","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/090.png"],
+			["cloyster","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/091.png"],
+			["gastly","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/092.png"],
+			["haunter","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/093.png"],
+			["gengar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/094.png"],
+			["onix","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/095.png"],
+			["drowzee","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/096.png"],
+			["hypno","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/097.png"],
+			["krabby","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/098.png"],
+			["kingler","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/099.png"],
+			["voltorb","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/100.png"],
+			["electrode","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/101.png"],
+			["exeggcute","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/102.png"],
+			["exeggutor","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/103.png"],
+			["cubone","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/104.png"],
+			["marowak","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/105.png"],
+			["hitmonlee","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/106.png"],
+			["hitmonchan","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/107.png"],
+			["lickitung","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/108.png"],
+			["koffing","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/109.png"],
+			["weezing","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/110.png"],
+			["rhyhorn","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/111.png"],
+			["rhydon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/112.png"],
+			["chansey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/113.png"],
+			["tangela","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/114.png"],
+			["kangaskhan","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/115.png"],
+			["horsea","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/116.png"],
+			["seadra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/117.png"],
+			["goldeen","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/118.png"],
+			["seaking","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/119.png"],
+			["staryu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/120.png"],
+			["starmie","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/121.png"],
+			["mr-mime","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/122.png"],
+			["scyther","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/123.png"],
+			["jynx","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/124.png"],
+			["electabuzz","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/125.png"],
+			["magmar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/126.png"],
+			["pinsir","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/127.png"],
+			["tauros","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/128.png"],
+			["magikarp","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/129.png"],
+			["gyarados","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/130.png"],
+			["lapras","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/131.png"],
+			["ditto","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/132.png"],
+			["eevee","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/133.png"],
+			["vaporeon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/134.png"],
+			["jolteon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/135.png"],
+			["flareon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/136.png"],
+			["porygon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/137.png"],
+			["omanyte","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/138.png"],
+			["omastar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/139.png"],
+			["kabuto","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/140.png"],
+			["kabutops","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/141.png"],
+			["aerodactyl","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/142.png"],
+			["snorlax","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/143.png"],
+			["articuno","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/144.png"],
+			["zapdos","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/145.png"],
+			["moltres","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/146.png"],
+			["dratini","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/147.png"],
+			["dragonair","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/148.png"],
+			["dragonite","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/149.png"],
+			["mewtwo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/150.png"],
+			["mew","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/151.png"],
+			["chikorita","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/152.png"],
+			["bayleef","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/153.png"],
+			["meganium","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/154.png"],
+			["cyndaquil","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/155.png"],
+			["quilava","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/156.png"],
+			["typhlosion","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/157.png"],
+			["totodile","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/158.png"],
+			["croconaw","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/159.png"],
+			["feraligatr","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/160.png"],
+			["sentret","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/161.png"],
+			["furret","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/162.png"],
+			["hoothoot","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/163.png"],
+			["noctowl","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/164.png"],
+			["ledyba","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/165.png"],
+			["ledian","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/166.png"],
+			["spinarak","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/167.png"],
+			["ariados","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/168.png"],
+			["crobat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/169.png"],
+			["chinchou","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/170.png"],
+			["lanturn","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/171.png"],
+			["pichu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/172.png"],
+			["cleffa","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/173.png"],
+			["igglybuff","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/174.png"],
+			["togepi","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/175.png"],
+			["togetic","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/176.png"],
+			["natu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/177.png"],
+			["xatu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/178.png"],
+			["mareep","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/179.png"],
+			["flaaffy","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/180.png"],
+			["ampharos","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/181.png"],
+			["bellossom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/182.png"],
+			["marill","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/183.png"],
+			["azumarill","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/184.png"],
+			["sudowoodo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/185.png"],
+			["politoed","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/186.png"],
+			["hoppip","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/187.png"],
+			["skiploom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/188.png"],
+			["jumpluff","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/189.png"],
+			["aipom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/190.png"],
+			["sunkern","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/191.png"],
+			["sunflora","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/192.png"],
+			["yanma","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/193.png"],
+			["wooper","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/194.png"],
+			["quagsire","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/195.png"],
+			["espeon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/196.png"],
+			["umbreon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/197.png"],
+			["murkrow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/198.png"],
+			["slowking","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/199.png"],
+			["misdreavus","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/200.png"],
+			["unown","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/201.png"],
+			["wobbuffet","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/202.png"],
+			["girafarig","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/203.png"],
+			["pineco","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/204.png"],
+			["forretress","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/205.png"],
+			["dunsparce","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/206.png"],
+			["gligar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/207.png"],
+			["steelix","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/208.png"],
+			["snubbull","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/209.png"],
+			["granbull","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/210.png"],
+			["qwilfish","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/211.png"],
+			["scizor","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/212.png"],
+			["shuckle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/213.png"],
+			["heracross","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/214.png"],
+			["sneasel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/215.png"],
+			["teddiursa","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/216.png"],
+			["ursaring","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/217.png"],
+			["slugma","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/218.png"],
+			["magcargo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/219.png"],
+			["swinub","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/220.png"],
+			["piloswine","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/221.png"],
+			["corsola","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/222.png"],
+			["remoraid","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/223.png"],
+			["octillery","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/224.png"],
+			["delibird","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/225.png"],
+			["mantine","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/226.png"],
+			["skarmory","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/227.png"],
+			["houndour","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/228.png"],
+			["houndoom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/229.png"],
+			["kingdra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/230.png"],
+			["phanpy","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/231.png"],
+			["donphan","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/232.png"],
+			["porygon2","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/233.png"],
+			["stantler","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/234.png"],
+			["smeargle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/235.png"],
+			["tyrogue","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/236.png"],
+			["hitmontop","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/237.png"],
+			["smoochum","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/238.png"],
+			["elekid","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/239.png"],
+			["magby","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/240.png"],
+			["miltank","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/241.png"],
+			["blissey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/242.png"],
+			["raikou","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/243.png"],
+			["entei","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/244.png"],
+			["suicune","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/245.png"],
+			["larvitar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/246.png"],
+			["pupitar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/247.png"],
+			["tyranitar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/248.png"],
+			["lugia","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/249.png"],
+			["ho-oh","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/250.png"],
+			["celebi","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/251.png"],
+			["treecko","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/252.png"],
+			["grovyle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/253.png"],
+			["sceptile","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/254.png"],
+			["torchic","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/255.png"],
+			["combusken","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/256.png"],
+			["blaziken","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/257.png"],
+			["mudkip","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/258.png"],
+			["marshtomp","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/259.png"],
+			["swampert","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/260.png"],
+			["poochyena","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/261.png"],
+			["mightyena","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/262.png"],
+			["zigzagoon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/263.png"],
+			["linoone","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/264.png"],
+			["wurmple","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/265.png"],
+			["silcoon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/266.png"],
+			["beautifly","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/267.png"],
+			["cascoon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/268.png"],
+			["dustox","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/269.png"],
+			["lotad","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/270.png"],
+			["lombre","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/271.png"],
+			["ludicolo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/272.png"],
+			["seedot","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/273.png"],
+			["nuzleaf","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/274.png"],
+			["shiftry","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/275.png"],
+			["taillow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/276.png"],
+			["swellow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/277.png"],
+			["wingull","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/278.png"],
+			["pelipper","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/279.png"],
+			["ralts","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/280.png"],
+			["kirlia","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/281.png"],
+			["gardevoir","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/282.png"],
+			["surskit","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/283.png"],
+			["masquerain","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/284.png"],
+			["shroomish","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/285.png"],
+			["breloom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/286.png"],
+			["slakoth","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/287.png"],
+			["vigoroth","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/288.png"],
+			["slaking","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/289.png"],
+			["nincada","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/290.png"],
+			["ninjask","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/291.png"],
+			["shedinja","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/292.png"],
+			["whismur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/293.png"],
+			["loudred","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/294.png"],
+			["exploud","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/295.png"],
+			["makuhita","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/296.png"],
+			["hariyama","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/297.png"],
+			["azurill","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/298.png"],
+			["nosepass","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/299.png"],
+			["skitty","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/300.png"],
+			["delcatty","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/301.png"],
+			["sableye","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/302.png"],
+			["mawile","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/303.png"],
+			["aron","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/304.png"],
+			["lairon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/305.png"],
+			["aggron","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/306.png"],
+			["meditite","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/307.png"],
+			["medicham","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/308.png"],
+			["electrike","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/309.png"],
+			["manectric","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/310.png"],
+			["plusle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/311.png"],
+			["minun","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/312.png"],
+			["volbeat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/313.png"],
+			["illumise","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/314.png"],
+			["roselia","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/315.png"],
+			["gulpin","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/316.png"],
+			["swalot","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/317.png"],
+			["carvanha","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/318.png"],
+			["sharpedo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/319.png"],
+			["wailmer","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/320.png"],
+			["wailord","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/321.png"],
+			["numel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/322.png"],
+			["camerupt","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/323.png"],
+			["torkoal","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/324.png"],
+			["spoink","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/325.png"],
+			["grumpig","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/326.png"],
+			["spinda","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/327.png"],
+			["trapinch","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/328.png"],
+			["vibrava","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/329.png"],
+			["flygon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/330.png"],
+			["cacnea","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/331.png"],
+			["cacturne","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/332.png"],
+			["swablu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/333.png"],
+			["altaria","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/334.png"],
+			["zangoose","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/335.png"],
+			["seviper","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/336.png"],
+			["lunatone","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/337.png"],
+			["solrock","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/338.png"],
+			["barboach","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/339.png"],
+			["whiscash","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/340.png"],
+			["corphish","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/341.png"],
+			["crawdaunt","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/342.png"],
+			["baltoy","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/343.png"],
+			["claydol","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/344.png"],
+			["lileep","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/345.png"],
+			["cradily","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/346.png"],
+			["anorith","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/347.png"],
+			["armaldo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/348.png"]
+		];
+
+	var app = angular
+				.module('app', ['angularMoment', 'angular-underscore', 'firebase'])
+				.controller("Controller",
+					function($scope, $window, $timeout, $interval, $http, $firebaseArray, $firebaseObject, $q, $location) {
+
+						$scope.showMap = function(pokemon) {
+							$('#map').css('flex', '5');
+
+							map.easeTo({
+								zoom: 13,
+								duration: 3000
+							})
+
+							var point = new mapboxgl.LngLat(pokemon.longitude, pokemon.latitude);
+
+							setTimeout(function() {
+								map.panTo(point, {
+										zoom: 15,
+										duration: 3000
+								});
+							}, 3000);
 						}
-					);
-	</script>
+
+						$scope.hideMap = function(pokemon) {
+							$('#map').css('flex', '0');
+						}
+
+						$scope.moment = moment;
+						$scope.all = _(allPokemons).object();
+
+						// $scope.url = 'https://skiplagged.com/api/pokemon.php?bounds=22.272059,114.118954,22.362497,114.208733'
+						$scope.method = "GET";
+
+						updateData = function(dd) {
+							console.log('updateData', _(dd).flatten(true).length);
+
+							//remove all markers
+							_(markers).each(function(m) {
+								m.remove();
+							})
+
+							$scope.data = dd;
+							_($scope.data).each(function(d, i) {
+								if (currentLocation) {
+									d.bearing = Math.round(findBearing(
+										currentLocation.coords.latitude, currentLocation.coords.longitude,
+										d.latitude, d.longitude
+									));
+
+									d.distance = findDistance(
+										d.latitude, d.longitude,
+										currentLocation.coords.latitude, currentLocation.coords.longitude
+									)
+
+									if (currentLocationMarker) currentLocationMarker.remove();
+									currentLocationMarker = new mapboxgl.Marker()
+									  .setLngLat([currentLocation.coords.longitude, currentLocation.coords.latitude])
+									  .addTo(map)
+									$(currentLocationMarker._el).addClass('here');
+								}
+
+							 	markers.push(new mapboxgl.Marker()
+								  .setLngLat([d.longitude, d.latitude])
+								  .addTo(map));
+							});
+
+							$scope.data = _($scope.data).sortBy('distance');
+
+							if (_($scope.data).chain()
+									.filter(function(d) { return d.distance && d.distance < 0.8; })
+									.filter(function(obj) { return !_(notified).findWhere({ latitude:obj.latitude, longitude:obj.longitude }); })
+									.value().length > 0) {
+
+								notified = _($scope.data).filter(function(d) { return d.distance && d.distance < 0.8; });
+								new Audio('message.mp3').play();
+							}
+						}
+
+						getUrl = function(url, dd) {
+							var deferred = $q.defer();
+
+							// console.log('getting', url, dd.length);
+							$http({method: $scope.method, url: url})
+								.then(function(response) {
+									// console.log(url, response.data.pokemons.length);
+									try {
+										_(response.data.pokemons).each(function(p) { dd.push(p); });
+									} catch(e) {
+										console.log(e);
+									}
+									deferred.resolve();
+								}, function(e) {
+									console.log(e)
+									deferred.resolve();
+								});
+
+							return deferred.promise;
+						}
+
+						$scope.request = function() {
+							$scope.lastUpdate = new Date();
+							console.log('reading from backend', $scope.lastUpdate);
+
+							var dd = [];
+							$q.all([
+								getUrl('/get', dd)
+							]).then(function() {
+								console.log('done');
+								updateData(dd);
+							});
+						};
+
+						// $scope.request();
+						$interval($scope.request, 15000);
+						$timeout($scope.request, 2000);
+					}
+				);
+
+
+//pokeradar
+							// $http({method: $scope.method, url: $scope.url2})
+							// 	.then(function(response) {
+							// 		console.log(response.data.length);
+
+							// 		dd.push(_(response.data.data).chain()
+							// 					.map(function(d) {
+							// 						return {
+							// 							id: d.latitude + ',' + d.longitude,
+							// 							source: 'pokeradar',
+							// 							expires: d.created + (15*60),
+							// 							latitude: d.latitude,
+							// 							longitude: d.longitude,
+							// 							pokemon_name: _.capitalize(allPokemons[d.pokemonId - 1][0])
+							// 						}
+							// 					})
+							// 					.filter(function(e) { return _(rarePokemons).contains(e.pokemon_name); })
+							// 					.value());
+							// 	}, function(response) {
+							// 		$scope.data = response.data || "Request failed";
+							// 	});
+</script>
 </body>
 </html>
