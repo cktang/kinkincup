@@ -1,0 +1,19 @@
+<div>
+  <div class="ui inverted dimmer" ng-class="{active: !usersLoaded}">
+    <div class="ui text loader">Loading</div>
+  </div>
+
+	<div class="ui inverted dimmer"></div>
+
+	<h4>  Signup </h4>
+
+	<div class="fluid large ui facebook button"> <i class="facebook icon"></i> Facebook </div>
+	<div class="fluid large ui google plus button"> <i class="google plus icon"></i> Google </div>
+
+	<div class="ui horizontal divider"> Or </div>
+
+	<h4> Login </h4>
+
+	<div ng-repeat="u in users" ng-bind="u.name" ng-click="login(u)"
+		class="fluid teal large ui button link"></div>
+</div>

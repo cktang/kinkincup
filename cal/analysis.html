@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
+
+	<!-- AngularJS -->
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>-->
+
+	<!-- mapbox -->
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.22.1/mapbox-gl.js'></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v0.22.1/mapbox-gl.css' rel='stylesheet' />
+	<script src="https://raw.githubusercontent.com/mapbox/mapbox-gl-js/13a9015341f0602ccb55c98c53079838ad4b70b5/js/ui/camera.js"></script>
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet"/>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet"/>
+
+  <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+
+  <script src="js/semantic/semantic.js"></script>
+	<link href="js/semantic/semantic.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+	<link href="https://fonts.googleapis.com/css?family=Covered+By+Your+Grace" rel="stylesheet">
+
+  <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-database.js"></script>
+</head>
+
+<script>
+  firebase.initializeApp({
+    serviceAccount: "firebaseCredentials.json",
+    databaseURL: "https://pokemon-server-141117.firebaseio.com"
+  });
+
+  // var ref = firebase.database().ref('2016-08-27');
+  // setTimeout(function() {
+  //   ref.once('value').then(function(snapshot) {
+  //     console.log(arguments);
+  //   });
+  // }, 5000);
+</script>
+
+<style>
+	html {
+	  touch-action: manipulation;
+	}
+
+	.button:active, .card:active, .label:active {
+			-webkit-transform-style: preserve-3d;
+			-webkit-transform: scale3d(0.9, 0.9, 0.9);
+			opacity:0.7;
+	}
+
+	.body {
+		position: fixed;
+		top: 0px;
+		height: 100%;
+    width: 100%;
+    overflow: hidden;
+	}
+
+  .rows {
+		display: flex;
+		flex-direction: column;
+  }
+  .rows > * {
+    flex: 5;
+  }
+
+  .cols {
+		display: flex;
+		flex-direction: row;
+  }
+  .cols > * {
+    flex: 5;
+  }
+
+	.mapboxgl-marker {
+		/*animation: ease-in-out waypoint 2s 1s infinite both;*/
+    background: radial-gradient(rgba(255,0,0,1), rgba(255,0,0,0)); /* Standard syntax */
+    opacity: 0.2;
+		/*border: 2px solid darkgreen;*/
+		/*box-shadow: 0px 0px 5px red;*/
+    width: 1em;
+    height: 1em;
+    border-radius: 8px;
+	}
+
+	.mapboxgl-marker.here {
+		background-color: gold;
+		border: 2px solid orange;
+		box-shadow: 0px 0px 5px orange;
+		/*animation: ease-in-out waypointHere 2s 1s infinite both;*/
+	}
+
+	.mapboxgl-control-container {
+		display: none;
+	}
+
+	.title {
+		font-family: 'Covered By Your Grace';
+		font-size: 1.4em;
+		letter-spacing: -1px;
+	}
+</style>
+
+<body ontouchstart="" ng-controller="Controller" class="rows">
+
+	<h3 style="flex: 0; margin: 0px; padding:0.2em" class="ui header">
+		<span class="title">Pokemonitor</span> Analysis
+	</h3>
+
+	<div id='map' style='flex:5'></div>
+
+  <div class="cols">
+    <div class="rows ui segments" style="flex:8">
+      <div class="ui segment">
+          <h4 class="ui header">Date</h4>
+          <form class="ui form">
+            <div class="field">
+              <div class="ui fields">
+                <div class="field">
+                  <input type="text" ng-model="startDate" placeholder="Start">
+                </div>
+                <div class="field">
+                  <input type="text" ng-model="endDate" placeholder="End">
+                </div>
+                <div class="field">
+                  <span class="ui blue button"> Go </span>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+      <div class="ui segment">
+          <h4 class="ui header"> Result Grid </h4>
+
+          <style>
+            #resultTable tr * {
+              min-width: 35px;
+              max-width: 35px;
+              padding: 0.5em 0.5em;
+              text-align: center;
+              cursor: pointer;
+            }
+
+            #resultTable .selected {
+              background-color: pink;
+              color: brown;
+            }
+
+            .square {
+              width: 30px;
+              height: 30px;
+              line-height: 30px;
+              background-color: #ccc;
+              vertical-align: middle;
+              border-radius: 5px;
+            }
+          </style>
+
+          {{select}}
+
+          <table class="ui very basic collapsing celled table" id="resultTable">
+            <tr>
+              <th></th>
+              <th ng-repeat="hour in _.range(0, 24)"
+                  ng-click="toggleHour(hour)"
+                  class="{{ selectH[hour]? 'selected': ''}}">
+                {{ hour % 12 == 0? 12: hour%12 }}
+              </th>
+            </tr>
+
+            <tr ng-repeat="weekday in _.range(0, 7)">
+              <td class="{{ selectW[weekday]? 'selected': ''}}"
+                  ng-click="toggleWeekday($index)">
+                  {{ moment().weekday(weekday).format('ddd') }}
+              </td>
+              <td ng-repeat="hour in _.range(0, 24)"
+                  ng-click="select[weekday + '-' + hour] = !select[weekday + '-' + hour]"
+                  class="{{ isSelected(weekday, hour)? 'selected': ''}}">
+                  {{ group[weekday + "-" + hour].length }}
+              </td>
+            </tr>
+          </table>
+      </div>
+    </div>
+    <div class="rows ui segments" style="flex:2; margin-top: 0px">
+      <div class="rows ui segment">
+          <h4 class="ui header" style="flex: 0">
+            <span style="margin-right:1em"> Pokemons </span>
+            <span class="ui mini button" ng-click="changeFilter(true)"> All </span>
+            <span class="ui mini button" ng-click="changeFilter(false)"> None </span>
+          </h4>
+
+          <style>
+            #pokemonList {
+              overflow: scroll;
+            }
+
+            #pokemonList .item {
+              margin-right: 1em;
+              margin-left: 0px;
+              min-width: 150px;
+            }
+          </style>
+
+          <div style="flex: 0">
+          </div>
+
+          <div class="ui horizontal list" id="pokemonList">
+            <div class="item" ng-repeat="(f, v) in filter">
+              <span class="ui {{v.filter? 'green': 'red'}} inverted circular icon button"
+                  ng-click="v.filter = !v.filter"
+              >
+                <i class="fa fa-{{v.filter? 'check': 'remove'}}"></i>
+              </span>
+              <img class="ui avatar image" src="{{all[f.toLowerCase()]}}">
+              <div class="content">
+                <span ng-bind="f"></span>
+                <span class="ui circular small label" ng-bind="v.count"></span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  		var map;
+  		initMap = function() {
+  			mapboxgl.accessToken = 'pk.eyJ1Ijoia2luIiwiYSI6IjUwZjM3NzMxODc1ZWZhNmFlMDk0ZWI4NTRjMjQyNTNiIn0.IWGYKh6S1rlplwtdEaNyyA';
+				map = new mapboxgl.Map({
+			    container: 'map',
+			    style: 'mapbox://styles/kin/ciseqxzqs004y2ynzitydsaz3',
+					center: [114.1, 22.35],
+					zoom: 10,
+					animation: false
+  			});
+  		}
+
+  		initMap();
+  </script>
+
+  <script>
+  	var app = angular
+  				.module('app', ['angularMoment', 'angular-underscore'])
+  				.controller("Controller",
+  					function($scope, $window, $timeout, $interval, $http, $q, $location) {
+              $scope.startDate = "2016-08-27";
+              $scope.endDate = "2016-08-27";
+              $scope.pokemons = [];
+              $scope.filter = {};
+              $scope._ = _;
+              $scope.moment = moment;
+
+              $scope.select = {}
+              $scope.selectW = {}
+              $scope.selectH = {}
+
+              $scope.isSelected = function(w, h) {
+                return $scope.select[w+"-"+h];
+              }
+
+              $scope.toggleHour = function(h) {
+                $scope.selectH[h] = !$scope.selectH[h];
+                _(_.range(0, 7)).each(function(w) {
+                  $scope.select[w + "-" + h] = $scope.selectH[h];
+                })
+
+              }
+
+              $scope.toggleWeekday = function(w) {
+                $scope.selectW[w] = !$scope.selectW[w];
+                _(_.range(0, 24)).each(function(h) {
+                  $scope.select[w + "-" + h] = $scope.selectW[w];;
+                })
+              }
+
+              var allPokemons = [
+                  ["bulbasaur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png"],
+                  ["ivysaur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/002.png"],
+                  ["venusaur","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/003.png"],
+                  ["charmander","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/004.png"],
+                  ["charmeleon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/005.png"],
+                  ["charizard","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/006.png"],
+                  ["squirtle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/007.png"],
+                  ["wartortle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/008.png"],
+                  ["blastoise","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/009.png"],
+                  ["caterpie","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/010.png"],
+                  ["metapod","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/011.png"],
+                  ["butterfree","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/012.png"],
+                  ["weedle","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/013.png"],
+                  ["kakuna","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/014.png"],
+                  ["beedrill","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/015.png"],
+                  ["pidgey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/016.png"],
+                  ["pidgeotto","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/017.png"],
+                  ["pidgeot","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/018.png"],
+                  ["rattata","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/019.png"],
+                  ["raticate","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/020.png"],
+                  ["spearow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/021.png"],
+                  ["fearow","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/022.png"],
+                  ["ekans","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/023.png"],
+                  ["arbok","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/024.png"],
+                  ["pikachu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/025.png"],
+                  ["raichu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/026.png"],
+                  ["sandshrew","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/027.png"],
+                  ["sandslash","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/028.png"],
+                  ["nidoran-female","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/029.png"],
+                  ["nidorina","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/030.png"],
+                  ["nidoqueen","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/031.png"],
+                  ["nidoran-male","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/032.png"],
+                  ["nidorino","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/033.png"],
+                  ["nidoking","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/034.png"],
+                  ["clefairy","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/035.png"],
+                  ["clefable","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/036.png"],
+                  ["vulpix","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/037.png"],
+                  ["ninetales","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/038.png"],
+                  ["jigglypuff","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/039.png"],
+                  ["wigglytuff","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/040.png"],
+                  ["zubat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/041.png"],
+                  ["golbat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/042.png"],
+                  ["oddish","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/043.png"],
+                  ["gloom","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/044.png"],
+                  ["vileplume","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/045.png"],
+                  ["paras","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/046.png"],
+                  ["parasect","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/047.png"],
+                  ["venonat","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/048.png"],
+                  ["venomoth","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/049.png"],
+                  ["diglett","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/050.png"],
+                  ["dugtrio","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/051.png"],
+                  ["meowth","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/052.png"],
+                  ["persian","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/053.png"],
+                  ["psyduck","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/054.png"],
+                  ["golduck","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/055.png"],
+                  ["mankey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/056.png"],
+                  ["primeape","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/057.png"],
+                  ["growlithe","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/058.png"],
+                  ["arcanine","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/059.png"],
+                  ["poliwag","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/060.png"],
+                  ["poliwhirl","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/061.png"],
+                  ["poliwrath","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/062.png"],
+                  ["abra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/063.png"],
+                  ["kadabra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/064.png"],
+                  ["alakazam","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/065.png"],
+                  ["machop","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/066.png"],
+                  ["machoke","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/067.png"],
+                  ["machamp","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/068.png"],
+                  ["bellsprout","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/069.png"],
+                  ["weepinbell","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/070.png"],
+                  ["victreebel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/071.png"],
+                  ["tentacool","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/072.png"],
+                  ["tentacruel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/073.png"],
+                  ["geodude","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/074.png"],
+                  ["graveler","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/075.png"],
+                  ["golem","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/076.png"],
+                  ["ponyta","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/077.png"],
+                  ["rapidash","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/078.png"],
+                  ["slowpoke","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/079.png"],
+                  ["slowbro","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/080.png"],
+                  ["magnemite","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/081.png"],
+                  ["magneton","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/082.png"],
+                  ["farfetchd","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/083.png"],
+                  ["doduo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/084.png"],
+                  ["dodrio","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/085.png"],
+                  ["seel","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/086.png"],
+                  ["dewgong","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/087.png"],
+                  ["grimer","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/088.png"],
+                  ["muk","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/089.png"],
+                  ["shellder","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/090.png"],
+                  ["cloyster","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/091.png"],
+                  ["gastly","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/092.png"],
+                  ["haunter","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/093.png"],
+                  ["gengar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/094.png"],
+                  ["onix","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/095.png"],
+                  ["drowzee","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/096.png"],
+                  ["hypno","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/097.png"],
+                  ["krabby","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/098.png"],
+                  ["kingler","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/099.png"],
+                  ["voltorb","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/100.png"],
+                  ["electrode","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/101.png"],
+                  ["exeggcute","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/102.png"],
+                  ["exeggutor","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/103.png"],
+                  ["cubone","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/104.png"],
+                  ["marowak","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/105.png"],
+                  ["hitmonlee","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/106.png"],
+                  ["hitmonchan","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/107.png"],
+                  ["lickitung","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/108.png"],
+                  ["koffing","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/109.png"],
+                  ["weezing","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/110.png"],
+                  ["rhyhorn","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/111.png"],
+                  ["rhydon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/112.png"],
+                  ["chansey","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/113.png"],
+                  ["tangela","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/114.png"],
+                  ["kangaskhan","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/115.png"],
+                  ["horsea","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/116.png"],
+                  ["seadra","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/117.png"],
+                  ["goldeen","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/118.png"],
+                  ["seaking","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/119.png"],
+                  ["staryu","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/120.png"],
+                  ["starmie","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/121.png"],
+                  ["mr-mime","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/122.png"],
+                  ["scyther","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/123.png"],
+                  ["jynx","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/124.png"],
+                  ["electabuzz","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/125.png"],
+                  ["magmar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/126.png"],
+                  ["pinsir","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/127.png"],
+                  ["tauros","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/128.png"],
+                  ["magikarp","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/129.png"],
+                  ["gyarados","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/130.png"],
+                  ["lapras","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/131.png"],
+                  ["ditto","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/132.png"],
+                  ["eevee","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/133.png"],
+                  ["vaporeon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/134.png"],
+                  ["jolteon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/135.png"],
+                  ["flareon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/136.png"],
+                  ["porygon","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/137.png"],
+                  ["omanyte","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/138.png"],
+                  ["omastar","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/139.png"],
+                  ["kabuto","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/140.png"],
+                  ["kabutops","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/141.png"],
+                  ["aerodactyl","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/142.png"],
+                  ["snorlax","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/143.png"],
+                  ["articuno","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/144.png"],
+                  ["zapdos","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/145.png"],
+                  ["moltres","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/146.png"],
+                  ["dratini","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/147.png"],
+                  ["dragonair","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/148.png"],
+                  ["dragonite","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/149.png"],
+                  ["mewtwo","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/150.png"],
+                  ["mew","http://assets.pokemon.com/assets/cms2/img/pokedex/detail/151.png"]
+                ];
+              $scope.all = _(allPokemons).object();
+
+              var self = this;
+              $http({method: 'GET', url: '/get_all'})
+                .then((res) => {
+                  $scope.pokemons = res.data.pokemons;
+
+                  this.drawMarkers($scope.pokemons);
+                  this.initFilter($scope.pokemons);
+                  this.processStats($scope.pokemons);
+                })
+
+              this.markers = [];
+              this.drawMarkers = (pp) => {
+                _(this.markers).each((m) => { m.remove(); });
+
+                _(pp).each((p) => {
+                    if (!$scope.filter[p.pokemon_name] ||
+                        !$scope.filter[p.pokemon_name].filter) return;
+
+                    var marker = new mapboxgl.Marker()
+                      .setLngLat([p.longitude, p.latitude])
+                      .addTo(map);
+
+                    this.markers.push(marker);
+                })
+              }
+
+              this.initFilter = function(pp) {
+                  $scope.filter = _(pp).chain()
+                                    .groupBy('pokemon_name')
+                                    .map(function(v, k) { return [k, { count: v.length, filter: false}] })
+                                    // .sortBy(function(v) { return  v[1].count * -1; })
+                                    .object()
+                                    .value();
+              }
+
+              this.processStats = function(pp) {
+                $scope.group = _(pp)
+                                  .chain()
+                                  .filter(function(pp) {
+                                    return $scope.filter[pp.pokemon_name].filter;
+                                  })
+                                  .groupBy(function(p) {
+                                    return moment(p.expires).format('e') + "-" + moment(p.expires).format('H');
+                                  })
+                                  .value();
+              }
+
+              $scope.changeFilter = (value) => {
+                _($scope.filter).each((v, k) => {
+                  v.filter = value;
+                })
+              }
+
+              $scope.$watch('filter', () => {
+                this.drawMarkers($scope.pokemons);
+                this.processStats($scope.pokemons);
+              }, true);
+            }
+  				);
+  </script>
+</body>
+</html>

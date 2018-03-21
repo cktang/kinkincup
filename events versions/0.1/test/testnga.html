@@ -1,0 +1,44 @@
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
+	<script src="https://code.angularjs.org/1.3.13/angular-animate.min.js"></script>
+
+	<link href="js/semantic/semantic.css" rel="stylesheet"/>
+	<link href="css/nga.min.css" rel="stylesheet"/>
+	<link href="css/style.css" rel="stylesheet"/>
+</head>
+
+<body ontouchstart="">
+		<div ng-controller="controller">
+			<div ng-repeat="a in arr" ng-bind="a" class="ui attached segment link"></div>
+			<br>
+			<div class="ui button" ng-click="init()"> Init </div>
+			<div class="ui blue button" ng-click="add()"> Add </div>
+			<div class="ui red button" ng-click="remove()"> Remove </div>
+		</div>
+</body>
+
+<script>
+	var app = angular
+				.module('app', ["ngAnimate"])
+				.controller('controller', function($scope, $animate) {
+					$scope.arr = [1,2,3,4,5];
+
+					$scope.add = function() {
+						$scope.arr.push($scope.arr.length + Math.random());
+					}
+
+					$scope.init = function() {
+						$scope.arr = [1,2,3,4,5];
+					}
+
+					$scope.remove = function() {
+						$scope.arr.shift();
+					}
+
+					console.log($animate);
+				});
+</script>
+</html>

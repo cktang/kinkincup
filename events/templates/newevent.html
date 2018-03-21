@@ -1,0 +1,291 @@
+<style>
+	.ui.cards {
+		position: absolute;
+		height: 105%;
+		overflow-x: hidden;
+		overflow-y: hidden;
+		background-color: #eee;
+	}
+
+	.ui.cards .wrapper {
+		width: 5000px;
+		height: 100%;
+	}
+
+	.ui.cards .ui.card {
+		width: 100%;
+		height: 100%;
+		box-shadow: silver 2px 2px 10px;
+	}
+
+	.ui.cards .wrapper>* {
+		margin: 70px 30px 100px 30px !important;
+		height: 70%;
+	}
+
+	.ui.form.card {
+		background-color: #ffe;
+	}
+
+	.ui.form .form-group {
+		margin-bottom: 1em;
+	}
+</style>
+
+<div class="ui cards draggable">
+	<div class="wrapper">
+
+		<div class="ui shape">
+			<div class="sides">
+				<div class="active side">
+					<div class="ui card">
+							<div class="content">
+								<div class="ui green circular icon right floated button" ng-if="newEvent.name">
+									<i class="ui checkmark icon"/>
+								</div>
+								<div class="header" style="margin-top:0px"> Event Name </div>
+
+					      {{newEvent.name}}
+								<Br>
+								<small>{{newEvent.description}}</small>
+							</div>
+
+							<div class="ui big teal button editButton" ng-click="flip($event)"> Edit </div>
+					</div>
+				</div>
+
+				<div class="side">
+					<div class="ui card form">
+						<div class="content">
+							<div class="form-group">
+						    <label for="name" class="ui header">Name</label>
+						    <div class="ui fluid input">
+						    	<input type="text" placeholder="Event Name" ng-model="newEvent.name">
+						    </div>
+						  </div>
+
+						  <div class="form-group">
+						    <label for="description" class="ui header">Description</label>
+						    <div class="ui fluid input">
+							    <input type="text" placeholder="Event Description" ng-model="newEvent.description">
+						    </div>
+						  </div>
+						</div>
+
+						<div class="ui big green button editButton" ng-click="flip($event)"> OK </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui shape" ng-init="adjustCardWidth()">
+			<div class="sides">
+				<div class="active side">
+					<div class="ui card">
+							<div class="content">
+								<div class="ui green circular icon right floated button" ng-if="newTopics['Time']">
+									<i class="ui checkmark icon"/>
+								</div>
+								<div class="header"> Time </div>
+				      		<div ng-repeat="c in newTopics['Time'].choices">
+						  		<span ng-bind="c"></span><Br>
+					  		</div>
+							</div>
+
+							<div class="ui big teal button editButton" ng-click="openTopic('Time', $event)"> Edit </div>
+					</div>
+				</div>
+
+				<div class="side" ng-include="'templates/newEventModal.html'"></div>
+			</div>
+		</div>
+
+		<div class="ui shape">
+			<div class="sides">
+				<div class="active side">
+					<div class="ui card">
+							<div class="content">
+								<div class="ui green circular icon right floated button" ng-if="newTopics['Venue']">
+									<i class="ui checkmark icon"/>
+								</div>
+								<div class="header"> Place </div>
+				      		<div ng-repeat="c in newTopics['Venue'].choices">
+						  		<span ng-bind="c"></span><Br>
+					  		</div>
+							</div>
+
+							<div class="ui big teal button editButton" ng-click="openTopic('Venue', $event)"> Edit </div>
+					</div>
+				</div>
+
+				<div class="side" ng-include="'templates/newEventModal.html'"></div>
+			</div>
+		</div>
+
+		<div class="ui shape">
+			<div class="sides">
+				<div class="active side">
+					<div class="ui card">
+							<div class="content">
+								<div class="ui green circular icon right floated button" ng-if="_(users).filter({ selected: true }).length > 0">
+									<i class="ui checkmark icon"/>
+								</div>
+								<div class="header"> Participants </div>
+					  		<div ng-repeat="c in _(users).filter({selected:true})">
+						  		<span ng-bind="c.name"></span><Br>
+					  		</div>
+							</div>
+
+							<div class="ui big teal button editButton" ng-click="openParticipants($event)"> Edit </div>
+					</div>
+				</div>
+
+				<div class="side">
+					<div class="ui card">
+						<div class="ui segments content" style="padding:0px">
+							<h5 	ng-repeat="u in users"
+									class="ui attached segment"
+									ng-click="u.selected = !u.selected"
+									ng-class="{'inverted green': u.selected}">
+								<span ng-show="u.selected"><i class="ui checkmark icon"></i></span>
+								<span>{{u.name}}</span>
+							</h5>
+						</div>
+
+						<div class="ui big green button editButton" ng-click="flip($event)"> OK </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ui shape" ng-if="_(newTopics).keys().length > 0">
+			<div class="sides">
+				<div class="active side">
+						<div ng-repeat="t in newTopics"
+							class="ui card"
+							ng-init="adjustCardWidth()"
+							ng-hide="{{t.id=='Venue' || t.id=='Time'}}">
+
+							<div class="content">
+								<div class="ui green circular icon right floated button">
+									<i class="ui checkmark icon"/>
+								</div>
+						  	<span ng-bind="t.name" class="header"></span>
+						  	<span class="main">
+						  		<div ng-repeat="c in t.choices">
+							  		<span ng-bind="c"></span><Br>
+						  		</div>
+						  	</span>
+							</div>
+
+							<div class="ui big teal button editButton" ng-click="openTopic(t.name, $event)"> Edit </div>
+						</div>
+				</div>
+				<div class="side" ng-include="'templates/newEventModal.html'"></div>
+			</div>
+		</div>
+
+		<div class="ui shape">
+			<div class="sides">
+				<div class="active side">
+					<div class="ui card">
+						<div class="content">
+							<span class="header"> New Topics ? </span>
+							<span class="header"> Gift?? Reminder??? Travel Tips?? </span>
+						</div>
+
+						<div class="new ui big orange button editButton" ng-click="openTopic('newTopic', $event)"> Create Topic </div>
+					</div>
+				</div>
+				<div class="side" ng-include="'templates/newEventModal.html'">
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div style="position:fixed; top:0px; left:0px; width:100%; height:3em; padding:1em">
+	<div class="ui header"> Create New Event </div>
+</div>
+
+<div style="position:fixed; bottom:0px; left:0px; width:100%; height:3em">
+	<button ng-click="addEvent()" class="ui orange button" style="float:right"> Submit </button>
+	<button class="ui basic button" style="float:right"> Cancel </button>
+</div>
+
+	<!-- Modal -->
+	<div class="ui modal fade" id="form4">
+	  <div class="ui header"> Participants </div>
+
+	      <div class="ui segments" style="margin:0px">
+			  <h5 	ng-repeat="u in users"
+			  		class="ui attached segment"
+			  		ng-click="u.selected = !u.selected"
+			  		ng-class="{'inverted green': u.selected}">
+				<span ng-show="u.selected"><i class="ui checkmark icon"></i></span>
+			  	<span>{{u.name}}</span>
+			  </h5>
+	      </div>
+	      <div class="ui segment actions">
+	        <button type="button" class="ui blue button deny">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal -->
+	<div class="ui modal fade" id="form5">
+	      <div class="ui header">
+	        <h4 id="myModalLabel">New Topic</h4>
+	      </div>
+
+	      <div class="content">
+	      	  <div class="form-group">
+			    <label for="name">Name</label>
+			    <div class="ui fluid input">
+				    <input type="text" class="form-control" placeholder="Topic Name" ng-model="currentTopic.name">
+				</div>
+			  </div>
+			  <div class="form-group">
+			    <label for="description">Description</label>
+			    <div class="ui fluid input">
+				    <input type="description" class="form-control" placeholder="Event Description" ng-model="currentTopic.description"></input>
+				</div>
+			  </div>
+			  <div class="form-group">
+			    <label for="choices">Choices</label>
+				<div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 1" ng-model="currentTopic.choices[0]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 2" ng-model="currentTopic.choices[1]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 3" ng-model="currentTopic.choices[2]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 4" ng-model="currentTopic.choices[3]"/>
+				</div>
+			    <div class=" ui fluid input">
+			    	<input type="text" class="form-control" placeholder="Choice 5" ng-model="currentTopic.choices[4]"/>
+				</div>
+			  </div>
+	      </div>
+	      <div class="ui segment actions">
+	        <button type="button" class="ui deny button">Cancel</button>
+	        <button type="button" class="ui blue deny button" ng-click="saveTopic()">Confirm</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+<div style="position:absolute; top:45%" class="ui black circular button icon" ng-click="gotoLastCard()">
+	<i class="ui chevron left icon"/>
+</div>
+
+<div style="position:absolute; top:45%; right:10px" class="ui black circular button icon" ng-click="gotoNextCard()">
+	<i class="ui chevron right icon" style="margin: 0px"/>
+</div>
+
+</div>

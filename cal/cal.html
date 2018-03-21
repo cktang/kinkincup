@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
+
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
+
+	<meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+
+    <script src="js/semantic/semantic.js"></script>
+	<link href="js/semantic/semantic.css" rel="stylesheet">
+
+    <script src="js/semantic/components/modal.js"></script>
+	<link href="js/semantic/components/modal.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+</head>
+
+<body ontouchstart="" ng-controller="Controller">
+	<div class="ui fixed menu" id="menu">
+		<div class="ui item"> <i class="ui large heart icon"></i> </div>
+		<div class="ui item">
+			<h1> {{ d | amDateFormat: 'MMMM' }} </h1>
+		</div>
+
+		<span class="ui floated right item">
+			<h1>
+				<i class="ui angle left icon link" ng-click="lastMonth()"></i>
+				<i class="ui angle right icon link" ng-click="nextMonth()"></i>
+			</h1>
+		</span>
+	</div>
+
+	<style>
+		body {
+			background-color: #fff7ff;
+		}
+
+		#menu *, #dates * {
+			color: hotpink;
+		}
+
+		.selected, .selected * {
+			background-color: #fdf !important;
+			color: brown !important;
+		}
+
+		#dates .column.today {
+			border: 2px solid deeppink !important;
+		}
+
+		#dates {
+			margin: 60px 10px;
+		}
+
+		.ui.dText {
+			position: absolute;
+			top: 1px;
+			left: 1px;
+			font-size: 20px;
+			opacity: 0.5;
+		}
+
+		.ui.dIcons {
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			font-size: 14px;
+			text-align: right;
+		}
+
+		.ui.duty {
+			position: absolute;
+			right: 1px;
+			top: 0px;
+			padding: 2px 0px;
+			font-size: 12px;
+		}
+
+		.ui.date {
+			border: 2px solid transparent;
+		}
+
+		.link, .button { transition: all .1s; }
+		.link:active, .button:active {
+			-webkit-transform-style: preserve-3d;
+		    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+		   	opacity:0.7;
+		}
+
+		#modal .button {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+	</style>
+
+	<div id="dates" class="ui seven column grid">
+		<div class="column">Sun</div>
+		<div class="column">Mon</div>
+		<div class="column">Tue</div>
+		<div class="column">Wed</div>
+		<div class="column">Thu</div>
+		<div class="column">Fri</div>
+		<div class="column">Sat</div>
+
+		<div class="column" ng-repeat="a in emptiness"></div>
+		<div
+			class="ui column link date"
+			style="padding-bottom: 3em"
+			ng-class="{selected: events.$getRecord(date).d, 'today':date==today}"
+			ng-click="modal(date)"
+			ng-repeat="date in dd.dates">
+			<span class="ui dText">{{ date | amDateFormat: 'D' }}</span>
+			<span class="ui header">&nbsp;</span>
+
+			<span class="ui duty" ng-bind="events.$getRecord(date).d"></span>
+
+			<div class="ui dIcons">
+				<img class="icon icons8-Eggs-Filled" style="width:20px" ng-show="events.$getRecord(date).food=='E' || events.$getRecord(date).food=='E+F'" src="data:image/png;base64,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" />
+				<img src="https://maxcdn.icons8.com/Color/PNG/24/Food/apple-24.png" title="Apple" style="width:20px" ng-show="events.$getRecord(date).food=='F' || events.$getRecord(date).food=='E+F'"/>
+				<img title="Ambulance" width="18" ng-show="events.$getRecord(date).ams" src="data:image/png;base64,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" />
+				<img style="width:16px" ng-show="events.$getRecord(date).food=='V'" class="icon icons8-Broccoli-Filled" src="data:image/png;base64,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"/>
+				<i class="ui right floated orange music icon" ng-show="events.$getRecord(date).choir"></i>
+				<span ng-show="events.$getRecord(date).piano"><img src="img/music.png" style="width:20px"/></span>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal" class="ui modal">
+		<div class="ui header" style="padding:10px !important">
+			<div class="ui right floated close button" ng-click="saveSelected()"> X </div>
+			<div class="ui right floated button" ng-click="nextDate( selectedDate.id )"> <i class="ui angle right icon"></i> </div>
+			<div class="ui right floated button" ng-click="lastDate( selectedDate.id )"> <i class="ui angle left icon"></i> </div>
+			{{ selectedDate.$id }}
+		</div>
+
+		<div class="ui content" style="padding:0px 	1px !important">
+			<div class="ui top attached segment">
+				<div class="ui content"> <strong>Duty</strong> </div>
+				<div class="ui divider"></div>
+				<div class="ui eight columned grid">
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C1'}" ng-click="selectedDate.d='C1'">C1</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C2'}" ng-click="selectedDate.d='C2'">C2</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C3'}" ng-click="selectedDate.d='C3'">C3</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='W1'}" ng-click="selectedDate.d='W1'">W1</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='W2'}" ng-click="selectedDate.d='W2'">W2</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='W3'}" ng-click="selectedDate.d='W3'">W3</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d=='C*'}" ng-click="selectedDate.d='C*'">C*</div>
+				  <div class="column link" ng-class="{selected: selectedDate.d==''}" ng-click="selectedDate.d=''">Off</div>
+				</div>
+			</div>
+
+			<div class="ui attached segment">
+				<div class="ui content"> <strong>Food Sampling</strong>	</div>
+				<div class="ui divider"></div>
+				<div class="ui five columned grid">
+				  <div class="column link" ng-class="{selected: selectedDate.food=='E'}" ng-click="selectedDate.food='E'">Egg</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='E+F'}" ng-click="selectedDate.food='E+F'">Egg+Fruit</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='V'}" ng-click="selectedDate.food='V'">Veggie</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food=='F'}" ng-click="selectedDate.food='F'">Fruit</div>
+				  <div class="column link" ng-class="{selected: selectedDate.food==''}" ng-click="selectedDate.food=''">Off</div>
+				</div>
+			</div>
+
+			<div class="ui attached segment link" ng-click="selectedDate.piano=!selectedDate.piano" ng-class="{selected: selectedDate.piano}">
+				<i class="ui checkmark icon" ng-show="selectedDate.piano"></i> Piano
+			</div>
+			<div class="ui attached segment link" ng-click="selectedDate.ams=!selectedDate.ams" ng-class="{selected: selectedDate.ams}"> <i class="ui checkmark icon" ng-show="selectedDate.ams"></i> AMS </div>
+			<div class="ui bottom attached segment link" ng-click="selectedDate.choir=!selectedDate.choir" ng-class="{selected: selectedDate.choir}"> <i class="ui checkmark icon" ng-show="selectedDate.choir"></i> Choirs </div>
+		</div>
+	</div>
+
+	<script>
+		var app = angular
+					.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
+		  			.controller("Controller",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
+							$scope.d = moment();
+							$scope.today = $scope.d.format('YYYY-MM-DD');
+							$scope.eventRef = new Firebase("https://queencal.firebaseio.com/items");
+							$scope.events = $firebaseArray($scope.eventRef);
+
+							$scope.nextMonth = function() {
+								$scope.d = $scope.d.add(1, 'M');
+								$scope.defineCal();
+							}
+
+							$scope.lastMonth = function() {
+								$scope.d = $scope.d.add(-1, 'M');
+								$scope.defineCal();
+							}
+
+							$scope.nextDate = function(date) {
+								console.log("nextDate: " + date);
+								$scope.saveSelected();
+								var d = new moment(date).add(1, 'd').format('YYYY-MM-DD');
+								$scope.setSelected(d);
+							}
+
+							$scope.lastDate = function(date) {
+								$scope.saveSelected();
+								var d = new moment(date).add(-1, 'd').format('YYYY-MM-DD');
+								$scope.setSelected(d);
+							}
+
+							$scope.setSelected = function(d) {
+								if (!$scope.events.$getRecord(d)) {
+									$scope.eventRef.child(d).set({id: d});
+								}
+
+								$timeout( function() {
+									$scope.selectedDate = $scope.events.$getRecord(d);
+								}, 500);
+							}
+
+							$scope.saveSelected = function() {
+								try {
+									$scope.events.$save($scope.selectedDate);
+								}catch(e) { console.log(e); }
+							}
+
+							$scope.defineCal = function() {
+								var d = new moment($scope.d.toDate()).startOf('month');
+								$scope.dd = $scope.dd || {};
+								$scope.dd.dates = [];
+								$scope.emptiness = _.range(d.weekday());
+
+								while(true) {
+									$scope.dd.dates.push(d.format('YYYY-MM-DD'));
+									d.add(1, 'd');
+									if (d.format('DD') == 1) break;
+								}
+							}
+
+							$scope.modal = function(d) {
+								$scope.setSelected(d);
+								$('#modal').modal('show');
+							}
+
+							$scope.defineCal();
+						}
+					);
+	</script>
+</body>
+</html>

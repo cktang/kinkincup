@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
+
+    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+
+	<link href="js/jquery.tagsinput.css" rel="stylesheet">
+	<link href="js/bootstrap-3.1.1-dist//css/bootstrap.css" rel="stylesheet">
+
+	<link href="css/silly.css" rel="stylesheet">
+	<script src="js/backbonemodel.js"></script>
+	<script src="js/tessharrymodels.js"></script>
+	<script src="js/backbone-listeners.js"></script>
+
+	<script src="pagejs/index.js"></script>
+
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+</head>
+<body ontouchstart="">
+	<div class="container-fluid">
+		<h3 class=header> 
+			Groups
+			<h6 class="header" style="display: block;">  </h6>
+		</h3>
+
+		<div class="list-group" id="groups">
+			<script class="template" type="text/x-handlebars-template">
+				<div data-target="group.html" data-id-type="group" data-id="{{id}}" class="link list-group-item group full">
+					<div class="pull-right buttonGroup">
+						<a href="#" class="btn btn-danger removeButton"><span class="glyphicon glyphicon-remove"></span></a>
+					</div>
+					<h4 style="line-height:1.6em">  {{name}} </h4>
+					<div> {{description}} </div>
+				</div>
+			</script>
+		</div>
+	</div>
+</body>
+</html>

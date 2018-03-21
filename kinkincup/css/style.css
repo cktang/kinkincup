@@ -1,0 +1,111 @@
+header, footer, body ,h1,h2,h3,h4,h5,h6, form {
+	margin:0px;
+	padding:0px;
+	border:0px;
+	font-family: 'Helvetica'; 
+	color: black;
+	font-size: 12px;
+}
+
+body {
+	background-color: #ccc;
+	padding: 10px;
+}
+
+header, footer {
+	left:0px; right:0px;
+	padding:0em;
+	margin:0em;
+	//display:none;
+}
+
+header *, footer * {
+	color:white;
+	padding:0px;
+	margin:0px;
+	font-size: 12px;
+}
+
+header {
+	top:0px;
+	margin-bottom: 1em;
+}
+
+footer {
+	bottom:0px;
+}
+
+.window {
+	position:relative;
+	border: 2px solid #333;
+	margin-right: 10px;
+	margin-top: 10px;
+	min-width:300px;
+	float: left;
+	box-shadow: 2px 4px 6px #aaa;
+	overflow:auto;
+}
+
+/* window */
+.window h1 {
+	margin:0px; 
+	line-height:1.6em;
+	text-indent:0.2em;
+	font-size: 14px;
+	background-color: #333;
+	color: white;
+	font-family: 'ContrailOne', cursive;
+	font-weight:normal;
+
+}
+
+.window .content {
+	padding:2px; 
+}
+
+.window, .window .content {
+	background-color:white;
+	border-radius: 0px 0px;
+}
+
+.window h1 input {
+	padding:1px 5px;
+}
+/* window */
+
+/* input */
+input, select, textarea {
+	background-color: #333;
+	border: 1px solid #eee;
+	color: #eee;
+	margin:0px 1px;
+	font-family: Helvetica;
+	font-size: 12px;
+}
+
+input[type=button] {
+	padding:5px 8px;
+}
+
+textarea {
+	min-width:300px;
+}
+
+input:hover, select:hover {
+	background-color: #ccc;
+	color: #333;
+}
+
+input:active, select:active {
+	background-color: lightblue;
+	color:navy;
+}
+/* input */
+
+
+th {
+	background-color: #ddd;
+	font-family: "ContrailOne";
+	font-weight: normal;
+	padding:0.2em 0.5em;
+}

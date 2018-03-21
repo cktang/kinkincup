@@ -1,0 +1,55 @@
+*:not(input):not(textarea) {
+  -webkit-user-select: none; //disable selection/Copy of UIWebView
+  -webkit-touch-callout: none; //disable the IOS popup when long-press on a link
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.container {
+	padding: 0 0.5em;
+}
+
+.link, .button, .draggable { transition: all .1s; }
+.link:active, .button:active {
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: scale3d(0.98, 0.98, 0.98);
+  opacity:0.7;
+  /*background-color: silver;*/
+}
+
+.container .bottomplaceholder {
+	height: 50px;
+}
+
+.ui.button.fluid {
+	margin-bottom: 0.2em;
+}
+
+
+.ui.segment.yes {
+  border-top: 1px solid green;
+  background-color: #efe;
+}
+
+.ui.segment.maybe {
+  border-top: 1px solid olive;
+  background-color: #ffe;
+}
+
+.ui.segment.no, .ui.segment.no .ui.segment {
+  border-top: 1px solid red;
+  background-color: #fee;
+}
+
+.ui.segment.no.title { background-color: #fdd; }
+.ui.segment.maybe.title { background-color: #ffd; }
+.ui.segment.yes.title { background-color: #dfd; }
+
+.tools .ui.button .icon { margin-right: 0px !important }
+
+.ui.statistic .label {
+  font-family: 'Bad Script' !important;
+}
+
+*:not(.icon) {
+  font-family: 'Kalam' !important;
+}

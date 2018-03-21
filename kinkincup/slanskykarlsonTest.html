@@ -1,0 +1,25 @@
+<script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
+<script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore.js"></script>
+<script type="text/javascript"  src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone.js"></script>
+<script type="text/javascript"  src="https://cdn.firebase.com/v0/firebase.js"></script>
+<script type="text/javascript" src="https://cdn.firebase.com/libs/backfire/0.3.0/backbone-firebase.js"></script>
+<script src="slanskykarlson.js"></script>
+
+<script>
+	var sk = new slanskyKarlson();
+	var hand = ['Ts', 'As'];
+
+	//test convertHand
+	console.log(sk.convertHand(hand));
+	console.log(sk.convertHand(hand));
+
+	//test range
+	console.log(sk.findRange(hand));
+	console.log(sk.isHandInRange(hand, 45));
+	console.log(sk.isHandInRange(hand, 2));
+	console.log(sk.isHandInRange(hand, 90));
+
+	//test ranges
+	console.log(sk.handsInRange(20));
+</script>

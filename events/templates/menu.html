@@ -1,0 +1,18 @@
+<a class="item" ng-click="goto('/myEvents/')">
+  <i class="list icon"></i>
+  List
+</a>
+<a class="compact item" ng-click="goto('/eventSummary/' + event.$id)">
+  <i class="home icon"></i>
+  Home
+</a>
+<a class="blue item" ng-click="goto('/chat/' + event.$id)">
+  <span class="ui small red circular right label">3</span>
+  <i class="comment icon"></i>
+  Chat
+</a>
+<a class="item" ng-repeat="t in event.topics" ng-click="goto('/eventTopic/' + t)">
+  <span class="ui small green circular right label">7</span>
+  <i class="grey flag icon"></i>
+  {{topics.$getRecord(t).name}}
+</a>

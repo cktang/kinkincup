@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
+
+	<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+    <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width" /> 
+		
+    <script src="js/semantic/semantic.js"></script>	
+	<link href="js/semantic/semantic.css" rel="stylesheet">
+	
+    <script src="js/semantic/components/modal.js"></script>	
+	<link href="js/semantic/components/modal.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.1/angular-moment.js"></script>
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<link href="css/schedule.css" rel="stylesheet">
+</head>
+
+<body ontouchstart="" ng-controller="Controller">	
+	<div class="ui fixed menu" id="menu">
+		<div class="ui item"> 
+			<h4>Month</h4>
+			<h1> {{ d | amDateFormat: 'MMMM YYYY' }} </h1> 
+		</div>
+		
+		<div class="ui item">
+			<h4>Preference</h4>
+			<div class="ui buttons">
+			  	<div ng-repeat="d in duty" 
+			      class="ui button duty{{d}}" 
+				  ng-class="{big: choice==d}" 
+				  ng-click="setChoice(d)" 
+				  ng-bind="d">
+				</div> 
+			  	<div class="ui button" ng-class="{big: choice==null}" ng-click="setChoice(null)" > Clear </div>
+			</div>
+		</div>
+		
+		<div class="ui item">
+			<h4>Lock</h4>
+			<div class="ui buttons">
+			  	<div class="ui button" ng-class="{big: choice==null}" ng-click="setLock(null)" > Current </div>
+			  	<div ng-repeat="d in duty" 
+			      class="ui button duty{{d}}" 
+				  ng-class="{big: lock==d}" 
+				  ng-click="setLock(d)" 
+				  ng-bind="d">
+				</div>
+			  	<div class="ui button" ng-class="{big: choice==null}" ng-click="setLock(null)" > Clear </div>
+			</div>
+		</div>
+		
+		<div class="ui item">
+			<h4>Action</h4>
+			<span class="ui negative button" ng-click="clearBoard()">Clear Board</span>
+			<br></br>
+			<span class="ui negative button" ng-click="clearLock()">Clear Lock</span>
+			<br></br>
+			<span class="ui positive button" ng-click="findSolution()">Auto Assign</span>
+		</div>
+		
+		<div class="ui item">
+			<h4>Memory</h4>
+			<span class="ui negative button" ng-click="save()">Save</span>
+			<br></br>
+			<span class="ui positive button" ng-click="load()">Load</span>
+		</div>
+		
+		<div class="ui item">
+			<h4>Loop</h4>
+			<h1 ng-bind="tries"></h1> 
+		</div>
+				
+		<span class="ui floated right item">
+			<h1>
+				<i class="ui angle left icon link" ng-click="lastMonth()"></i>
+				<i class="ui angle right icon link" ng-click="nextMonth()"></i>
+			</h1>
+		</span>
+	</div>
+	
+	<div id="dates" class="ui column grid">	
+		<div class="column"> &nbsp;</div>		
+		<div 
+			class="column link header"
+			ng-class="{selected: events.items[date].d, 'today':date==today}"
+			ng-repeat="date in dd.dates">
+			<div class="ui dText">{{ date | amDateFormat: 'ddd' }}</div>
+			<div class="ui dText">{{ date | amDateFormat: 'D' }}</div>
+		</div>
+		<div class="ui column duty{{d}}" ng-repeat='d in duty'>
+			<div class="ui dText" ng-bind="d"></div>
+			<div class="ui dText">&nbsp;</div>
+		</div>
+	</div>
+	
+	<div ng-repeat="p in solution" class="ui column grid" ng-if="solution">
+		<div class="column header" ng-bind="p.name"></div>		
+		<div 
+			class="ui column link {{ 'duty' + date.duty }}"
+			ng-class="{manual: date.method=='manual'}"
+			ng-click="toggleLock($parent.$index, date, choice)"
+			ng-repeat="date in p.dates">
+			<span class="ui dText"> {{ date.duty || "/" }} </span>
+		</div>
+		<div class="ui column duty{{d}} subtotal" ng-repeat="d in duty" ng-bind="_(p.dates).where({ duty: d }).length"></div>		
+	</div>
+	 	
+	<div class="ui column grid subtotal" ng-repeat="d in duty" ng-if="solution">
+		<div class="ui column duty{{d}}" ng-bind="d"></div>		
+		<div 
+			class="ui column link duty{{d}}"
+			ng-class="{negative: getColumnCount($index, d) < 2 ||  getColumnCount($index, d) > 4}"
+			ng-repeat="date in dd.dates">
+			<div class="ui" ng-bind="getColumnCount($index, d) || 0"></div>
+		</div>	
+	</div>
+
+	<div class="ui message">
+		<div> Rules </div>
+		
+		<div>1. Each day min 2, max 4 ppl for duty 1,2,3</div>
+		<div>2. Each ppl can have exactly 8 days of O</div>
+		<div>3. Each ppl cannot work consecutively more than 6 days</div>
+		<div>4. After duty 2, cannot be duty 1</div>
+		<div>5. After duty 3, cannot be duty 1 or 2</div>
+		<div>6. Ppl want to have preference like duty 1 or O</div>
+	</div>
+	
+	<script>
+		var app = angular
+					.module('app', ['angularMoment', "ngRoute", "firebase", 'angular-underscore'])
+		  			.controller("Controller", 
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
+							$scope.duty = ['1', '2', '3', 'O', 'L'];
+							$scope.choice = "1";
+							$scope.tries = 0;
+							$scope.lockedList = {};
+							
+							$scope.rowCheck = function(row) {
+								var condition1 = _(row.dates).countBy('duty')['O'] >= 8;
+								if (!condition1) return condition1;
+								
+								var condition2 = true;
+								var duties = _(row.dates).pluck('duty').join("");
+								condition2 = condition2 
+//												&& duties.indexOf("21") < 0
+//												&& duties.indexOf("31") < 0
+//												&& duties.indexOf("32") < 0
+								if (!condition2) return condition2;
+								
+								return true;
+							};
+							
+							$scope.isValid = function(list) {
+								var condition = true;
+								return condition;
+							};
+							
+							$scope.createDateDutyList = function(date) {
+								//rule 1: Each day min 2, max 4 ppl for duty 1,2,3
+								var result = ['1', '1', '2', '2', '3', '3', 'O', 'O', 'O', 'O', 'O', 'O'];
+//								var result = ['1', '2', '3', 'O', 'O', 'O', 'O', 'O'];
+									
+								var result2 = [];
+								var lockedList = angular.copy($scope.lockedList[date]);
+								
+								_(result).each(function(r) {
+									if (lockedList && lockedList.length > 0 && r == lockedList[0]) 
+										lockedList.shift();
+									else 
+										result2.push(r);
+								});
+										
+								$scope.dateDutyList[date] = _(result2).shuffle();
+								console.log(date + ":: " + $scope.dateDutyList[date]);
+							};
+							
+							$scope.person = [
+								{ name: 'LAW' }, 	{ name: 'LEE' }, 
+								{ name: 'HO' }, 	{ name: 'KUEN' }, 
+								{ name: 'YIP' }, 	{ name: 'POON' }, 
+								{ name: 'WONG' }, 	{ name: 'KIT' },
+								{ name: 'CHEUNG' },		{ name: 'LAU' },
+								{ name: 'YEUNG' },	{ name: 'LIZ' }
+							];
+
+							$scope.d = moment();
+							$scope.today = $scope.d.format('YYYY-MM-DD');
+							$scope.solutionFound = false;
+								
+							$scope.nextMonth = function() { 
+								$scope.d = $scope.d.add(1, 'M'); 
+								$scope.defineCal(); 								
+							};
+							
+							$scope.lastMonth = function() { 
+								$scope.d = $scope.d.add(-1, 'M'); 						
+								$scope.defineCal(); 
+							};
+							
+							$scope.findSolution = function() {
+								console.log('find solution');
+								
+								$scope.tries++;								
+								var maxTestReached = false;
+								
+								_($scope.person[0].dates).each(function(d) { 
+									$scope.createDateDutyList(d.date);
+								});
+									
+								_($scope.person).each(function(p, i) {
+									if (maxTestReached) return;
+									
+									//clear original assigmnet if its not manually asssigned
+									_(p.dates).each(function(d) { 
+										if (d.method == 'manual') {
+											return;	
+										}
+										d.duty = null; 
+									});
+									
+									var maxTest = 100;
+									var allocated = 0;
+									while ((!$scope.rowCheck(p) && maxTest-- > 0) || allocated == 0) {
+										allocated++;
+										_(p.dates).each(function(d) {		
+											//skip assignment if its manually assigned
+											if (d.method == 'manual') {
+												return;
+											}	
+																						
+											//randomly assign a duty to this field			
+											
+											console.log(d.date + ": " + $scope.dateDutyList[d.date]);								
+			
+											d.duty =  $scope.dateDutyList[d.date].pop();
+										});
+									}
+									
+									if (maxTest <= 0) {
+										if (i > 8) console.log($scope.tries + " failed at row " + i);
+										maxTestReached = true;
+									}
+								});
+									
+								if (!maxTestReached) {
+									$scope.solution = angular.copy($scope.person);
+								} else {
+//									$timeout.cancel();
+									$timeout($scope.findSolution, 0);
+								} 
+							};
+							
+							$scope.defineCal = function() {
+								var d = new moment($scope.d.toDate()).startOf('month');
+								$scope.dd = $scope.dd || {};								
+								$scope.dateDutyList= [];
+	
+								_($scope.person).each(function(p) {	p.dates = []; });
+								$scope.dd.dates = [];
+									
+								while(true) {
+									$scope.dd.dates.push(d.format('YYYY-MM-DD'));
+									_($scope.person).each(function(p, i) {
+										p.dates.push({ date: d.format('YYYY-MM-DD') });
+									});
+									d.add(1, 'd');
+									if (d.format('DD') == 1) break;
+								}				
+								
+								//init screen
+								$scope.solution = angular.copy($scope.person);
+								//TODO: populate locks
+
+//								$timeout($scope.findSolution, 0);								
+							};
+							$scope.defineCal();
+							
+							$scope.getColumnCount = function(column, duty) {
+								return _($scope.solution).chain()
+											.map(function(p) { return p.dates[column].duty; })
+											.countBy()
+											.value()[duty];	
+							};
+							
+							$scope.clearBoard = function() {
+								_($scope.solution).each(function(p) {
+									_(p.dates).each(function(d) {																		
+										if (d.method=='manual') return;
+										d.duty = null;
+									});
+								});
+							};
+
+							$scope.clearLock = function() {
+								_($scope.solution).each(function(p) {
+									_(p.dates).each(function(d) {																		
+										d.method = null;
+									});
+								});
+							}
+														
+							$scope.setChoice = function(d) {
+								$scope.choice = d;
+							};
+							
+							$scope.toggleLock = function(index, date, choice) {
+								var record = _($scope.person[index].dates).findWhere({date: date.date});
+								record.duty = choice; 
+								record.method = choice? 'manual': null; 
+								
+								if (choice) {
+									if (!$scope.lockedList[record.date]) $scope.lockedList[record.date] = [];
+									$scope.lockedList[record.date].push(choice);
+								} else {
+									//remove lock case
+								}
+								
+								$scope.solution = angular.copy($scope.person);
+							};
+							
+							$scope.save = function() {
+								$scope.clearBoard();
+								localStorage["manualSchedule"] = angular.toJson($scope.solution);
+								localStorage["lockedlist"] = angular.toJson($scope.lockedList);
+								console.log('saved');
+							};
+	
+							$scope.load = function() {
+								$scope.clearBoard();
+								$scope.solution = angular.fromJson(localStorage["manualSchedule"]);
+								$scope.person = angular.fromJson(localStorage["manualSchedule"]);
+								$scope.lockedList = angular.fromJson(localStorage["lockedlist"]);
+								console.log('loaded');
+							};
+						});
+						
+	</script>
+</body>
+</html>

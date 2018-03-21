@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/bootstrap-3.1.1-dist/js/bootstrap.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/backbone-firebase.js"></script>
+    <script src="js/handlebars-v1.3.0.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
+
+    <script src="js/jquery-ui-1.11.0/jquery-ui.js"></script>
+	<link href="js/jquery-ui-1.11.0/jquery-ui.css" rel="stylesheet">
+
+	<link href="js/jquery.tagsinput.css" rel="stylesheet">
+	<link href="js/bootstrap-3.1.1-dist//css/bootstrap.css" rel="stylesheet">
+
+	<link href="css/silly.css" rel="stylesheet">
+	<script src="js/backbonemodel.js"></script>
+	<script src="js/tessharrymodels.js"></script>
+	<script src="js/backbone-listeners.js"></script>
+
+	<script src="pagejs/activity.js"></script>
+
+	<!-- <meta name="viewport" content="width=1024, minimal-ui"/> -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body ontouchstart="">
+	<div class="container-fluid">
+		<div id="stats">
+			<script class="template" type="text/x-handlebars-template">
+				<h3 id="title" class=header> 
+					<div class="pull-right" style="text-align:right">
+					<small>
+					  <span class="glyphicon glyphicon-ok"></span> {{{ filter people status="going" }}} 
+					  <span class="glyphicon glyphicon-minus" style="padding-left:5px"></span> {{{ filter people status="unknown" }}} 
+					  <span class="glyphicon glyphicon-remove" style="padding-left:5px"></span> {{{ filter people status="notgoing" }}} 
+					  <span class="glyphicon glyphicon-asterisk" style="padding-left:5px"></span> {{{ filter people status="--any--" }}}
+					</small>
+					</div>
+					<a href="index.html" class="small link">Main</a> <span class="small"> > </span> 
+					<a href="group.html" class="small link">Group</a> <span class="small"> > </span> 
+					<span class="name"> {{name}} </span> 
+				</h3>
+				<h6 class=header> {{description}} </h6>
+			</script>
+		</div>
+
+		<ul class="list-group" id="peopleList">
+			<script class="template" type="text/x-handlebars-template">
+				<li  data-id="{{id}}" class="list-group-item activity list-group-item-{{{printStatus this}}}" style="padding-left:50px">
+				    <button type="button" class="link attendenceButton btn btn-lg btn-default" style="position:absolute; top:0px; left:0px">
+				    	<span class="glyphicon glyphicon-{{icon status}}"></span>
+				    </button>
+					<h4 class="name list-group-item-heading"> {{name}} </h4>
+					<div> {{remark}} &nbsp;</div>
+					<div class="content list-group-item-text full">
+						<div class="pull-right buttonGroup">
+							<button type="button" class="link reportButton btn btn-lg btn-default"><span class="glyphicon glyphicon-pencil"></span></button>
+							<button type="button" class="link giftButton btn btn-lg btn-default {{#if gift}}active{{/if}}"><span class="glyphicon glyphicon-gift"></span></button>
+							<button type="button" class="link moneyButton btn btn-lg btn-default {{#if money}}active{{/if}}"><span class="glyphicon glyphicon-usd"></span></button>
+						</div>
+					</div>
+				</li>
+			</script>
+		</ul>
+	</div>
+</body>
+</html>

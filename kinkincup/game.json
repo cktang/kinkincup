@@ -1,0 +1,16 @@
+{
+	"rooms": [
+		{
+			"roomid": "1",
+			"name": "Room 1",
+			"roomadmin": null,
+			"players": []
+		},
+		{
+			"roomid": "2",
+			"name": "Room 2",
+			"roomadmin": null,
+			"players": []
+		}
+	]
+}

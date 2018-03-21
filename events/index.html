@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.js"></script>
+
+	<!-- firebase.js -->
+	<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+
+	<!-- underscore.js -->
+  <script src="js/ngStorage.js"></script>
+  <Script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+	<Script src="js/angular-underscore.js"></script>
+
+	<!-- moment.js -->
+  <script src="js/moment.js"></script>
+  <script src="js/angular-moment.min.js"></script>
+
+	<!-- semantic-ui -->
+  <script src="js/semantic/semantic.js"></script>
+	<link href="js/semantic/semantic.css" rel="stylesheet">
+  <script src="js/semantic/components/modal.js"></script>
+	<link href="js/semantic/components/modal.css" rel="stylesheet">
+
+	<!-- css and animations -->
+	<link href="css/animate.css" rel="stylesheet">
+	<link href="css/animation.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+	<link href='https://fonts.googleapis.com/css?family=Bad+Script' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Kalam' rel='stylesheet' type='text/css'>
+</head>
+
+<body ontouchstart="" style="position:fixed; overflow:hidden">
+	<!-- <div class="ui fixed main menu" ng-include="'header.html'"></div> -->
+
+ 	<div ng-view class="container pageTransition"></div>
+
+	<script>
+		var app = angular
+					.module('app', ["ngAnimate", "ngRoute", "firebase", "ngStorage", 'angular-underscore', 'angularMoment'])
+
+					.config(function($routeProvider, $locationProvider) {
+					    $locationProvider.hashPrefix('!');
+					    $routeProvider
+							.when('/login', {
+								templateUrl: 'templates/login.html'
+							})
+							.when('/main', {
+								templateUrl: 'templates/main.html'
+							})
+							.when('/myEvents', {
+								templateUrl: 'templates/myevents.html'
+							})
+							.when('/newEvent', {
+								templateUrl: 'templates/newevent.html',
+								controller: 'newEventController'
+							})
+							.when('/eventSummary/:id', {
+								templateUrl: 'templates/eventsummary.html',
+								controller: 'eventSummaryController'
+							})
+							.when('/event/:id', {
+								templateUrl: 'templates/eventsummary.html',
+								controller: 'eventSummaryController'
+							})
+							.when('/eventTopic/:id', {
+								templateUrl: 'templates/eventtopic.html',
+								controller: 'eventTopicController'
+							})
+							.when('/topic/:id', {
+								templateUrl: 'templates/eventtopic.html',
+								controller: 'eventTopicController'
+							})
+							.when('/history/:id', {
+								templateUrl: 'templates/history.html',
+								controller: 'historyController'
+							})
+							.when('/chat/:id', {
+								templateUrl: 'templates/chat.html',
+								controller: 'chatController'
+							})
+							.otherwise({
+							 	redirectTo: 'login'
+							});
+					})
+
+					.run(function($rootScope, $window, $location, $localStorage, $firebaseArray) {
+						console.log('rootScope::start');
+				    $rootScope.local = $localStorage;
+
+				    $rootScope.topics = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/topic"));
+				    $rootScope.users = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/user"));
+				    $rootScope.events = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event"));
+
+						$rootScope.topics.$loaded(function() { $rootScope.topicsLoaded = true; })
+						$rootScope.users.$loaded(function() { $rootScope.usersLoaded = true; })
+						$rootScope.events.$loaded(function() { $rootScope.eventsLoaded = true; })
+
+						$rootScope.$on('$locationChangeSuccess', function() {
+						    $rootScope.actualLocation = $location.path();
+						});
+
+						$rootScope.$watch(function () {return $location.path()}, function (newLocation, oldLocation) {
+					    if($rootScope.actualLocation === newLocation) {
+								$('[ng-view]').removeClass('pageTransition').addClass('pageTransitionBack');
+					    } else {
+								$('[ng-view]').removeClass('pageTransitionBack').addClass('pageTransition');
+							}
+						});
+
+						// $rootScope.$on('$routeChangeStart', function(next, current) {
+						//    try {
+						// 	   console.log(current.$$route.originalPath);
+						//    }catch (e) {
+						// 	   console.error(e);
+						//    }
+						// });
+
+						$rootScope.goto = function(url) {
+							try {
+	  							linkEvent(url);
+							} catch (e) {
+	  							$location.path(url);
+  						}
+  					}
+
+				    $rootScope.login = function(user) {
+				    	$localStorage.user = user;
+				    	$location.path("myEvents");
+				    };
+
+				    $rootScope.back = function() {
+				    	$window.history.back();
+				    }
+
+						$rootScope.addHistory = function() {
+							try {
+
+							}catch(e) {
+
+							}
+						};
+
+						$rootScope.voted = function(options) {
+							options.topic = options.topic;
+							options.userId = options.userId || $rootScope.local.user.$id;
+							options.choice = options.choice || options.topic.finalize;
+							return !_.isUndefined(options.value)?
+											options.topic &&
+											options.topic.votes &&
+											options.topic.votes[options.userId] &&
+											options.topic.votes[options.userId][options.choice] &&
+											options.topic.votes[options.userId][options.choice].value == options.value
+										: options.topic.votes[options.userId][options.choice];
+						};
+
+						$rootScope.attend = function(options) {
+							try {
+								var event = options.event || $scope.event;
+								options.userId = options.userId || $rootScope.local.user.$id;
+
+								console.log('here');
+								return options.decision?
+									_(event.users).findWhere({ id: $rootScope.local.user.$id }).decision == options.decision:
+									_(event.users).findWhere({ id: $rootScope.local.user.$id }).decision;
+							} catch(e) {
+								return false;
+							}
+						};
+
+						$rootScope.toggleMenu = function() {
+							$('.ui.labeled.icon.sidebar')
+								.sidebar({
+									dimPage: false
+								})
+							  .sidebar('setting', 'transition', 'overlay')
+							  .sidebar('toggle');
+						}
+					})
+
+					.filter('reverse', function() {
+			      function toArray(list) {
+			         var k, out = [];
+			         if( list ) {
+			            if( angular.isArray(list) ) {
+			               out = list;
+			            }
+			            else if( typeof(list) === 'object' ) {
+			               for (k in list) {
+			                  if (list.hasOwnProperty(k)) { out.push(list[k]); }
+			               }
+			            }
+			         }
+			         return out;
+			      }
+			      return function(items) {
+			         return toArray(items).slice().reverse();
+			      };
+			   })
+
+					.controller("chatController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+								$scope.chats = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/chat"));
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
+						    obj.$bindTo($scope, "event");
+								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
+								$scope.history.$loaded(function() {
+									$scope.history.$watch(function(event) {
+										$scope.n = $scope.n+1;
+										$scope.scrollToBottom();
+									});
+								})
+
+						    $scope.r = $routeParams;
+								$scope.n = 10;
+
+								$('.ui.sticky').sticky();
+
+								$scope.checkNewChat = function($event) {
+										if ($event.charCode == 13) {
+											$scope.newChat($scope.newText);
+											$scope.newText = "";
+										}
+								};
+
+						    $scope.newChat = function(text) {
+									if (text == "") return;
+
+						     	try {
+									var c = {
+							     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
+							     		content: text,
+											action: 'chat'
+							     	};
+										c.event = $scope.r.id;
+
+							    $scope.chats.$add(c);
+
+									setTimeout(function() {
+										$scope.history.$add(c);
+									}, 1000);
+						     	} catch (e) { console.error(e); }
+
+									$scope.scrollToBottom();
+						    };
+
+								$scope.scrollToBottom = function() {
+									$('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+								}
+
+								$scope.matchTopic = function(query) {
+									return function(h) {
+										return !(h.topic && h.topic!=$scope.r.id);
+									}
+								};
+
+								$scope.shortName = function(userId) {
+									var user = $scope.users.$getRecord(userId);
+									if (!user) return "";
+									return user.name.split(" ")[0];
+								};
+
+								$scope.filterByTopic = function(e) {
+									if (!$scope.topicToFilter || $scope.topicToFilter == '') return true;
+									return e.action=='chat' || e.topic==$scope.topicToFilter;
+								}
+						}
+					)
+
+					.controller("historyController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
+
+						    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
+						    obj.$bindTo($scope, "event");
+ 						    $scope.r = $routeParams;
+						}
+					)
+
+					.controller("eventSummaryController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams) {
+
+							var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id));
+							obj.$bindTo($scope, "event");
+							obj.$loaded(function() {
+								$scope.topChoices = $scope.event.topics.map($scope.findTopChoices);
+								$scope.eventLoaded = true;
+							});
+
+							// try{
+							// 	webkit.messageHandlers.callbackHandler.postMessage("test");
+							// } catch(e) {}
+
+							$scope.acceptFinalize = function($event, topic, accept) {
+								if (!accept) {
+									_($scope.event.users).findWhere({ id: $scope.local.user.$id }).decision = "no";
+									$scope.logParticipate("no");
+								}
+
+								if (accept) {
+										topic.votes[$scope.local.user.$id] = [topic.finalize];
+								}
+
+								topic.decisionMade = topic.decisionMade || {};
+								topic.decisionMade[$scope.local.user.$id] = true;
+								$scope.topics.$save(topic);
+
+								$event.stopPropagation();
+							}
+
+							$scope.getVote = function(topicId, choice) {
+								try {
+									return _($scope.topics.$getRecord(topicId).votes).chain().flatten().groupBy().value()[choice].length;
+								} catch(e) { return 0;  }
+							};
+
+							$scope.maxVotes = function(topicId) {
+								return _($scope.topics.$getRecord(topicId).votes)
+									.chain()
+									.groupBy()
+									.map(function(e) { return e.length; })
+									.max()
+									.value();
+							};
+
+							$scope.decision = function(topic) {
+								if (topic == 'participants') {
+									$('#modal').modal('show');
+								} else {
+									$scope.topicModal = topic;
+									$('#topicModal').modal('show');
+								}
+							};
+
+							$scope.findTopChoices = function(topicId) {
+								// console.log("topChoices: " + topicId);
+								try {
+									var topic = $scope.topics.$getRecord(topicId);
+									return topic.choices.map(function(c) {
+										return {
+											t: topicId,
+											c: c,
+											yes: _(topic.votes).chain().compact().map(function(e) { return e[c] && e[c].value; }).compact().value().length,
+											no: _(topic.votes).chain().compact().map(function(e) { return e[c] && !e[c].value; }).compact().value().length,
+										};
+									});
+								} catch (e) { return []; }
+							}
+
+							$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + $routeParams.id + "/history"));
+
+							$scope.logTopicDecision = function(topic, value) {
+								console.log('status changed: ' + topic.$id + " " + value);
+
+								setTimeout(function() {
+									$scope.history.$add({
+							     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
+							     		action: 'vote',
+										event: topic.$id,
+										content: value
+									});
+								}, 1000);
+
+								topic.votes[$scope.local.user.$id] = value;
+								$scope.topics.$save(topic);
+							};
+
+							$scope.logParticipate = function(value) {
+								console.log('status changed: ' + value);
+
+								setTimeout(function() {
+									$scope.history.$add({
+							     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
+							     		action: 'participate',
+											event: $scope.event.$id,
+											content: value
+									});
+								}, 1000);
+
+								_($scope.event.users).findWhere({ id: $scope.local.user.$id }).decision = value;
+							};
+
+							$scope.saveNewTopic = function(newTopic) {
+								var event = $scope.event;
+								var events = $scope.events;
+
+								newTopic.event = event.$id;
+								var type = "topic added";
+								$scope.topics.$add(angular.copy(newTopic)).then(function(ref) {
+									event.topics.push(ref.key());
+									events.$save(event);
+
+									setTimeout(function() {
+										$scope.history.$add({
+						 		     		user: $scope.local.user.$id,
+								     		ts: moment().format('YYYY-MM-DD HH.mm'),
+								     		action: type,
+											topic: ref.key(),
+											event: event.$id,
+											content: value
+										});
+									})
+								});
+							};
+
+							$scope.openNewTopicModal = function() {
+								$('#newTopicModal').modal('show');
+							};
+
+
+							$scope.deleteEvent = function(event) {
+								event = event || $scope.event;
+								if (!confirm('Remove Event ' + event.name)) return;
+
+								_($scope.event.topics).each(function(t) {
+									$scope.topics.$remove($scope.topics.$getRecord(t));
+								})
+								$scope.events.$remove($scope.events.$getRecord(event.$id));
+
+								$scope.history.$add({
+							   	user: $scope.local.user.$id,
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
+							 		action: 'event removed',
+									event: event.$id
+								});
+							}
+						}
+					)
+
+					.controller("eventTopicController",
+						function($scope, $firebaseObject, $firebaseArray, $window, $routeParams, $timeout) {
+					    var obj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/topic/" + $routeParams.id));
+					    obj.$bindTo($scope, "topic");
+							obj.$loaded().then(function() {
+								$scope.topicLoaded = true;
+								$scope.history = $firebaseArray(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event + "/history"));
+
+								var eobj = $firebaseObject(new Firebase("https://eventshk.firebaseio.com/event/" + obj.event));
+								eobj.$bindTo($scope, "event");
+								eobj.$loaded(function() { $scope.eventLoaded = true; });
+
+								$timeout( function() {
+									$('.topics .draggable').each(function(i, e) {
+										$(e).find('.pre, .post').hide();
+
+										var el = $(e).parents('.topic');
+										var preEl = $(el).find('.pre');
+										var postEl = $(el).find('.post');
+										var startY = 0;
+										var startScrollY = 0;
+										$(e).draggable({
+											axis: 'x',
+											start: function(event, ui) {
+												startY = event.clientY;
+												startScrollY = $('body').scrollTop();
+												// console.log(event, ui);
+											},
+
+											drag: function(event, ui) {
+												var movements = ui.offset.left;
+												var top = event.clientY;
+												// console.log(movements, top - startY);
+
+												setTimeout(function() {
+													if (movements > 1) {
+														$(preEl).show()
+														$(postEl).hide();
+													}
+													if (movements < -1) {
+														$(postEl).show()
+														$(preEl).hide();
+													}
+
+													$('html, body').animate({
+											        scrollTop: startScrollY + (startY - top)
+											    }, 0);
+												}, 0);
+											},
+
+											stop: function(event, ui) {
+												var movements = ui.offset.left;
+												var threshold = 80;
+
+												if (Math.abs(movements) < threshold) {
+													$(el).find('.draggable').css('left', 0);
+												}
+
+												if (movements > threshold) {
+													$(el).find('.draggable').css('left', 190);
+												}
+
+												if (movements < threshold * -1) {
+													$(el).find('.draggable').css('left', -190);
+												}
+											}
+										});
+									});
+								}, 1000);
+							});
+
+							$scope.log = function(value, type, reason) {
+								console.log('vote changed: ' + value, type);
+								type = type || 'vote';
+								reason = reason || '';
+
+								setTimeout(function() {
+									$scope.history.$add({
+					 		     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
+							     		action: type,
+										topic: $scope.topic.$id,
+										event: $scope.topic.event,
+										content: value,
+										reason: reason
+									});
+								})
+							};
+
+							$scope.saveNewChoice = function(newChoice) {
+								if (newChoice == '') return;
+
+								$scope.topic.choices.push(newChoice);
+								// $scope.topic.votes = [];
+
+								setTimeout(function() {
+									$scope.history.$add({
+					 		     		user: $scope.local.user.$id,
+							     		ts: moment().format('YYYY-MM-DD HH.mm'),
+							     		action: 'add choice',
+										topic: $scope.topic.$id,
+										event: $scope.topic.event,
+										content: newChoice
+									});
+								}, 1000);
+
+								$scope.vote($scope.topic, newChoice, true);
+							};
+
+							$scope.openLockModal = function(topic, choice) {
+								if (topic.finalize) return;
+
+								$('#lockModal')
+									.modal({
+											autofocus: false,
+											onApprove: function() {
+												$scope.finalize(topic, choice)
+											}
+									})
+									.modal('show');
+							};
+
+							$scope.openNewChoiceModal = function() {
+								$('#newChoiceModal')
+									.modal({
+											autofocus: false
+									})
+									.modal('show');
+							};
+
+							$scope.openRemoveTopicModal = function(topic) {
+								$('#removeTopicModal')
+									.modal({
+											autofocus: false,
+											onApprove: function() {
+												$scope.removeTopic(topic)
+											}
+									})
+									.modal('show');
+							};
+
+							$scope.unfinalize = function(topic) {
+								setTimeout(function() {
+									$scope.history.$add({
+										user: $scope.local.user.$id,
+										ts: moment().format('YYYY-MM-DD HH.mm'),
+										action: 'un-finalize',
+										topic: topic.$id,
+										event: topic.event,
+										content: topic.finalize
+									});
+								}, 1000);
+
+								topic.finalize = null;
+							}
+
+							$scope.finalize = function(topic, choice) {
+								topic.finalize = choice;
+								topic.decisionMade = [];
+
+								setTimeout(function() {
+									$scope.history.$add({
+								   	user: $scope.local.user.$id,
+								 		ts: moment().format('YYYY-MM-DD HH.mm'),
+								 		action: 'finalize',
+										topic: topic.$id,
+										event: topic.event,
+										content: choice
+									});
+								}, 1000);
+							};
+
+							$scope.resetPosition = function($event) {
+								// console.log($event);
+								$($event.target).parents('.topic').find('.draggable').css('left', 0);
+							}
+
+							$scope.unvote = function(topic, choice) {
+								if (!topic.finalize) {
+									topic.votes = topic.votes || [];
+									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || {};
+									topic.votes[$scope.local.user.$id][choice] = null;
+
+									$scope.log(choice, 'unvote');
+									$scope.topics.$save(topic);
+								}
+							}
+
+							$scope.vote = function(topic, choice, value) {
+								if (!topic.finalize) {
+									topic.votes = topic.votes || [];
+									topic.votes[$scope.local.user.$id] = topic.votes[$scope.local.user.$id] || {};
+
+									//return if already voted the same value
+									if (topic.votes[$scope.local.user.$id][choice] && topic.votes[$scope.local.user.$id][choice].value == value) return;
+
+									//ask for a reason
+									$('#reasonModal')
+										.modal({
+											autofocus: false,
+											onShow: function() {
+												// setTimeout(function() {
+												// 	$('#reasonModal').find('input').focus();
+												// }, 1000);
+											},
+											onApprove: function() {
+												var vote = {
+														value: value,
+												};
+
+												if ($scope.reason && $scope.reason.length > 0) {
+													vote.reason = $scope.reason;
+												}
+
+												topic.votes[$scope.local.user.$id][choice] = vote;
+												$scope.log(choice, value? 'Accept': 'Reject', $scope.reason);
+												$scope.topics.$save(topic);
+
+												//reset reason
+												$scope.reason = "";
+											}
+										})
+										.modal('show')
+								}
+							};
+
+							$scope.deleteTopic = function(topic) {
+								if (!confirm('Remove Topic ' + topic.name)) return;
+
+								$scope.event.topics = _($scope.event.topics).without(topic.$id);
+								$scope.topics.$remove($scope.topics.$getRecord(topic.$id));
+
+								setTimeout(function() {
+									$scope.history.$add({
+								   	user: $scope.local.user.$id,
+								 		ts: moment().format('YYYY-MM-DD HH.mm'),
+								 		action: 'topic removed',
+										topic: topic.$id,
+										event: topic.event
+									});
+								}, 1000);
+							};
+						}
+					)
+
+					.controller("newEventController",
+						function($scope, $firebaseArray, $window) {
+							$scope.times = [];
+							$scope.venues = [];
+							$scope.newTopics = {};
+							var count = 1;
+
+							// setTimeout(function() {
+								// console.log('drag enabled');
+								// $scope.adjustCardWidth();
+							// }, 1000);
+
+							$scope.flip = function($event) {
+								setTimeout(function() {
+									var shape = $($event.target).parents('.shape');
+									$(shape).shape('flip up');
+								}, 500);
+							}
+
+							$scope.adjustCardWidth = function() {
+									$('.ui.cards .wrapper').find('.ui.shape, .ui.card').css({
+										width: $(window).width() - 60
+									});
+
+									$('.ui.card').css('height', $('.ui.shape').height());
+							}
+
+							$scope.gotoNextCard = function(i) {
+								$scope.adjustCardWidth();
+								var left = $('.ui.cards').css('left');
+								if (left == 'auto') {
+									$('.ui.cards').css('left', 0);
+									left = 0;
+								}
+
+								if (Math.abs(parseInt(left)) > $(window).width() * ($('.ui.cards .ui.card').length - 2)) return;
+
+								$('.ui.cards').css('left', Math.min(0, parseInt(left) - $(window).width()));
+							}
+
+							$scope.gotoLastCard = function(i) {
+								$scope.adjustCardWidth();
+								var left = $('.ui.cards').css('left');
+								if (left == 'auto') left = 0;
+								if (parseInt(left) == 0) return;
+
+								$('.ui.cards').css('left', Math.min(0, parseInt(left) + $(window).width()));
+							}
+
+							$scope.addEvent = function() {
+								if (!$scope.newEvent || !$scope.newEvent.name || !$scope.newEvent.description) {
+									alert('fill in name and description');
+									return;
+								}
+
+								//add users
+								$scope.newEvent.users = $scope._($scope.users).chain().filter({ selected: true }).map(function(e) {
+									return {
+										id: e.$id,
+										decision: 'no'
+									};
+								});
+
+								$scope.newEvent.history = [];
+								$scope.newEvent.history.push({
+									user: $scope.local.user.$id,
+							 		ts: moment().format('YYYY-MM-DD HH.mm'),
+									action: 'event created'
+								})
+
+								$scope.events.$add($scope.newEvent).then(function(ref) {
+									$scope.newEvent = $scope.events.$getRecord(ref.key());
+									$scope.saveTopics(ref.key());
+								});
+							};
+
+							$scope.saveTopics = function(id) {
+								console.log('save topics');
+
+								$scope.newTopicIds = [];
+
+								if (_($scope.newTopics).keys().length == 0) {
+									$scope.updateEvent();
+								}
+
+								_($scope.newTopics).each(function(topic) {
+									topic.event = id;
+
+									$scope.topics.$add(topic).then(function(ref) {
+										$scope.newTopicIds.push(ref.key());
+
+										if ($scope.newTopicIds.length == _($scope.newTopics).values().length) {
+											$scope.updateEvent();
+										}
+									});
+								});
+							};
+
+							$scope.updateEvent = function() {
+								console.log('update event');
+								$scope.newEvent.topics = $scope.newTopicIds;
+								$scope.events.$save($scope.newEvent).then(function() {
+									$scope.goto("eventSummary/" + $scope.newEvent.$id);
+								});
+							}
+
+							$scope.openTopic = function(id, $event) {
+								if (id == 'newTopic') {
+									id = 'newTopic ' + count++;
+								}
+
+								$scope.currentTopic = $scope.newTopics[id];
+								$scope.currentTopic = $scope.currentTopic || { id:id, name:id };
+								$scope.topicId = id;
+
+								// $('#form5').modal('show');
+								$scope.flip($event);
+							};
+
+							$scope.saveTopic = function($event) {
+								$scope.newTopics[$scope.topicId] = $scope.currentTopic;
+
+								// $('#form5').modal('hide');
+								$scope.flip($event);
+							};
+
+							$scope.openParticipants = function($event) {
+								// $('#form4').modal('show');
+								$scope.flip($event);
+							};
+
+							$scope.openEvent = function($event) {
+								// $('#form1').modal('show');
+								$scope.flip($event);
+							};
+						}
+					);
+	</script>
+</body>
+</html>

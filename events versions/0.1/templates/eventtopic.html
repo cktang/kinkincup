@@ -1,0 +1,225 @@
+<div style="margin-top:20px; min-height:100%">
+  <div class="ui inverted dimmer" ng-class="{active: !topicLoaded}">
+    <div class="ui text loader">Loading</div>
+  </div>
+
+  <div ng-show="topicLoaded && !topic.name">
+    <div class="ui small fluid teal button" ng-click="$window.history.back()"> Go Back </div>
+  </div>
+
+  <div ng-show="!topicLoaded || (topicLoaded && topic.name)">
+    <div class="ui header" style="margin: 0px; float:left">
+      {{topic.name}} {{decision}}
+      <div class="sub header" ng-bind="topic.description"></div>
+    </div>
+
+    <div style="float: right" class="tools">
+      <button class="ui circular icon button" ng-show="topic.finalize" ng-click="unfinalize(topic)"><i class="ui lock icon"/></button>
+      <button class="ui circular icon button" ng-click="goto('chat/' + topic.$id + '/type/topic')"><i class="ui comment icon"/></button>
+      <button class="ui circular icon button" ng-click="newChoice=''; openNewChoiceModal()"><i class="ui plus icon"/></button>
+      <div class="ui circular icon button" ng-click="openRemoveTopicModal(topic)"><i class="ui delete icon"/></div>
+    </div>
+
+    <div style="clear:both">&nbsp;</div>
+
+    <style>
+      .dim {
+        opacity: 0.2;
+      }
+
+      .tools .icon.button {
+        background-color: #f8f8f8;
+      }
+
+      .finalized {
+        font-weight: bolder;
+      }
+
+      .topics .topic:nth-child(odd) {
+        background-color: #eee;
+      }
+
+      .topics .topic:nth-child(even) {
+        background-color: #ddd;
+      }
+
+      .topics .topic {
+        margin: 0px;
+        padding: 0px;
+        position:relative;
+      }
+
+      .topic .pre {
+        left: 0px;
+      }
+
+      .topic .post {
+        right: 0px;
+      }
+
+      .topic .pre, .topic .post {
+        position: absolute;
+        top: 0px;
+        height: 100%;
+        display:none;
+      }
+
+      .topic .pre .ui.button, .topic .post .ui.button {
+        height: 100%;
+        border-radius: 0px;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .topic .part .ui.button {
+        margin-right: -5px;
+      }
+
+      .topic .part .ui.button i {
+        margin: 0px;
+      }
+
+      .topic .finalizeButton {
+        position: absolute;
+        right: 0.2em;
+      }
+
+      .topic .draggable {
+        padding: 10px;
+        background-color: inherit;
+      }
+    </style>
+
+    <div class="topics" style="overflow:hidden;
+          margin-left: -10px;
+          margin-right: -10px;">
+    	<div ng-repeat="c in topic.choices"
+    		class="ui attached topic"
+        topic="{{topic.$id}}"
+        choice="{{c}}"
+        ng-click="resetPosition($event)"
+    		ng-class="{ 'finalized green inverted': topic.finalize == c,
+                    'dim': topic.finalize && topic.finalize != c }">
+
+        <span class="pre part">
+          <span class="ui green button" ng-click="vote(topic, c, true); resetPosition($event)">
+            <i class="big checkmark icon"></i>
+          </span>
+          <span class="ui yellow button" ng-click="unvote(topic, c); resetPosition($event)">
+            <i class="big question mark icon"></i>
+          </span>
+          <span class="ui red button" ng-click="vote(topic, c, false); resetPosition($event)">
+            <i class="big remove icon"></i>
+          </span>
+        </span>
+
+        <span class="post part">
+          <span class="ui button" ng-click=" resetPosition($event)">
+            <i class="big edit icon"></i>
+          </span>
+          <span class="ui button" ng-click="openLockModal(topic, c); resetPosition($event)">
+            <i class="big lock icon"></i>
+          </span>
+          <span class="ui button" ng-click=" resetPosition($event)">
+            <i class="big remove icon"></i>
+          </span>
+        </span>
+
+        <div style="width: 100%" class="draggable">
+          <button class="circular ui mini icon green button"  ng-if="voted({topic:topic, choice:c, value:true})">
+            <i class="icon checkmark"></i>
+          </button>
+
+          <button class="circular ui mini icon red button"  ng-if="voted({topic:topic, choice:c, value:false})">
+            <i class="icon remove"></i>
+          </button>
+
+          <button class="circular ui mini icon button"  ng-if="!topic.votes[local.user.$id][c]" style="background-color:transparent">
+            <i class="icon ok"></i>
+          </button>
+
+      		<span class="ui header" ng-bind="c"></span>
+
+      		<div class="ui right floated medium icon finalizeButton button"
+              ng-click="finalize(topic, c, $event)"
+              ng-show="!topic.finalize && allowFinalize">
+      			<i class="ui icon lock"></i>
+      		</div>
+          <div style="clear:both"></div>
+
+          <div style="width: 100%; margin-top: 0.2em; margin-left: 2.5em">
+        		<span ng-repeat="userId in _(topic.votes).keys()"
+                  ng-if="topic.votes[userId][c]"
+                  ng-class="{green:topic.votes[userId][c].value, red:!topic.votes[userId][c].value}"
+                  class="ui image label">{{users.$getRecord(userId).name.split(" ")[0]}}<span class="detail" ng-if="topic.votes[userId][c].reason" ng-bind="topic.votes[userId][c].reason"></span></span>
+            <div style="height:1px">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="clear:both"> &nbsp; </div>
+    </div>
+  </div>
+
+  <!-- newChoiceModal -->
+  <div class="ui basic modal fade" id="newChoiceModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">New Choice</h4>
+    </div>
+
+    <div class="content">
+    	  <div class="form-group">
+	    <div class="ui fluid input">
+		    <input type="text" class="form-control" placeholder="New Choice" ng-model="newChoice">
+		</div>
+	  </div>
+    </div>
+    <div class="ui segment actions">
+      <button type="button" class="ui deny button">Cancel</button>
+      <button type="button" class="ui blue ok button" ng-click="saveNewChoice(newChoice)">Confirm</button>
+    </div>
+  </div>
+
+  <!-- newChoiceModal -->
+  <div class="ui basic modal fade" id="reasonModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">Reason</h4>
+    </div>
+
+    <div class="content">
+    	  <div class="form-group">
+	    <div class="ui fluid input">
+		    <input type="text" class="form-control" placeholder="Reason" ng-model="reason">
+		</div>
+	  </div>
+    </div>
+    <div class="ui segment actions">
+      <button type="button" class="ui grey basic cancel button">Cancel</button>
+      <button type="button" class="ui green basic ok button">Confirm</button>
+    </div>
+  </div>
+
+  <!-- lockModal -->
+  <div class="ui basic modal fade" id="lockModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">Finalize Choice ??</h4>
+    </div>
+
+    <div class="ui segment actions">
+      <button type="button" class="ui grey basic cancel button">Cancel</button>
+      <button type="button" class="ui green basic ok button">Lock</button>
+    </div>
+  </div>
+
+  <!-- removeTopic -->
+  <div class="ui basic modal fade" id="removeTopicModal">
+    <div class="ui header">
+      <h4 id="myModalLabel">Remove topic ??</h4>
+    </div>
+
+    <div class="ui segment actions">
+      <button type="button" class="ui grey basic cancel button">Cancel</button>
+      <button type="button" class="ui green basic ok button">Remove</button>
+    </div>
+  </div>
+</div>
